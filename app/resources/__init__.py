@@ -1,0 +1,10 @@
+# app/resources/__init__.py
+
+from app.resources.user_resource import UserResource
+from app.resources.appointment_resource import AppointmentResource
+from app.resources.health_record_resource import HealthRecordResource
+from app.resources.recommendation_resource import RecommendationResource
+from app.resources.news_resource import NewsResource
+from app.resources.provider_patients_resource import ProviderPatientResource
+from app.resources.user_recommendations_resource import UserRecommendationResource
+from app.resources.analytics_resource import AnalyticsResource
