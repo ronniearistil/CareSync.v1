@@ -36,6 +36,7 @@ def seed_patients():
             email=faker.unique.email(),
             phone_number=faker.msisdn()[:10],  # Generate a 10-digit number
             date_of_birth=faker.date_of_birth(minimum_age=18, maximum_age=80),
+            address=faker.address()  # Add fake address
         )
         db.session.add(patient)
         patients.append(patient)
@@ -86,12 +87,16 @@ def seed_recommendations(users):
 def seed_provider_patients(users):
     providers = [user for user in users if user.role == "Provider"]
     patients = [user for user in users if user.role == "Patient"]
+    
     for provider in providers:
-        assigned_patients = faker.random_elements(patients, length=3, unique=True)
+        num_patients_to_assign = min(len(patients), 3)  # Assign up to 3 patients per provider
+        assigned_patients = faker.random_elements(patients, length=num_patients_to_assign, unique=True)
+        
         for patient in assigned_patients:
             relationship = ProviderPatient(provider_id=provider.id, patient_id=patient.id)
             db.session.add(relationship)
     db.session.commit()
+
 
 def seed_news():
     for _ in range(5):  # Generate 5 news items
@@ -127,6 +132,7 @@ if __name__ == "__main__":
         seed_news()
         seed_analytics(users)
         print("Database seeded successfully!")
+
 
 
 

@@ -1,5 +1,5 @@
 from marshmallow import Schema, fields, validates, ValidationError
-from marshmallow.validate import Email
+from marshmallow.validate import Email, Length
 from datetime import datetime, date
 
 
@@ -26,12 +26,19 @@ class PatientSchema(Schema):
         validate=Email(error="Invalid email format."),
         error_messages={"required": "Email is required."}
     )
-    phone_number = fields.Str(required=False, missing=None)
-    date_of_birth = fields.Method(
-        deserialize="deserialize_date_of_birth",
+    phone_number = fields.Str(
+        required=False, 
+        missing=None
+    )
+    date_of_birth = fields.Date(
+        required=False, 
+        missing=None, 
+        format="%m/%d/%Y"
+    )
+    address = fields.Str(
         required=False,
-        missing=None,
-        error_messages={"invalid": "Date of birth must follow the format MM/DD/YYYY."}
+        validate=Length(max=255, error="Address must not exceed 255 characters."),
+        missing=None
     )
 
     @validates("first_name")
@@ -56,18 +63,13 @@ class PatientSchema(Schema):
                 raise ValidationError("Phone number must be 10 digits long.")
         return value
 
-    def deserialize_date_of_birth(self, value):
-        """
-        Converts date_of_birth from MM/DD/YYYY format to datetime.date.
-        """
-        try:
-            # Parse string into datetime.date
-            dob = datetime.strptime(value, "%m/%d/%Y").date()
-            if dob >= date.today():
-                raise ValidationError("Date of birth must be in the past.")
-            return dob
-        except ValueError:
-            raise ValidationError("Invalid date format. Use MM/DD/YYYY.")
+    @validates("date_of_birth")
+    def validate_date_of_birth(self, value):
+        if value >= date.today():
+            raise ValidationError("Date of birth must be in the past.")
+        return value
+
+
 
 
 

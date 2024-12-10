@@ -9,6 +9,7 @@ pytest = "*"
 pytest-flask = "*"
 psycopg2-binary = "*"
 flask-cors = "*"
+flask-bcrypt = "*"
 
 [dev-packages]
 

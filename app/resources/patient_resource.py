@@ -10,7 +10,6 @@ from sqlalchemy.exc import IntegrityError
 patient_schema = PatientSchema()
 patients_schema = PatientSchema(many=True)
 
-
 class PatientResource(Resource):
     def get(self, patient_id=None):
         """
@@ -80,7 +79,32 @@ class PatientResource(Resource):
         except Exception as e:
             db.session.rollback()
             return {"error": f"An unexpected error occurred: {str(e)}"}, 500
+    def patch(self, patient_id):
+        """
+        Partially update an existing patient by ID.
+        """
+        patient = Patient.query.get(patient_id)
+        if not patient:
+            return {"error": "Patient not found"}, 404
 
+        try:
+            json_data = request.get_json()
+            data = patient_schema.load(json_data, partial=True)  # Partial validation and update
+
+            # Update only the provided fields
+            for key, value in data.items():
+                setattr(patient, key, value)
+
+            db.session.commit()
+            return patient_schema.dump(patient), 200
+        except ValidationError as err:
+            return {"errors": err.messages}, 400
+        except IntegrityError:
+            db.session.rollback()
+            return {"error": "A patient with this email already exists."}, 400
+        except Exception as e:
+            db.session.rollback()
+            return {"error": f"An unexpected error occurred: {str(e)}"}, 500
     def delete(self, patient_id):
         """
         Delete a patient by ID.
