@@ -10,6 +10,7 @@ pytest-flask = "*"
 psycopg2-binary = "*"
 flask-cors = "*"
 flask-bcrypt = "*"
+passlib = "*"
 
 [dev-packages]
 
