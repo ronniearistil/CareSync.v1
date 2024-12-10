@@ -8,6 +8,7 @@ faker = "*"
 pytest = "*"
 pytest-flask = "*"
 psycopg2-binary = "*"
+flask-cors = "*"
 
 [dev-packages]
 

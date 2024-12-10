@@ -11,7 +11,7 @@ class Patient(db.Model):
     last_name = db.Column(db.String(50), nullable=False)
     email = db.Column(db.String(100), unique=True, nullable=False)
     phone_number = db.Column(db.String(15), nullable=True)
-    date_of_birth = db.Column(db.Date, nullable=True)
+    date_of_birth = db.Column(db.Date, nullable=False)
 
     def __repr__(self):
         return f"<Patient {self.first_name} {self.last_name}>"

@@ -1,0 +1,26 @@
+# Ignore environment files
+.env
+.env.development
+.env.production
+
+# Python specific ignores
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environments
+venv/
+env/
+
+# Flask specific ignores
+instance/
+*.log
+
+# IDE-specific ignores
+.vscode/
+.idea/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
