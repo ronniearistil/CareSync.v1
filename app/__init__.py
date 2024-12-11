@@ -146,15 +146,10 @@ def create_app():
     migrate.init_app(app, db)
     jwt.init_app(app)
     ma.init_app(app)
-    bcrypt.init_app(app)
 
     # Register blueprints and CLI commands
     register_blueprints(app)
     register_cli_commands(app)
-
-    # Import models to ensure tables are created
-    with app.app_context():
-        register_models()
 
     return app
 
@@ -162,9 +157,8 @@ def create_app():
 def register_blueprints(app):
     """
     Import and register all blueprints (routes) in the application.
-    This keeps the `create_app` function cleaner.
     """
-    from app.routes.auth_routes import auth_bp
+    from app.auth import auth_bp
     from app.routes.patient_routes import patient_bp
     from app.routes.appointment_routes import appointment_bp
     from app.routes.recommendation_routes import recommendation_bp
@@ -184,21 +178,6 @@ def register_blueprints(app):
     app.register_blueprint(user_bp, url_prefix="/users")
 
 
-def register_models():
-    """
-    Import models to ensure they are registered with SQLAlchemy.
-    This avoids circular import issues and ensures all models are initialized properly.
-    """
-    from app.models.user_model import User
-    from app.models.health_record_model import HealthRecord
-    from app.models.appointment_model import Appointment
-    from app.models.recommendation_model import Recommendation
-    from app.models.news_model import News
-    from app.models.provider_patients_model import ProviderPatient
-    from app.models.user_recommendations_model import UserRecommendation
-    from app.models.analytics_model import Analytics
-
-
 def register_cli_commands(app):
     seed_cli = AppGroup("seed")
 
@@ -208,10 +187,20 @@ def register_cli_commands(app):
         from app.seeds import seed_users, seed_patients, seed_appointments
         try:
             seed_users()
-            seed_patients()
-            seed_appointments()
-            print("Database seeded successfully!")
+            print("Users seeded successfully.")
         except Exception as e:
-            print(f"Error during seeding: {e}")
+            print(f"Error seeding users: {e}")
+
+        try:
+            seed_patients()
+            print("Patients seeded successfully.")
+        except Exception as e:
+            print(f"Error seeding patients: {e}")
+
+        try:
+            seed_appointments()
+            print("Appointments seeded successfully.")
+        except Exception as e:
+            print(f"Error seeding appointments: {e}")
 
     app.cli.add_command(seed_cli)
