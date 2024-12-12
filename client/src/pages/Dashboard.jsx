@@ -1,17 +1,28 @@
-import React from 'react';
-import Analytics from '../components/Dashboard/Analytics';
-import AppointmentCalendar from '../components/Dashboard/AppointmentCalendar';
+import React from "react";
+import { Box, Typography } from "@mui/material";
+import Analytics from "../components/Dashboard/Analytics";
+import AppointmentCalendar from "../components/Dashboard/AppointmentCalendar";
 
 const Dashboard = () => {
   return (
-    <div>
-      <h1>Dashboard</h1>
+    <Box
+      sx={{
+        backgroundColor: "background.default",
+        padding: 4,
+        color: "text.primary",
+        minHeight: "100vh",
+      }}
+    >
+      <Typography variant="h1" gutterBottom>
+        Dashboard
+      </Typography>
       <Analytics />
       <AppointmentCalendar />
-    </div>
+    </Box>
   );
 };
 
 export default Dashboard;
+
 
 

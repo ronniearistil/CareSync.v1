@@ -1,41 +1,46 @@
-import React, { useEffect, useState } from 'react';
-import { fetchAppointments } from '../../utils/api';
+import React, { useEffect, useState } from "react";
+import { Card, CardContent, Typography, List, ListItem } from "@mui/material";
+import { fetchAppointments } from "../../utils/api";
 
 const AppointmentCalendar = () => {
   const [appointments, setAppointments] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const loadAppointments = async () => {
       try {
-        const response = await fetchAppointments();
-        setAppointments(response.data);
-      } catch (error) {
-        console.error('Failed to fetch appointments:', error);
-      } finally {
-        setLoading(false);
+        const data = await fetchAppointments();
+        setAppointments(data);
+      } catch (err) {
+        console.error("Failed to fetch appointments:", err);
+        setError("Unable to load appointments");
       }
     };
+    loadAppointments();
+  }, []);
 
-    fetchData();
-  }, []); // Empty dependency array ensures this runs only on component mount.
-
-  if (loading) return <div>Loading...</div>;
+  if (error) {
+    return <Typography color="error">{error}</Typography>;
+  }
 
   return (
-    <div>
-      <h2>Appointments</h2>
-      <ul>
-        {appointments.map(({ id, date, time, status }) => (
-          <li key={id}>
-            {date} at {time} ({status})
-          </li>
-        ))}
-      </ul>
-    </div>
+    <Card>
+      <CardContent>
+        <Typography variant="h2" gutterBottom>
+          Appointments
+        </Typography>
+        <List>
+          {appointments.map((appointment, index) => (
+            <ListItem key={index}>{appointment.date}</ListItem>
+          ))}
+        </List>
+      </CardContent>
+    </Card>
   );
 };
 
 export default AppointmentCalendar;
+
+
 
 

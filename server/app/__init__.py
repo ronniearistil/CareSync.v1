@@ -6,6 +6,7 @@ from flask_marshmallow import Marshmallow
 from flask_cors import CORS
 from flask.cli import AppGroup
 from flask_bcrypt import Bcrypt
+# from flask_caching import Cache
 from datetime import timedelta
 import os
 
@@ -15,6 +16,7 @@ migrate = Migrate()
 jwt = JWTManager()
 ma = Marshmallow()
 bcrypt = Bcrypt()
+# cache = Cache(config={"CACHE_TYPE": "SimpleCache"}) 
 
 def create_app():
     """
@@ -35,23 +37,22 @@ def create_app():
     app.config["JWT_TOKEN_LOCATION"] = ["cookies"]
     app.config["JWT_COOKIE_CSRF_PROTECT"] = False
 
-# Enable CORS
+    # Enable CORS
     app.config["CORS_ALLOWED_ORIGINS"] = ["http://localhost:5174"]
-    CORS(app, supports_credentials=True, resources={r"/*": {"origins": app.config["CORS_ALLOWED_ORIGINS"]}})
-
+    CORS(app, resources={r"/*": {"origins": "http://localhost:5173"}}, supports_credentials=True)
 
     # Initialize Flask extensions
     db.init_app(app)
     migrate.init_app(app, db)
     jwt.init_app(app)
     ma.init_app(app)
+    # cache.init_app(app)
 
     # Register blueprints and CLI commands
     register_blueprints(app)
     register_cli_commands(app)
 
     return app
-
 
 def register_blueprints(app):
     """
@@ -75,7 +76,6 @@ def register_blueprints(app):
     app.register_blueprint(news_bp, url_prefix="/news")
     app.register_blueprint(provider_patient_bp, url_prefix="/provider_patients")
     app.register_blueprint(user_bp, url_prefix="/users")
-
 
 def register_cli_commands(app):
     """
@@ -106,4 +106,3 @@ def register_cli_commands(app):
             print(f"Error seeding appointments: {e}")
 
     app.cli.add_command(seed_cli)
-

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { fetchPatientById } from '../utils/api';
-import { useParams } from 'react-router-dom';
+import { fetchPatientById } from '../utils/api'; // Adjusted path to relative
 
 const PatientDetails = () => {
   const { id } = useParams();
@@ -8,7 +7,7 @@ const PatientDetails = () => {
 
   useEffect(() => {
     fetchPatientById(id)
-      .then((response) => setPatient(response.data))
+      .then((data) => setPatient(data))
       .catch((error) => console.error('Failed to fetch patient details:', error));
   }, [id]);
 
@@ -24,3 +23,5 @@ const PatientDetails = () => {
 };
 
 export default PatientDetails;
+
+

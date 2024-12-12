@@ -1,33 +1,28 @@
-import React, { useEffect, useState } from 'react';
-import { fetchAnalytics } from '../../utils/api';
+import React from "react";
+import { Card, CardContent, Typography } from "@mui/material";
 
 const Analytics = () => {
-  const [analytics, setAnalytics] = useState([]);
-
-  useEffect(() => {
-    fetchAnalytics()
-      .then((response) => {
-        console.log("API Response:", response.data); // Log the response data
-        setAnalytics(response.data);
-      })
-      .catch((error) => console.error('Failed to fetch analytics:', error));
-  }, []);
+  const data = {
+    active_users: 50,
+    total_users: 100,
+  };
 
   return (
-    <div>
-      <h2>Analytics</h2>
-      <ul>
-        {analytics.map(({ id, metric, value }) => (
-          <li key={id}>
-            <strong>{metric}</strong>: {value}
-          </li>
-        ))}
-      </ul>
-    </div>
+    <Card sx={{ marginBottom: 3 }}>
+      <CardContent>
+        <Typography variant="h2" gutterBottom>
+          Analytics
+        </Typography>
+        <Typography>Active Users: {data.active_users}</Typography>
+        <Typography>Total Users: {data.total_users}</Typography>
+      </CardContent>
+    </Card>
   );
 };
 
 export default Analytics;
+
+
 
 
 
