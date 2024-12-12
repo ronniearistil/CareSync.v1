@@ -1,7 +1,10 @@
+from flask_bcrypt import Bcrypt
 from flask import request, jsonify, make_response
-from flask_jwt_extended import jwt_required, get_jwt_identity, unset_jwt_cookies
+from flask_jwt_extended import create_access_token, create_refresh_token, jwt_required, get_jwt_identity, unset_jwt_cookies
 from app.auth.services import authenticate_user, register_user, reset_user_password
 from app.auth.utils import validate_user_input
+# from server.app.models.user_model import User
+from app.models.user_model import User
 from . import auth_bp
 
 
@@ -70,4 +73,31 @@ def logout():
         return response
     except Exception as e:
         return {"error": f"An unexpected error occurred: {str(e)}"}, 500
+
+
+@auth_bp.route("/patients/login", methods=["POST"])
+def login_patient():
+    try:
+        data = request.get_json()
+        email, password = data.get("email"), data.get("password")
+
+        if not email or not password:
+            return {"error": "Email and password are required"}, 400
+
+        # Filter by role 'Patient'
+        patient = User.query.filter_by(email=email, role="Patient").first()
+        if not patient or not bcrypt.check_password_hash(patient.password_hash, password):
+            return {"error": "Invalid credentials"}, 401
+
+        # Generate tokens
+        access_token = create_access_token(identity={"id": patient.id, "email": patient.email, "role": patient.role})
+        refresh_token = create_refresh_token(identity={"id": patient.id, "email": patient.email, "role": patient.role})
+
+        response = make_response({"message": "Login successful"}, 200)
+        response.set_cookie("access_token_cookie", access_token, httponly=True, max_age=3600)
+        response.set_cookie("refresh_token_cookie", refresh_token, httponly=True, max_age=604800)
+        return response
+    except Exception as e:
+        return {"error": f"An unexpected error occurred: {str(e)}"}, 500
+
 

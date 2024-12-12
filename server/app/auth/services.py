@@ -1,7 +1,9 @@
+# import bcrypt
 from flask import make_response
 from flask_jwt_extended import create_access_token, create_refresh_token
 from app.models.user_model import User
-from app import bcrypt, db
+from app import bcrypt 
+from app import db
 
 
 def authenticate_user(email, password):
@@ -48,14 +50,14 @@ def register_user(data):
 
         # Create new user
         new_user = User(email=email, password_hash=hashed_password, name=name, role=role)
-        db.session.add(new_user)
-        db.session.commit()
+        db.session.add(new_user) # type: ignore
+        db.session.commit() # type: ignore
         print(f"User {email} registered successfully.")  # Debugging
 
         return {"message": "User registered successfully"}, 201
     except Exception as e:
         print(f"Error during user registration: {e}")  # Debugging
-        db.session.rollback()
+        db.session.rollback() # type: ignore
         return {"error": "An unexpected error occurred. Contact support."}, 500
 
 
@@ -72,16 +74,10 @@ def reset_user_password(email, new_password):
         # Hash the new password with bcrypt
         hashed_password = bcrypt.generate_password_hash(new_password).decode("utf-8")
         user.password_hash = hashed_password
-        db.session.commit()
+        db.session.commit() # type: ignore
         print(f"Password for user {email} reset successfully.")  # Debugging
         return {"message": "Password reset successfully"}, 200
     except Exception as e:
         print(f"Error during password reset: {e}")  # Debugging
-        db.session.rollback()
+        db.session.rollback() # type: ignore
         return {"error": "An unexpected error occurred. Contact support."}, 500
-
-
-
-
-
-

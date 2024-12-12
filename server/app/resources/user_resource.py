@@ -1,6 +1,6 @@
 from flask_restful import Resource, reqparse
-from app import db, bcrypt
 from app.models.user_model import User
+from flask_bcrypt import Bcrypt
 from app import db
 
 # bcrypt = Bcrypt()  # Initialize bcrypt

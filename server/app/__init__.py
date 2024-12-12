@@ -46,6 +46,7 @@ def create_app():
     migrate.init_app(app, db)
     jwt.init_app(app)
     ma.init_app(app)
+    # bcrypt.init_app(app)
     # cache.init_app(app)
 
     # Register blueprints and CLI commands
