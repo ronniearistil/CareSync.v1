@@ -7,7 +7,6 @@ from app.auth.utils import validate_user_input
 from app.models.user_model import User
 from . import auth_bp
 
-
 @auth_bp.route("/login", methods=["POST"])
 def login():
     try:
@@ -18,8 +17,8 @@ def login():
             return {"error": "Email and password are required"}, 400
 
         response = authenticate_user(email, password)
-        if response.get("error"):
-            return response, 401
+        # if response.get("error"):
+        #     return response, 401
 
         return response
     except Exception as e:

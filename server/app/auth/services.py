@@ -4,7 +4,7 @@ from flask_jwt_extended import create_access_token, create_refresh_token
 from app.models.user_model import User
 from app import bcrypt 
 from app import db
-
+from app.schemas.user_schema import user_schema
 
 def authenticate_user(email, password):
     """
@@ -13,22 +13,21 @@ def authenticate_user(email, password):
     """
     user = User.query.filter_by(email=email).first()
     if not user:
-        return {"error": "Invalid credentials"}
+        return {"error": "Invalid credentials"},400
 
     # Verify bcrypt hash
     if not bcrypt.check_password_hash(user.password_hash, password):
-        return {"error": "Invalid credentials"}
+        return {"error": "Invalid credentials"},400
 
     # Generate JWT tokens
     access_token = create_access_token(identity={"id": user.id, "email": user.email, "role": user.role})
     refresh_token = create_refresh_token(identity={"id": user.id, "email": user.email, "role": user.role})
 
     # Set tokens as HTTP-only cookies
-    response = make_response({"message": "Login successful"}, 200)
+    response = make_response(user_schema.dump(user),200)
     response.set_cookie("access_token_cookie", access_token, httponly=True, max_age=3600)
     response.set_cookie("refresh_token_cookie", refresh_token, httponly=True, max_age=604800)
     return response
-
 
 def register_user(data):
     """

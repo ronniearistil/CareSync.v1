@@ -10,3 +10,6 @@ class UserSchema(ma.SQLAlchemySchema):
     name = ma.auto_field()
     email = ma.auto_field()
     role = ma.auto_field()
+
+user_schema=UserSchema()
+users_schema=UserSchema(many=True)

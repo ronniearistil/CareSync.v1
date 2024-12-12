@@ -1,5 +1,4 @@
 # app/resources/provider_patients_resource.py
-
 from flask_restful import Resource, reqparse
 from app.models.provider_patients_model import ProviderPatient
 from app import db
