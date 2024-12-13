@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { fetchNews } from '../utils/api'; // Updated import path
+import { fetchNews } from '../../utils/api'; // Updated import path
 import NewsCard from './NewsCard';
 
 const News = () => {

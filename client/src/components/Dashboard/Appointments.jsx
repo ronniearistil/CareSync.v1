@@ -1,5 +1,5 @@
 import React from 'react';
-import AppointmentCalendar from '../components/Dashboard/AppointmentCalendar';
+import AppointmentCalendar from './AppointmentCalendar';
 
 const Appointments = () => {
   return (
