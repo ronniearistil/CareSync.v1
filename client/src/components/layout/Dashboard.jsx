@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
-import Analytics from "../components/Dashboard/Analytics";
-import AppointmentCalendar from "../components/Dashboard/AppointmentCalendar";
+import Analytics from "../dashboard/Analytics";
+import AppointmentCalendar from "../dashboard/AppointmentCalendar";
 
 const Dashboard = () => {
   return (

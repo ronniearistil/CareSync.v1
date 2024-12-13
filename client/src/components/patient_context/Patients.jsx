@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { fetchPatients } from '../utils/api';
-import PatientCard from '../components/Patients/PatientCard';
+// import {fetchPatients} from "./utils/api";
+// import PatientCard from './components/Patients/PatientCard';
 
 const Patients = () => {
   const [patients, setPatients] = useState([]);
@@ -39,4 +39,3 @@ const Patients = () => {
 };
 
 export default Patients;
-
