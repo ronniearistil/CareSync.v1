@@ -1,10 +1,10 @@
 :root {
   /* Color Palette */
   --primary-color: #1976D2; /* Blue */
-  --secondary-color: #388E3C; /* Green */
+  --secondary-color: #8e948e; /* Green */
   --accent-color: #FF9800; /* Orange */
   --background-color: #F5F5F5; /* Light Gray */
-  --text-color: #212121; /* Dark Gray */
+  --text-color: #010101; /* Dark Gray */
 }
 
 body {
@@ -64,6 +64,22 @@ button:hover {
 
 .main-content {
   background-color: var(--background-color);
-  padding: 20px;
+  padding: 30px;
   border-radius: 8px;
 }
+
+/* appointments.css */
+.appointment-buttons {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.appointment-details {
+  margin-top: 20px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+

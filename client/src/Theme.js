@@ -1,23 +1,23 @@
 import { createTheme } from '@mui/material/styles';
 
-const theme = createTheme({
+const sageTheme = createTheme({
   palette: {
     primary: {
-      main: '#1976D2', // Blue
+      main: '#77815C', // Sage Green
     },
     secondary: {
-      main: '#388E3C', // Green
+      main: '#A9B97E', // Lighter Sage Green
     },
     warning: {
-      main: '#FF9800', // Orange
+      main: '#FFB347', // Light Orange
     },
     background: {
-      default: '#F5F5F5', // Light Gray
+      default: '#F7F7F2', // Off-white with a hint of green
       paper: '#FFFFFF', // White
     },
     text: {
-      primary: '#212121', // Dark Gray
-      secondary: '#757575', // Lighter Gray for subtitles
+      primary: '#2E2E2E', // Dark Gray/Black
+      secondary: '#636363', // Medium Gray for subtitles
     },
   },
   typography: {
@@ -39,11 +39,13 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           borderRadius: '8px',
-          textTransform: 'none', // Avoid uppercase text
+          textTransform: 'none',
+          color: '#FFFFFF', // White text for buttons
         },
       },
     },
   },
 });
 
-export default theme;
+export default sageTheme;
+

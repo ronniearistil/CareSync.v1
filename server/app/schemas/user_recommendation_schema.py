@@ -6,6 +6,6 @@ class UserRecommendationSchema(ma.SQLAlchemySchema):
         model = UserRecommendation
         load_instance = True
 
-    id = ma.auto_field()
     user_id = ma.auto_field()
     recommendation_id = ma.auto_field()
+

@@ -1,7 +1,10 @@
 {
     "cSpell.words": [
         "backpopulates",
+        "daygrid",
         "dotenv",
-        "reqparse"
+        "fullcalendar",
+        "reqparse",
+        "timegrid"
     ]
 }
