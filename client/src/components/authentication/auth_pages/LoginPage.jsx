@@ -6,7 +6,6 @@ const LoginPage = () => {
         email: "",
         password: "",
     });
-
     const [error, setError] = useState(null);
 
     const handleChange = (e) => {
@@ -17,39 +16,54 @@ const LoginPage = () => {
         e.preventDefault();
         try {
             const response = await axios.post("http://localhost:5555/auth/login", formData);
+
+            // Set cookies for authentication tokens
             document.cookie = `access_token=${response.data.access_token};path=/;httponly`;
             document.cookie = `refresh_token=${response.data.refresh_token};path=/;httponly`;
+
             setError(null);
-            // Redirect to dashboard
-            window.location.href = "/";
+            window.location.href = "/"; // Redirect to the dashboard/homepage
         } catch (err) {
             setError(err.response?.data?.error || "Invalid login credentials.");
         }
     };
 
     return (
-        <div>
+        <div style={{ maxWidth: "400px", margin: "0 auto", padding: "20px" }}>
             <h1>Login</h1>
             {error && <p style={{ color: "red" }}>{error}</p>}
             <form onSubmit={handleSubmit}>
-                <input
-                    type="email"
-                    name="email"
-                    placeholder="Email"
-                    value={formData.email}
-                    onChange={handleChange}
-                />
-                <input
-                    type="password"
-                    name="password"
-                    placeholder="Password"
-                    value={formData.password}
-                    onChange={handleChange}
-                />
-                <button type="submit">Login</button>
+                <div style={{ marginBottom: "10px" }}>
+                    <label>Email:</label>
+                    <input
+                        type="email"
+                        name="email"
+                        placeholder="Email"
+                        value={formData.email}
+                        onChange={handleChange}
+                        required
+                        style={{ width: "100%", padding: "8px", marginTop: "5px" }}
+                    />
+                </div>
+                <div style={{ marginBottom: "10px" }}>
+                    <label>Password:</label>
+                    <input
+                        type="password"
+                        name="password"
+                        placeholder="Password"
+                        value={formData.password}
+                        onChange={handleChange}
+                        required
+                        style={{ width: "100%", padding: "8px", marginTop: "5px" }}
+                    />
+                </div>
+                <button type="submit" style={{ padding: "10px 20px", backgroundColor: "#4CAF50", color: "white", border: "none", cursor: "pointer" }}>
+                    Login
+                </button>
             </form>
         </div>
     );
 };
 
 export default LoginPage;
+

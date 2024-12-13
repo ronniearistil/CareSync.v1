@@ -1,32 +1,3 @@
-// import React from "react";
-// import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-// import { ThemeProvider, CssBaseline } from "@mui/material";
-// import theme from "./theme";
-// import Dashboard from "./pages/Dashboard";
-// import Patients from "./pages/Patients";
-// import PatientDetails from "./pages/PatientDetails";
-// import PrivateRoute from "./components/PrivateRoute";
-// // import LoginPage from "./pages/LoginPage";
-// // import RegisterPage from "./pages/RegisterPage";
-// 
-// const App = () => {
-//   return (
-//     <ThemeProvider theme={theme}>
-//       <CssBaseline />
-//       <Router>
-//         <Routes>
-//           <Route path="/" element={<Dashboard />} />
-//           <Route path="/patients" element={<Patients />} />
-//           <Route path="/patients/:id" element={<PatientDetails />} />
-//           {/* <Route path="/login" element={<LoginPage />} />
-//           <Route path="/register" element={<RegisterPage />} /> */}
-//         </Routes>
-//       </Router>
-//     </ThemeProvider>
-//   );
-// };
-// 
-// export default App;
 
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
@@ -43,6 +14,7 @@ import LoginPage from "./components/authentication/auth_pages/LoginPage";
 import RegisterPage from "./components/authentication/auth_pages/RegisterPage";
 import PasswordResetPage from "./components/authentication/auth_pages/PasswordResetPage";
 import PrivateRoute from "./components/PrivateRoute";
+import Footer from "./components/layout/Footer";
 
 const App = () => {
   return (
@@ -52,6 +24,7 @@ const App = () => {
         <Navbar />
         <Routes>
           {/* Public Routes */}
+          <Route path="/about" element={<About />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/reset-password" element={<PasswordResetPage />} />
@@ -62,8 +35,10 @@ const App = () => {
           <Route path="/patients/:id" element={<PrivateRoute><PatientDetails /></PrivateRoute>} />
           <Route path="/appointments" element={<PrivateRoute><Appointments /></PrivateRoute>} />
           <Route path="/news" element={<PrivateRoute><News /></PrivateRoute>} />
-          <Route path="/about" element={<PrivateRoute><About /></PrivateRoute>} />
+          {/* <Route path="/about" element={<PrivateRoute><About /></PrivateRoute>} /> */}
+          
         </Routes>
+        <Footer /> {/* Render Footer here */}
       </Router>
     </ThemeProvider>
   );
