@@ -1,51 +1,42 @@
-import { createTheme } from '@mui/material/styles';
+import { createTheme } from "@mui/material/styles";
 
-const sageTheme = createTheme({
+const healthcareTheme = createTheme({
   palette: {
     primary: {
-      main: '#77815C', // Sage Green
+      main: "#1976D2", // Trustworthy Blue
     },
     secondary: {
-      main: '#A9B97E', // Lighter Sage Green
-    },
-    warning: {
-      main: '#FFB347', // Light Orange
+      main: "#388E3C", // Calming Green
     },
     background: {
-      default: '#F7F7F2', // Off-white with a hint of green
-      paper: '#FFFFFF', // White
+      default: "#F7F7F7", // Soft Off-white
+      paper: "#FFFFFF", // Clean White
     },
     text: {
-      primary: '#2E2E2E', // Dark Gray/Black
-      secondary: '#636363', // Medium Gray for subtitles
+      primary: "#2E2E2E", // Dark Gray
+      secondary: "#757575", // Muted Gray
     },
   },
   typography: {
-    fontFamily: 'Roboto, Arial, sans-serif',
+    fontFamily: "Roboto, Arial, sans-serif",
     h1: {
-      fontSize: '2rem',
+      fontSize: "3rem",
       fontWeight: 700,
+      color: "#2E2E2E",
     },
     h2: {
-      fontSize: '1.5rem',
+      fontSize: "2rem",
       fontWeight: 600,
+      color: "#2E2E2E",
     },
     body1: {
-      fontSize: '1rem',
-    },
-  },
-  components: {
-    MuiButton: {
-      styleOverrides: {
-        root: {
-          borderRadius: '8px',
-          textTransform: 'none',
-          color: '#FFFFFF', // White text for buttons
-        },
-      },
+      fontSize: "1.25rem",
+      color: "#2E2E2E",
     },
   },
 });
 
-export default sageTheme;
+export default healthcareTheme;
+
+
 

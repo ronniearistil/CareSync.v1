@@ -1,3 +1,4 @@
+// 
 // import React from "react";
 // import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 // import { ThemeProvider, CssBaseline } from "@mui/material";
@@ -6,6 +7,8 @@
 // import Dashboard from "./components/layout/Dashboard";
 // import Patients from "./components/patient_context/Patients";
 // import PatientDetails from "./components/patient_context/PatientDetails";
+// import AddPatientForm from "./components/authentication/auth_forms/AddPatientForm";
+// import AddUserForm from "./components/authentication/auth_forms/AddUserForm";
 // import Appointments from "./components/dashboard/Appointments";
 // import News from "./components/news_container/News";
 // import About from "./pages/About";
@@ -54,6 +57,22 @@
 //             }
 //           />
 //           <Route
+//             path="/add-patient"
+//             element={
+//               <PrivateRoute>
+//                 <AddPatientForm />
+//               </PrivateRoute>
+//             }
+//           />
+//           <Route
+//             path="/add-user"
+//             element={
+//               <PrivateRoute>
+//                 <AddUserForm />
+//               </PrivateRoute>
+//             }
+//           />
+//           <Route
 //             path="/appointments"
 //             element={
 //               <PrivateRoute>
@@ -77,7 +96,7 @@
 // };
 // 
 // export default App;
-
+// import LandingPage from "./components/layout/LandingPage";
 
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
@@ -90,6 +109,7 @@ import PatientDetails from "./components/patient_context/PatientDetails";
 import AddPatientForm from "./components/authentication/auth_forms/AddPatientForm";
 import AddUserForm from "./components/authentication/auth_forms/AddUserForm";
 import Appointments from "./components/dashboard/Appointments";
+import Analytics from "./components/dashboard/Analytics";
 import News from "./components/news_container/News";
 import About from "./pages/About";
 import LoginPage from "./components/authentication/auth_pages/LoginPage";
@@ -97,6 +117,7 @@ import RegisterPage from "./components/authentication/auth_pages/RegisterPage";
 import PasswordResetPage from "./components/authentication/auth_pages/PasswordResetPage";
 import PrivateRoute from "./components/PrivateRoute";
 import Footer from "./components/layout/Footer";
+import LandingPage from "./components/layout/LandingPage";
 
 const App = () => {
   return (
@@ -106,6 +127,7 @@ const App = () => {
         <Navbar />
         <Routes>
           {/* Public Routes */}
+          <Route path="/" element={<LandingPage />} />
           <Route path="/about" element={<About />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
@@ -113,7 +135,7 @@ const App = () => {
 
           {/* Protected Routes */}
           <Route
-            path="/"
+            path="/dashboard"
             element={
               <PrivateRoute>
                 <Dashboard />
@@ -157,6 +179,14 @@ const App = () => {
             element={
               <PrivateRoute>
                 <Appointments />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/analytics"
+            element={
+              <PrivateRoute>
+                <Analytics />
               </PrivateRoute>
             }
           />

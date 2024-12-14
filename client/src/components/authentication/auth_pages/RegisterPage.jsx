@@ -1,9 +1,14 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-const LoginPage = () => {
-    const [formData, setFormData] = useState({ email: "", password: "" });
+const RegisterPage = () => {
+    const [formData, setFormData] = useState({
+        name: "",
+        email: "",
+        password: "",
+    });
     const [error, setError] = useState(null);
+    const [success, setSuccess] = useState(null);
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -12,21 +17,34 @@ const LoginPage = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post("http://localhost:5555/auth/login", formData);
-
-            // Cookies are set by the backend
+            const response = await axios.post("http://localhost:5555/auth/register", formData);
+            setSuccess(response.data.message || "Account created successfully!");
             setError(null);
-            window.location.href = "/"; // Redirect to the dashboard/homepage
+            setFormData({ name: "", email: "", password: "" });
         } catch (err) {
-            setError(err.response?.data?.error || "Invalid login credentials.");
+            setError(err.response?.data?.error || "An error occurred. Please try again.");
+            setSuccess(null);
         }
     };
 
     return (
         <div style={{ maxWidth: "400px", margin: "0 auto", padding: "20px" }}>
-            <h1>Login</h1>
+            <h1>Sign Up</h1>
             {error && <p style={{ color: "red" }}>{error}</p>}
+            {success && <p style={{ color: "green" }}>{success}</p>}
             <form onSubmit={handleSubmit}>
+                <div style={{ marginBottom: "10px" }}>
+                    <label>Name:</label>
+                    <input
+                        type="text"
+                        name="name"
+                        placeholder="Name"
+                        value={formData.name}
+                        onChange={handleChange}
+                        required
+                        style={{ width: "100%", padding: "8px", marginTop: "5px" }}
+                    />
+                </div>
                 <div style={{ marginBottom: "10px" }}>
                     <label>Email:</label>
                     <input
@@ -51,14 +69,27 @@ const LoginPage = () => {
                         style={{ width: "100%", padding: "8px", marginTop: "5px" }}
                     />
                 </div>
-                <button type="submit" style={{ padding: "10px 20px", backgroundColor: "#4CAF50", color: "white", border: "none", cursor: "pointer" }}>
-                    Login
+                <button
+                    type="submit"
+                    style={{
+                        padding: "10px 20px",
+                        backgroundColor: "#4CAF50",
+                        color: "white",
+                        border: "none",
+                        cursor: "pointer",
+                    }}
+                >
+                    Sign Up
                 </button>
+                <div style={{ marginTop: "10px" }}>
+                    Already have an account? <a href="/login">Log in</a>
+                </div>
             </form>
         </div>
     );
 };
 
-export default LoginPage;
+export default RegisterPage;
+
 
 

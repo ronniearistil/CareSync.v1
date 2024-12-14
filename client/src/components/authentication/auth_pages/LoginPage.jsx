@@ -2,10 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 
 const LoginPage = () => {
-    const [formData, setFormData] = useState({
-        email: "",
-        password: "",
-    });
+    const [formData, setFormData] = useState({ email: "", password: "" });
     const [error, setError] = useState(null);
 
     const handleChange = (e) => {
@@ -17,12 +14,9 @@ const LoginPage = () => {
         try {
             const response = await axios.post("http://localhost:5555/auth/login", formData);
 
-            // Set cookies for authentication tokens
-            document.cookie = `access_token=${response.data.access_token};path=/;httponly`;
-            document.cookie = `refresh_token=${response.data.refresh_token};path=/;httponly`;
-
+            // Cookies are set by the backend
             setError(null);
-            window.location.href = "/"; // Redirect to the dashboard/homepage
+            window.location.href = "/"; // Redirect to the dashboard/homepage after login
         } catch (err) {
             setError(err.response?.data?.error || "Invalid login credentials.");
         }
@@ -57,13 +51,26 @@ const LoginPage = () => {
                         style={{ width: "100%", padding: "8px", marginTop: "5px" }}
                     />
                 </div>
-                <button type="submit" style={{ padding: "10px 20px", backgroundColor: "#4CAF50", color: "white", border: "none", cursor: "pointer" }}>
+                <button
+                    type="submit"
+                    style={{
+                        padding: "10px 20px",
+                        backgroundColor: "#4CAF50",
+                        color: "white",
+                        border: "none",
+                        cursor: "pointer",
+                    }}
+                >
                     Login
                 </button>
+                <div style={{ marginTop: "10px" }}>
+                    Don't have an account? <a href="/register">Sign up</a>
+                </div>
             </form>
         </div>
     );
 };
 
 export default LoginPage;
+
 

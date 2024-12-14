@@ -107,3 +107,5 @@ def register_cli_commands(app):
             print(f"Error seeding appointments: {e}")
 
     app.cli.add_command(seed_cli)
+
+
