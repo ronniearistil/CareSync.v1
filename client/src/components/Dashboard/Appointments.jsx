@@ -1,69 +1,102 @@
 import React, { useState, useEffect } from "react";
-import { Box, Button, List, ListItem, Typography } from "@mui/material";
-import AppointmentCalendar from "./AppointmentCalendar"; // Ensure path is correct
-import * as appointmentApi from "../../utils/appointmentApi"; // Updated path
+import {
+  Box,
+  Button,
+  Typography,
+  Table,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody,
+} from "@mui/material";
+import * as appointmentApi from "../../utils/appointmentApi";
 
 const Appointments = () => {
-  const [view, setView] = useState("calendar");
-  const [appointments, setAppointments] = useState([]);
-  const [selectedAppointment, setSelectedAppointment] = useState(null);
-  const [error, setError] = useState(null);
+  const [appointments, setAppointments] = useState([]); // Store fetched appointments
+  const [selectedAppointment, setSelectedAppointment] = useState(null); // For details view
+  const [error, setError] = useState(null); // Error handling
+  const [view, setView] = useState("list"); // Current view: 'list' or 'details'
 
+  // Fetch appointments on component load
   useEffect(() => {
-    const loadAppointments = async () => {
+    const fetchAppointments = async () => {
       try {
-        const data = await appointmentApi.fetchAppointments(); // Adjusted call
-        console.log("Fetched appointments:", data); // Debugging log
+        const data = await appointmentApi.fetchAppointments();
         setAppointments(data);
       } catch (err) {
         console.error("Failed to fetch appointments:", err);
-        setError("Unable to load appointments");
+        setError("Unable to load appointments. Please try again later.");
       }
     };
-
-    loadAppointments();
+    fetchAppointments();
   }, []);
 
+  // Handle selection of an appointment for details view
   const handleAppointmentClick = (appointment) => {
     setSelectedAppointment(appointment);
     setView("details");
   };
 
+  // Handle back navigation from details to list view
+  const handleBackToList = () => {
+    setSelectedAppointment(null);
+    setView("list");
+  };
+
+  // Render error state
   if (error) {
-    return <Typography color="error">{error}</Typography>;
+    return (
+      <Box>
+        <Typography color="error">{error}</Typography>
+      </Box>
+    );
   }
 
+  // Main component rendering
   return (
     <Box>
-      <Box sx={{ display: "flex", gap: 2, mb: 2 }}>
-        <Button onClick={() => setView("calendar")}>Calendar View</Button>
-        <Button onClick={() => setView("list")}>List View</Button>
-      </Box>
-
-      {view === "calendar" && (
-        <AppointmentCalendar
-          onAppointmentSelect={handleAppointmentClick}
-          appointments={appointments}
-        />
-      )}
-
+      {/* List View */}
       {view === "list" && (
-        <List>
-          {appointments.map((appointment) => (
-            <ListItem
-              key={appointment.id}
-              onClick={() => handleAppointmentClick(appointment)}
-              sx={{ cursor: "pointer" }}
-            >
-              {appointment.date} - {appointment.status}
-            </ListItem>
-          ))}
-        </List>
+        <Box>
+          <Typography variant="h5" sx={{ mb: 2 }}>
+            Appointments
+          </Typography>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Date</TableCell>
+                <TableCell>Time</TableCell>
+                <TableCell>Location</TableCell>
+                <TableCell>Status</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {appointments.map((appointment) => (
+                <TableRow
+                  key={appointment.id}
+                  onClick={() => handleAppointmentClick(appointment)}
+                  sx={{ cursor: "pointer", "&:hover": { backgroundColor: "#f5f5f5" } }}
+                >
+                  <TableCell>{appointment.date}</TableCell>
+                  <TableCell>{appointment.time}</TableCell>
+                  <TableCell>{appointment.location}</TableCell>
+                  <TableCell>{appointment.status}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </Box>
       )}
 
+      {/* Details View */}
       {view === "details" && selectedAppointment && (
         <Box>
-          <Typography variant="h5">Appointment Details</Typography>
+          <Button variant="outlined" onClick={handleBackToList} sx={{ mb: 2 }}>
+            Back to List
+          </Button>
+          <Typography variant="h5" sx={{ mb: 2 }}>
+            Appointment Details
+          </Typography>
           <Typography>Date: {selectedAppointment.date}</Typography>
           <Typography>Time: {selectedAppointment.time}</Typography>
           <Typography>Location: {selectedAppointment.location}</Typography>
@@ -75,4 +108,5 @@ const Appointments = () => {
 };
 
 export default Appointments;
+
 

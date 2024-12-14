@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-// import * as patientApi from "../../../utils/patientApi"; 
+import * as patientApi from "../../utils/patientApi";
 import PatientCard from "./PatientCard"; 
+
 const Patients = () => {
   const [patients, setPatients] = useState([]);
   const [isLoading, setIsLoading] = useState(true); // Add loading state

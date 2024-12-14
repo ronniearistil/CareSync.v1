@@ -4,8 +4,7 @@ import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
-// import * as appointmentApi from "../../../utils/appointmentApi";
-
+import * as appointmentApi from "../../utils/appointmentApi";
 
 const AppointmentCalendar = ({ onAppointmentSelect = () => {} }) => {
   const [appointments, setAppointments] = useState([]);

@@ -10,6 +10,7 @@
 // import AddPatientForm from "./components/authentication/auth_forms/AddPatientForm";
 // import AddUserForm from "./components/authentication/auth_forms/AddUserForm";
 // import Appointments from "./components/dashboard/Appointments";
+// import Analytics from "./components/dashboard/Analytics";
 // import News from "./components/news_container/News";
 // import About from "./pages/About";
 // import LoginPage from "./components/authentication/auth_pages/LoginPage";
@@ -17,6 +18,9 @@
 // import PasswordResetPage from "./components/authentication/auth_pages/PasswordResetPage";
 // import PrivateRoute from "./components/PrivateRoute";
 // import Footer from "./components/layout/Footer";
+// import LandingPage from "./components/layout/LandingPage";
+// import PatientLoginPage from "./components/authentication/auth_pages/PatientLoginPage";
+// import UserLoginPage from "./components/authentication/auth_pages/UserLoginPage";
 // 
 // const App = () => {
 //   return (
@@ -26,6 +30,7 @@
 //         <Navbar />
 //         <Routes>
 //           {/* Public Routes */}
+//           <Route path="/" element={<LandingPage />} />
 //           <Route path="/about" element={<About />} />
 //           <Route path="/login" element={<LoginPage />} />
 //           <Route path="/register" element={<RegisterPage />} />
@@ -33,7 +38,7 @@
 // 
 //           {/* Protected Routes */}
 //           <Route
-//             path="/"
+//             path="/dashboard"
 //             element={
 //               <PrivateRoute>
 //                 <Dashboard />
@@ -81,6 +86,14 @@
 //             }
 //           />
 //           <Route
+//             path="/analytics"
+//             element={
+//               <PrivateRoute>
+//                 <Analytics />
+//               </PrivateRoute>
+//             }
+//           />
+//           <Route
 //             path="/news"
 //             element={
 //               <PrivateRoute>
@@ -96,7 +109,7 @@
 // };
 // 
 // export default App;
-// import LandingPage from "./components/layout/LandingPage";
+
 
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
@@ -112,12 +125,12 @@ import Appointments from "./components/dashboard/Appointments";
 import Analytics from "./components/dashboard/Analytics";
 import News from "./components/news_container/News";
 import About from "./pages/About";
-import LoginPage from "./components/authentication/auth_pages/LoginPage";
 import RegisterPage from "./components/authentication/auth_pages/RegisterPage";
 import PasswordResetPage from "./components/authentication/auth_pages/PasswordResetPage";
-import PrivateRoute from "./components/PrivateRoute";
 import Footer from "./components/layout/Footer";
 import LandingPage from "./components/layout/LandingPage";
+import PatientLoginPage from "./components/authentication/auth_pages/PatientLoginPage";
+import UserLoginPage from "./components/authentication/auth_pages/UserLoginPage";
 
 const App = () => {
   return (
@@ -129,74 +142,43 @@ const App = () => {
           {/* Public Routes */}
           <Route path="/" element={<LandingPage />} />
           <Route path="/about" element={<About />} />
-          <Route path="/login" element={<LoginPage />} />
+          <Route path="/login/user" element={<UserLoginPage />} />
+          <Route path="/login/patient" element={<PatientLoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/reset-password" element={<PasswordResetPage />} />
 
           {/* Protected Routes */}
           <Route
             path="/dashboard"
-            element={
-              <PrivateRoute>
-                <Dashboard />
-              </PrivateRoute>
-            }
+            element={<Dashboard />} // Kept as a protected route
           />
           <Route
             path="/patients"
-            element={
-              <PrivateRoute>
-                <Patients />
-              </PrivateRoute>
-            }
+            element={<Patients />} // Kept as a protected route
           />
           <Route
             path="/patients/:id"
-            element={
-              <PrivateRoute>
-                <PatientDetails />
-              </PrivateRoute>
-            }
+            element={<PatientDetails />} // Kept as a protected route
           />
           <Route
             path="/add-patient"
-            element={
-              <PrivateRoute>
-                <AddPatientForm />
-              </PrivateRoute>
-            }
+            element={<AddPatientForm />} // Kept as a protected route
           />
           <Route
             path="/add-user"
-            element={
-              <PrivateRoute>
-                <AddUserForm />
-              </PrivateRoute>
-            }
+            element={<AddUserForm />} // Kept as a protected route
           />
-          <Route
-            path="/appointments"
-            element={
-              <PrivateRoute>
-                <Appointments />
-              </PrivateRoute>
-            }
-          />
+
+          {/* Testing `/appointments` Route Without PrivateRoute */}
+          <Route path="/appointments" element={<Appointments />} />
+
           <Route
             path="/analytics"
-            element={
-              <PrivateRoute>
-                <Analytics />
-              </PrivateRoute>
-            }
+            element={<Analytics />} // Kept as a protected route
           />
           <Route
             path="/news"
-            element={
-              <PrivateRoute>
-                <News />
-              </PrivateRoute>
-            }
+            element={<News />} // Kept as a protected route
           />
         </Routes>
         <Footer />

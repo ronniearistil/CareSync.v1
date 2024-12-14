@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { fetchPatientById } from '../../utils/api'; // Adjusted path to relative
+import { fetchPatientById } from '../../utils/api'; 
 
 const PatientDetails = () => {
   const { id } = useParams();
