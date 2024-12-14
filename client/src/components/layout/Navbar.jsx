@@ -12,11 +12,15 @@ import {
 import SearchIcon from "@mui/icons-material/Search";
 
 const Navbar = () => {
-    const [anchorEl, setAnchorEl] = useState(null); // Controls dropdown menus
+    const [anchorElPatients, setAnchorElPatients] = useState(null); // Controls Patients dropdown
+    const [anchorElUsers, setAnchorElUsers] = useState(null); // Controls Users dropdown
     const [searchQuery, setSearchQuery] = useState("");
 
-    const handleMenuOpen = (event) => setAnchorEl(event.currentTarget);
-    const handleMenuClose = () => setAnchorEl(null);
+    const handlePatientsMenuOpen = (event) => setAnchorElPatients(event.currentTarget);
+    const handlePatientsMenuClose = () => setAnchorElPatients(null);
+
+    const handleUsersMenuOpen = (event) => setAnchorElUsers(event.currentTarget);
+    const handleUsersMenuClose = () => setAnchorElUsers(null);
 
     const handleSearchChange = (event) => setSearchQuery(event.target.value);
     const handleSearchSubmit = () => {
@@ -50,7 +54,7 @@ const Navbar = () => {
                 <Box sx={{ display: "flex", gap: 4 }}>
                     {/* Patients Dropdown */}
                     <Button
-                        onClick={handleMenuOpen}
+                        onClick={handlePatientsMenuOpen}
                         sx={{
                             color: "white",
                             textTransform: "none",
@@ -61,45 +65,73 @@ const Navbar = () => {
                         Patients
                     </Button>
                     <Menu
-                        anchorEl={anchorEl}
-                        open={Boolean(anchorEl)}
-                        onClose={handleMenuClose}
+                        anchorEl={anchorElPatients}
+                        open={Boolean(anchorElPatients)}
+                        onClose={handlePatientsMenuClose}
                     >
                         <MenuItem
-                            sx={{ fontSize: "1.5rem" }} // Adjust size for dropdown items
+                            sx={{ fontSize: "1.5rem" }}
                             onClick={() => (window.location.href = "/patients")}
                         >
                             View All Patients
                         </MenuItem>
                         <MenuItem
-                            sx={{ fontSize: "1.5rem" }} // Adjust size for dropdown items
+                            sx={{ fontSize: "1.5rem" }}
                             onClick={() => (window.location.href = "/add-patient")}
                         >
                             Add New Patient
                         </MenuItem>
                         <MenuItem
-                            sx={{ fontSize: "1.5rem" }} // Adjust size for dropdown items
+                            sx={{ fontSize: "1.5rem" }}
                             onClick={() => (window.location.href = "/patients/reports")}
                         >
                             Patient Reports
                         </MenuItem>
                     </Menu>
 
-                    {/* Other Links */}
+                    {/* Users Dropdown */}
                     <Button
-                        onClick={() => (window.location.href = "/add-user")}
+                        onClick={handleUsersMenuOpen}
                         sx={{
                             color: "white",
+                            textTransform: "none",
+                            fontWeight: "bold",
                             fontSize: "1.5rem", // Double the font size
                         }}
                     >
-                        Add User
+                        Users
                     </Button>
+                    <Menu
+                        anchorEl={anchorElUsers}
+                        open={Boolean(anchorElUsers)}
+                        onClose={handleUsersMenuClose}
+                    >
+                        <MenuItem
+                            sx={{ fontSize: "1.5rem" }}
+                            onClick={() => (window.location.href = "/users")}
+                        >
+                            View All Users
+                        </MenuItem>
+                        <MenuItem
+                            sx={{ fontSize: "1.5rem" }}
+                            onClick={() => (window.location.href = "/add-user")}
+                        >
+                            Add New User
+                        </MenuItem>
+                        <MenuItem
+                            sx={{ fontSize: "1.5rem" }}
+                            onClick={() => (window.location.href = "/users/reports")}
+                        >
+                            User Reports
+                        </MenuItem>
+                    </Menu>
+
+                    {/* Other Links */}
                     <Button
                         onClick={() => (window.location.href = "/appointments")}
                         sx={{
                             color: "white",
-                            fontSize: "1.5rem", // Double the font size
+                            fontSize: "1.5rem",
                         }}
                     >
                         Appointments
@@ -108,7 +140,7 @@ const Navbar = () => {
                         onClick={() => (window.location.href = "/analytics")}
                         sx={{
                             color: "white",
-                            fontSize: "1.5rem", // Double the font size
+                            fontSize: "1.5rem",
                         }}
                     >
                         Analytics
@@ -117,7 +149,7 @@ const Navbar = () => {
                         onClick={() => (window.location.href = "/about")}
                         sx={{
                             color: "white",
-                            fontSize: "1.5rem", // Double the font size
+                            fontSize: "1.5rem",
                         }}
                     >
                         About
@@ -136,15 +168,15 @@ const Navbar = () => {
                             backgroundColor: "white",
                             borderRadius: "4px",
                             width: "200px",
-                            fontSize: "1.5rem", // Double the font size for search bar
+                            fontSize: "1.5rem",
                         }}
                     />
                     <Button
                         variant="contained"
                         sx={{
-                            backgroundColor: "#005bb5", // A darker shade of blue for hover
+                            backgroundColor: "#005bb5",
                             color: "white",
-                            height: "50px", // Slightly taller button for proportion
+                            height: "50px",
                         }}
                         onClick={handleSearchSubmit}
                     >
@@ -157,13 +189,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
-
-
-
-
-
-
-
-
-
