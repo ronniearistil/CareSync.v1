@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Box, TextField, Button, Typography, MenuItem } from "@mui/material";
-import { createUser } from "../../utils/api";
+import * as userApi from "../../../utils/userApi";
+
 
 const AddUserForm = ({ onSuccess }) => {
     const [formData, setFormData] = useState({
@@ -10,6 +11,8 @@ const AddUserForm = ({ onSuccess }) => {
         role: "Provider",
     });
     const [error, setError] = useState(null);
+    const [successMessage, setSuccessMessage] = useState(null);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -18,18 +21,25 @@ const AddUserForm = ({ onSuccess }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setIsSubmitting(true);
+        setError(null);
+        setSuccessMessage(null);
         try {
-            await createUser(formData);
+            await userApi.createUser(formData); // Call createUser directly
+            setSuccessMessage("User added successfully!");
             setFormData({
                 name: "",
                 email: "",
                 password: "",
                 role: "Provider",
             });
-            setError(null);
             if (onSuccess) onSuccess();
         } catch (err) {
-            setError("Failed to add user. Please try again.");
+            setError(
+                `Failed to add user. Error: ${err.response?.data?.error || err.message}`
+            );
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
@@ -39,6 +49,7 @@ const AddUserForm = ({ onSuccess }) => {
                 Add User
             </Typography>
             {error && <Typography color="error">{error}</Typography>}
+            {successMessage && <Typography sx={{ color: "green" }}>{successMessage}</Typography>}
             <TextField
                 label="Name"
                 name="name"
@@ -80,11 +91,13 @@ const AddUserForm = ({ onSuccess }) => {
                 <MenuItem value="Provider">Provider</MenuItem>
                 <MenuItem value="Admin">Admin</MenuItem>
             </TextField>
-            <Button type="submit" variant="contained" color="primary">
-                Add User
+            <Button type="submit" variant="contained" color="primary" disabled={isSubmitting}>
+                {isSubmitting ? "Submitting..." : "Add User"}
             </Button>
         </Box>
     );
 };
 
 export default AddUserForm;
+
+

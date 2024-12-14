@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Box, Button, List, ListItem, Typography } from "@mui/material";
-import AppointmentCalendar from "./AppointmentCalendar";
-import { fetchAppointments } from "../../utils/api";
+import AppointmentCalendar from "./AppointmentCalendar"; // Ensure path is correct
+import * as appointmentApi from "../../utils/appointmentApi"; // Updated path
 
 const Appointments = () => {
   const [view, setView] = useState("calendar");
@@ -12,7 +12,7 @@ const Appointments = () => {
   useEffect(() => {
     const loadAppointments = async () => {
       try {
-        const data = await fetchAppointments();
+        const data = await appointmentApi.fetchAppointments(); // Adjusted call
         console.log("Fetched appointments:", data); // Debugging log
         setAppointments(data);
       } catch (err) {
@@ -75,3 +75,4 @@ const Appointments = () => {
 };
 
 export default Appointments;
+

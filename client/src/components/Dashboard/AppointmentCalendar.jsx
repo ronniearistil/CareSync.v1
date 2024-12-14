@@ -4,7 +4,8 @@ import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
-import { fetchAppointments } from "../../utils/api";
+// import * as appointmentApi from "../../../utils/appointmentApi";
+
 
 const AppointmentCalendar = ({ onAppointmentSelect = () => {} }) => {
   const [appointments, setAppointments] = useState([]);
@@ -14,7 +15,8 @@ const AppointmentCalendar = ({ onAppointmentSelect = () => {} }) => {
   useEffect(() => {
     const loadAppointments = async () => {
       try {
-        const data = await fetchAppointments();
+        const data = await appointmentApi.fetchAppointments(); // Use fetchAppointments from appointmentApi
+        console.log("Fetched appointments:", data); // Debugging log
         const events = data.map((appointment) => ({
           id: appointment.id,
           title: `${appointment.status} - ${appointment.location}`,
@@ -22,8 +24,8 @@ const AppointmentCalendar = ({ onAppointmentSelect = () => {} }) => {
         }));
         setAppointments(events);
       } catch (err) {
-        console.error("Failed to fetch appointments:", err);
-        setError("Unable to load appointments");
+        console.error("Failed to fetch appointments:", err); // Log the error
+        setError("Unable to load appointments."); // Set error message
       }
     };
 
@@ -34,11 +36,11 @@ const AppointmentCalendar = ({ onAppointmentSelect = () => {} }) => {
     appointments.find((appt) => appt.id === parseInt(id));
 
   if (error) {
-    return <Typography color="error">{error}</Typography>;
+    return <Typography color="error">{error}</Typography>; // Render error message
   }
 
-  if (appointments.length === 0) {
-    return <Typography>No appointments available.</Typography>;
+  if (!appointments || appointments.length === 0) {
+    return <Typography>No appointments available.</Typography>; // Handle empty appointments
   }
 
   return (
@@ -98,5 +100,7 @@ const AppointmentCalendar = ({ onAppointmentSelect = () => {} }) => {
   );
 };
 
-
 export default AppointmentCalendar;
+
+
+

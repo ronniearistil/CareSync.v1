@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { Box, TextField, Button, Typography } from "@mui/material";
-import { createPatient } from "../../utils/api";
+import { Box, TextField, Button, Typography, Alert, CircularProgress } from "@mui/material";
+import * as patientApi from "../../../utils/patientApi";
+
 
 const AddPatientForm = ({ onSuccess }) => {
     const [formData, setFormData] = useState({
@@ -12,6 +13,8 @@ const AddPatientForm = ({ onSuccess }) => {
         address: "",
     });
     const [error, setError] = useState(null);
+    const [successMessage, setSuccessMessage] = useState(null);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -20,8 +23,11 @@ const AddPatientForm = ({ onSuccess }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setIsSubmitting(true);
+        setError(null);
+        setSuccessMessage(null);
         try {
-            await createPatient(formData);
+            await patientApi.createPatient(formData);
             setFormData({
                 first_name: "",
                 last_name: "",
@@ -30,10 +36,13 @@ const AddPatientForm = ({ onSuccess }) => {
                 date_of_birth: "",
                 address: "",
             });
-            setError(null);
+            setSuccessMessage("Patient added successfully!");
             if (onSuccess) onSuccess();
         } catch (err) {
-            setError("Failed to add patient. Please try again.");
+            const errorMessage = err.response?.data?.error || "Failed to add patient. Please try again.";
+            setError(errorMessage);
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
@@ -42,7 +51,8 @@ const AddPatientForm = ({ onSuccess }) => {
             <Typography variant="h4" gutterBottom>
                 Add Patient
             </Typography>
-            {error && <Typography color="error">{error}</Typography>}
+            {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
+            {successMessage && <Alert severity="success" sx={{ mb: 2 }}>{successMessage}</Alert>}
             <TextField
                 label="First Name"
                 name="first_name"
@@ -97,11 +107,20 @@ const AddPatientForm = ({ onSuccess }) => {
                 fullWidth
                 margin="normal"
             />
-            <Button type="submit" variant="contained" color="primary">
-                Add Patient
+            <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                fullWidth
+                disabled={isSubmitting}
+                sx={{ mt: 2 }}
+            >
+                {isSubmitting ? <CircularProgress size={24} color="inherit" /> : "Add Patient"}
             </Button>
         </Box>
     );
 };
 
 export default AddPatientForm;
+
+
