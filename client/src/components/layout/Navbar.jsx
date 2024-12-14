@@ -127,7 +127,7 @@ const Navbar = () => {
                     </Menu>
 
                     {/* Other Links */}
-                    <Button
+                    {/* <Button
                         onClick={() => (window.location.href = "/appointments")}
                         sx={{
                             color: "white",
@@ -144,7 +144,7 @@ const Navbar = () => {
                         }}
                     >
                         Analytics
-                    </Button>
+                    </Button> */}
                     <Button
                         onClick={() => (window.location.href = "/about")}
                         sx={{
