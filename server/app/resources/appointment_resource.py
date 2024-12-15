@@ -70,7 +70,9 @@ class AppointmentResource(Resource):
         parser.add_argument("time", required=False)
         parser.add_argument("status", required=False)
         parser.add_argument("location", required=False)
-        parser.add_argument("user_id", required=False, type=int)
+        parser.add_argument("provider_id", required=True, type=int, help="Provider ID is required")
+        parser.add_argument("patient_id", required=True, type=int, help="Patient ID is required")
+
         args = parser.parse_args()
 
         try:
@@ -98,23 +100,4 @@ class AppointmentResource(Resource):
         except Exception as e:
             logger.error(f"Error updating appointment: {e}")
             return {"error": "An error occurred while updating the appointment."}, 500
-
-    def delete(self, appointment_id):
-        """
-        Delete an existing appointment.
-        """
-        try:
-            # Fetch appointment by ID
-            appointment = Appointment.query.get(appointment_id)
-            if not appointment:
-                logger.warning(f"Appointment with ID {appointment_id} not found.")
-                return {"error": "Appointment not found"}, 404
-
-            db.session.delete(appointment)
-            db.session.commit()
-            logger.info(f"Appointment with ID {appointment_id} deleted.")
-            return {"message": "Appointment deleted successfully"}, 200
-        except Exception as e:
-            logger.error(f"Error deleting appointment: {e}")
-            return {"error": "An error occurred while deleting the appointment."}, 500
 

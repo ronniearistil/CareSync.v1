@@ -58,12 +58,15 @@ class PatientResource(Resource):
         """
         Update an existing patient by ID.
         """
+        print(f"PUT Request received for patient_id: {patient_id}")  # Debug log
+        json_data = request.get_json()
+        print(f"Payload: {json_data}")  # Debug log
+
         patient = Patient.query.get(patient_id)
         if not patient:
             return {"error": "Patient not found"}, 404
 
         try:
-            json_data = request.get_json()
             data = patient_schema.load(json_data, partial=True)  # Partial update
             
             for key, value in data.items():
@@ -79,19 +82,22 @@ class PatientResource(Resource):
         except Exception as e:
             db.session.rollback()
             return {"error": f"An unexpected error occurred: {str(e)}"}, 500
+
     def patch(self, patient_id):
         """
         Partially update an existing patient by ID.
         """
+        print(f"PATCH Request received for patient_id: {patient_id}")  # Debug log
+        json_data = request.get_json()
+        print(f"Payload: {json_data}")  # Debug log
+
         patient = Patient.query.get(patient_id)
         if not patient:
             return {"error": "Patient not found"}, 404
 
         try:
-            json_data = request.get_json()
-            data = patient_schema.load(json_data, partial=True)  # Partial validation and update
+            data = patient_schema.load(json_data, partial=True) 
 
-            # Update only the provided fields
             for key, value in data.items():
                 setattr(patient, key, value)
 
@@ -105,6 +111,7 @@ class PatientResource(Resource):
         except Exception as e:
             db.session.rollback()
             return {"error": f"An unexpected error occurred: {str(e)}"}, 500
+        
     def delete(self, patient_id):
         """
         Delete a patient by ID.

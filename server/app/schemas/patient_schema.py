@@ -1,7 +1,6 @@
 from marshmallow import Schema, fields, validates, ValidationError
 from marshmallow.validate import Email, Length
-from datetime import datetime, date
-
+from datetime import date
 
 class PatientSchema(Schema):
     id = fields.Int(dump_only=True)
@@ -28,7 +27,8 @@ class PatientSchema(Schema):
     )
     phone_number = fields.Str(
         required=False, 
-        missing=None
+        missing=None,
+        validate=Length(max=15, error="Phone number must not exceed 15 characters.")
     )
     date_of_birth = fields.Date(
         required=False, 
@@ -39,6 +39,11 @@ class PatientSchema(Schema):
         required=False,
         validate=Length(max=255, error="Address must not exceed 255 characters."),
         missing=None
+    )
+    password = fields.Str(
+        required=True,
+        validate=Length(min=8, error="Password must be at least 8 characters."),
+        error_messages={"required": "Password is required."}
     )
 
     @validates("first_name")
@@ -59,8 +64,6 @@ class PatientSchema(Schema):
             value = value.replace(" ", "").replace("-", "").replace("(", "").replace(")", "")
             if not value.isdigit():
                 raise ValidationError("Phone number must contain only digits.")
-            if len(value) != 10:
-                raise ValidationError("Phone number must be 10 digits long.")
         return value
 
     @validates("date_of_birth")
@@ -68,7 +71,6 @@ class PatientSchema(Schema):
         if value >= date.today():
             raise ValidationError("Date of birth must be in the past.")
         return value
-
 
 
 

@@ -6,7 +6,7 @@ class ProviderPatientSchema(ma.SQLAlchemySchema):
         model = ProviderPatient
         load_instance = True  # Automatically create model instances
 
-    id = ma.auto_field()  # Include the primary key
     provider_id = ma.auto_field()
     patient_id = ma.auto_field()
+
 

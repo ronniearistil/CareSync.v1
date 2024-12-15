@@ -8,19 +8,37 @@ const Analytics = () => {
   };
 
   return (
-    <Card sx={{ marginBottom: 3 }}>
+    <Card
+      sx={{
+        marginBottom: 3,
+        backgroundColor: "#FFFFFF", // White background
+        border: "1px solid #1976D2", // Blue border
+      }}
+    >
       <CardContent>
-        <Typography variant="h2" gutterBottom>
+        <Typography
+          variant="h2"
+          gutterBottom
+          sx={{
+            color: "#1976D2", // Primary blue color for headings
+          }}
+        >
           Analytics
         </Typography>
-        <Typography>Active Users: {data.active_users}</Typography>
-        <Typography>Total Users: {data.total_users}</Typography>
+        <Typography sx={{ color: "#2E2E2E" /* Dark gray text */ }}>
+          Active Users: {data.active_users}
+        </Typography>
+        <Typography sx={{ color: "#2E2E2E" /* Dark gray text */ }}>
+          Total Users: {data.total_users}
+        </Typography>
       </CardContent>
     </Card>
   );
 };
 
 export default Analytics;
+
+
 
 
 

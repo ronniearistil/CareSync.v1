@@ -1,7 +1,6 @@
 from app import db
 from sqlalchemy.orm import validates
 from datetime import date
-from sqlalchemy.exc import IntegrityError
 
 class Patient(db.Model):
     __tablename__ = "patients"
@@ -12,10 +11,7 @@ class Patient(db.Model):
     email = db.Column(db.String(100), unique=True, nullable=False)
     phone_number = db.Column(db.String(15), nullable=True, default=None)
     date_of_birth = db.Column(db.Date, nullable=False)
-    address = db.Column(db.String(255), nullable=True, default=None) 
-    
-    # user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    # user = db.relationship('User', back_populates='patients')
+    address = db.Column(db.String(255), nullable=True, default=None)
 
     def __repr__(self):
         return f"<Patient {self.first_name} {self.last_name}>"

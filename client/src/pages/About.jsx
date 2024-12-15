@@ -4,22 +4,44 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
 const About = () => {
   return (
-    <Container maxWidth="md" sx={{ padding: '2rem', textAlign: 'center' }}>
+    <Container maxWidth="md" sx={{ padding: '2rem', textAlign: 'center', backgroundColor: '#F9F9F9', borderRadius: '8px' }}>
       {/* Main Heading */}
-      <Typography variant="h2" sx={{ fontWeight: 'bold', marginBottom: '1.5rem', color: '#4CAF50' }}>
+      <Typography
+        variant="h2"
+        sx={{
+          fontWeight: 'bold',
+          marginBottom: '1.5rem',
+          color: 'primary.main',
+          textShadow: '1px 1px 2px rgba(0, 0, 0, 0.1)',
+        }}
+      >
         About CareSync
       </Typography>
 
       {/* Introduction */}
-      <Typography variant="body1" sx={{ marginBottom: '2rem', lineHeight: 1.8 }}>
+      <Typography
+        variant="body1"
+        sx={{
+          marginBottom: '2rem',
+          lineHeight: 1.8,
+          color: 'text.secondary',
+        }}
+      >
         CareSync simplifies tracking vaccines, screenings, and milestones for seamless care coordination. 
         It empowers healthcare providers with personalized recommendations and engages patients to actively 
         participate in their health journey.
       </Typography>
 
       {/* For Providers Section */}
-      <Box sx={{ marginBottom: '2rem' }}>
-        <Typography variant="h4" sx={{ fontWeight: 'bold', marginBottom: '1rem' }}>
+      <Box sx={{ marginBottom: '2rem', backgroundColor: '#FFFFFF', padding: '1.5rem', borderRadius: '8px', boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)' }}>
+        <Typography
+          variant="h4"
+          sx={{
+            fontWeight: 'bold',
+            marginBottom: '1rem',
+            color: 'primary.main',
+          }}
+        >
           For Providers
         </Typography>
         <List sx={{ textAlign: 'left', margin: '0 auto', maxWidth: '600px' }}>
@@ -32,17 +54,24 @@ const About = () => {
           ].map((item, index) => (
             <ListItem key={index} sx={{ paddingLeft: 0 }}>
               <ListItemIcon>
-                <CheckCircleIcon color="success" />
+                <CheckCircleIcon sx={{ color: 'success.main' }} />
               </ListItemIcon>
-              <ListItemText primary={item} />
+              <ListItemText primary={item} sx={{ color: 'text.primary' }} />
             </ListItem>
           ))}
         </List>
       </Box>
 
       {/* For Patients Section */}
-      <Box>
-        <Typography variant="h4" sx={{ fontWeight: 'bold', marginBottom: '1rem' }}>
+      <Box sx={{ backgroundColor: '#FFFFFF', padding: '1.5rem', borderRadius: '8px', boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)' }}>
+        <Typography
+          variant="h4"
+          sx={{
+            fontWeight: 'bold',
+            marginBottom: '1rem',
+            color: 'primary.main',
+          }}
+        >
           For Patients
         </Typography>
         <List sx={{ textAlign: 'left', margin: '0 auto', maxWidth: '600px' }}>
@@ -54,9 +83,9 @@ const About = () => {
           ].map((item, index) => (
             <ListItem key={index} sx={{ paddingLeft: 0 }}>
               <ListItemIcon>
-                <CheckCircleIcon color="success" />
+                <CheckCircleIcon sx={{ color: 'success.main' }} />
               </ListItemIcon>
-              <ListItemText primary={item} />
+              <ListItemText primary={item} sx={{ color: 'text.primary' }} />
             </ListItem>
           ))}
         </List>

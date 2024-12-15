@@ -27,27 +27,58 @@ api.interceptors.response.use(
   }
 );
 
-// Analytics
-export const fetchAnalytics = async () => {
+// USERS
+export const createUser = async (user) => {
   try {
-    const { data } = await api.get('/analytics');
+    const { data } = await api.post('/users', user); // Maps to the backend `post` method
     return data;
   } catch (error) {
-    console.error('Failed to fetch analytics:', error);
-    throw error;
-  }
-};
-export const updateAnalytics = async (id, data) => {
-  try {
-    const { data: updatedData } = await api.put(`/analytics/${id}`, data);
-    return updatedData;
-  } catch (error) {
-    console.error(`Failed to update analytics with ID ${id}:`, error);
+    console.error('Failed to create user:', error);
     throw error;
   }
 };
 
-// Appointments
+export const fetchUsers = async () => {
+  try {
+    const { data } = await api.get('/users'); // Fetches all users
+    return data;
+  } catch (error) {
+    console.error('Failed to fetch users:', error);
+    throw error;
+  }
+};
+
+export const fetchUserById = async (id) => {
+  try {
+    const { data } = await api.get(`/users/${id}`); // Fetches a user by ID
+    return data;
+  } catch (error) {
+    console.error(`Failed to fetch user with ID ${id}:`, error);
+    throw error;
+  }
+};
+
+export const updateUser = async (id, user) => {
+  try {
+    const { data } = await api.put(`/users/${id}`, user); // Updates a user by ID
+    return data;
+  } catch (error) {
+    console.error(`Failed to update user with ID ${id}:`, error);
+    throw error;
+  }
+};
+
+export const deleteUser = async (id) => {
+  try {
+    await api.delete(`/users/${id}`); // Deletes a user by ID
+    return { message: `User with ID ${id} deleted successfully.` };
+  } catch (error) {
+    console.error(`Failed to delete user with ID ${id}:`, error);
+    throw error;
+  }
+};
+
+// APPOINTMENTS
 export const fetchAppointments = async () => {
   try {
     const { data } = await api.get('/appointments');
@@ -57,6 +88,7 @@ export const fetchAppointments = async () => {
     throw error;
   }
 };
+
 export const fetchAppointmentById = async (id) => {
   try {
     const { data } = await api.get(`/appointments/${id}`);
@@ -66,24 +98,27 @@ export const fetchAppointmentById = async (id) => {
     throw error;
   }
 };
-export const createAppointment = async (data) => {
+
+export const createAppointment = async (appointment) => {
   try {
-    const { data: newAppointment } = await api.post('/appointments', data);
-    return newAppointment;
+    const { data } = await api.post('/appointments', appointment);
+    return data;
   } catch (error) {
     console.error('Failed to create appointment:', error);
     throw error;
   }
 };
-export const updateAppointment = async (id, data) => {
+
+export const updateAppointment = async (id, appointment) => {
   try {
-    const { data: updatedAppointment } = await api.put(`/appointments/${id}`, data);
-    return updatedAppointment;
+    const { data } = await api.put(`/appointments/${id}`, appointment);
+    return data;
   } catch (error) {
     console.error(`Failed to update appointment with ID ${id}:`, error);
     throw error;
   }
 };
+
 export const deleteAppointment = async (id) => {
   try {
     await api.delete(`/appointments/${id}`);
@@ -94,7 +129,7 @@ export const deleteAppointment = async (id) => {
   }
 };
 
-// Patients
+// PATIENTS
 export const fetchPatients = async () => {
   try {
     const { data } = await api.get('/patients');
@@ -104,6 +139,7 @@ export const fetchPatients = async () => {
     throw error;
   }
 };
+
 export const fetchPatientById = async (id) => {
   try {
     const { data } = await api.get(`/patients/${id}`);
@@ -113,24 +149,27 @@ export const fetchPatientById = async (id) => {
     throw error;
   }
 };
-export const createPatient = async (data) => {
+
+export const createPatient = async (patient) => {
   try {
-    const { data: newPatient } = await api.post('/patients', data);
-    return newPatient;
+    const { data } = await api.post('/patients', patient);
+    return data;
   } catch (error) {
     console.error('Failed to create patient:', error);
     throw error;
   }
 };
-export const updatePatient = async (id, data) => {
+
+export const updatePatient = async (id, patient) => {
   try {
-    const { data: updatedPatient } = await api.put(`/patients/${id}`, data);
-    return updatedPatient;
+    const { data } = await api.put(`/patients/${id}`, patient);
+    return data;
   } catch (error) {
     console.error(`Failed to update patient with ID ${id}:`, error);
     throw error;
   }
 };
+
 export const deletePatient = async (id) => {
   try {
     await api.delete(`/patients/${id}`);
@@ -141,7 +180,7 @@ export const deletePatient = async (id) => {
   }
 };
 
-// News
+// NEWS
 export const fetchNews = async () => {
   try {
     const { data } = await api.get('/news');
@@ -151,6 +190,7 @@ export const fetchNews = async () => {
     throw error;
   }
 };
+
 export const fetchNewsById = async (id) => {
   try {
     const { data } = await api.get(`/news/${id}`);
@@ -160,24 +200,27 @@ export const fetchNewsById = async (id) => {
     throw error;
   }
 };
-export const createNews = async (data) => {
+
+export const createNews = async (news) => {
   try {
-    const { data: newNews } = await api.post('/news', data);
-    return newNews;
+    const { data } = await api.post('/news', news);
+    return data;
   } catch (error) {
     console.error('Failed to create news:', error);
     throw error;
   }
 };
-export const updateNews = async (id, data) => {
+
+export const updateNews = async (id, news) => {
   try {
-    const { data: updatedNews } = await api.put(`/news/${id}`, data);
-    return updatedNews;
+    const { data } = await api.put(`/news/${id}`, news);
+    return data;
   } catch (error) {
     console.error(`Failed to update news with ID ${id}:`, error);
     throw error;
   }
 };
+
 export const deleteNews = async (id) => {
   try {
     await api.delete(`/news/${id}`);
@@ -188,7 +231,7 @@ export const deleteNews = async (id) => {
   }
 };
 
-// Recommendations
+// RECOMMENDATIONS
 export const fetchRecommendations = async () => {
   try {
     const { data } = await api.get('/recommendations');
@@ -198,6 +241,7 @@ export const fetchRecommendations = async () => {
     throw error;
   }
 };
+
 export const fetchRecommendationById = async (id) => {
   try {
     const { data } = await api.get(`/recommendations/${id}`);
@@ -207,24 +251,27 @@ export const fetchRecommendationById = async (id) => {
     throw error;
   }
 };
-export const createRecommendation = async (data) => {
+
+export const createRecommendation = async (recommendation) => {
   try {
-    const { data: newRecommendation } = await api.post('/recommendations', data);
-    return newRecommendation;
+    const { data } = await api.post('/recommendations', recommendation);
+    return data;
   } catch (error) {
     console.error('Failed to create recommendation:', error);
     throw error;
   }
 };
-export const updateRecommendation = async (id, data) => {
+
+export const updateRecommendation = async (id, recommendation) => {
   try {
-    const { data: updatedRecommendation } = await api.put(`/recommendations/${id}`, data);
-    return updatedRecommendation;
+    const { data } = await api.put(`/recommendations/${id}`, recommendation);
+    return data;
   } catch (error) {
     console.error(`Failed to update recommendation with ID ${id}:`, error);
     throw error;
   }
 };
+
 export const deleteRecommendation = async (id) => {
   try {
     await api.delete(`/recommendations/${id}`);
@@ -235,6 +282,26 @@ export const deleteRecommendation = async (id) => {
   }
 };
 
+// ANALYTICS
+export const fetchAnalytics = async () => {
+  try {
+    const { data } = await api.get('/analytics');
+    return data;
+  } catch (error) {
+    console.error('Failed to fetch analytics:', error);
+    throw error;
+  }
+};
+
+export const updateAnalytics = async (id, analytics) => {
+  try {
+    const { data } = await api.put(`/analytics/${id}`, analytics);
+    return data;
+  } catch (error) {
+    console.error(`Failed to update analytics with ID ${id}:`, error);
+    throw error;
+  }
+};
+
 // Export the configured Axios instance
 export default api;
-

@@ -1,5 +1,5 @@
 import React from "react";
-import logout from "./logout"; // Ensure the path is correct
+import logout from "./logout"; 
 
 const LogoutButton = () => {
   const handleLogout = async () => {
