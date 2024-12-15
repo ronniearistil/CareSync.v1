@@ -1,11 +1,18 @@
 from flask_bcrypt import Bcrypt
-from flask import request, jsonify, make_response
-from flask_jwt_extended import create_access_token, create_refresh_token, jwt_required, get_jwt_identity, unset_jwt_cookies
+from flask import request, make_response
+from flask_jwt_extended import (
+    create_access_token,
+    create_refresh_token,
+    jwt_required,
+    get_jwt_identity,
+    unset_jwt_cookies
+)
 from app.auth.services import authenticate_user, register_user, reset_user_password
 from app.auth.utils import validate_user_input
-# from server.app.models.user_model import User
 from app.models.user_model import User
 from . import auth_bp
+
+bcrypt = Bcrypt()
 
 @auth_bp.route("/login", methods=["POST"])
 def login():
@@ -17,19 +24,7 @@ def login():
             return {"error": "Email and password are required"}, 400
 
         response = authenticate_user(email, password)
-        # if response.get("error"):
-        #     return response, 401
-
         return response
-    except Exception as e:
-        return {"error": f"An unexpected error occurred: {str(e)}"}, 500
-
-@auth_bp.route("/protected", methods=["GET"])
-@jwt_required()
-def protected():
-    try:
-        current_user = get_jwt_identity()
-        return {"message": f"Hello, {current_user['email']}! This is a protected route."}, 200
     except Exception as e:
         return {"error": f"An unexpected error occurred: {str(e)}"}, 500
 
@@ -74,6 +69,33 @@ def logout():
         return {"error": f"An unexpected error occurred: {str(e)}"}, 500
 
 
+@auth_bp.route("/user/login", methods=["POST"])
+def login_user():
+    try:
+        data = request.get_json()
+        email, password = data.get("email"), data.get("password")
+
+        if not email or not password:
+            return {"error": "Email and password are required"}, 400
+
+        # Ensure the user is not a patient
+        user = User.query.filter_by(email=email).filter(User.role != "Patient").first()
+        if not user or not bcrypt.check_password_hash(user.password_hash, password):
+            return {"error": "Invalid credentials"}, 401
+
+        # Generate tokens
+        identity = {"id": user.id, "email": user.email, "role": user.role}
+        access_token = create_access_token(identity=identity)
+        refresh_token = create_refresh_token(identity=identity)
+
+        response = make_response({"message": "Login successful"}, 200)
+        response.set_cookie("access_token_cookie", access_token, httponly=True, max_age=3600)
+        response.set_cookie("refresh_token_cookie", refresh_token, httponly=True, max_age=604800)
+        return response
+    except Exception as e:
+        return {"error": f"An unexpected error occurred: {str(e)}"}, 500
+
+
 @auth_bp.route("/patients/login", methods=["POST"])
 def login_patient():
     try:
@@ -89,8 +111,9 @@ def login_patient():
             return {"error": "Invalid credentials"}, 401
 
         # Generate tokens
-        access_token = create_access_token(identity={"id": patient.id, "email": patient.email, "role": patient.role})
-        refresh_token = create_refresh_token(identity={"id": patient.id, "email": patient.email, "role": patient.role})
+        identity = {"id": patient.id, "email": patient.email, "role": patient.role}
+        access_token = create_access_token(identity=identity)
+        refresh_token = create_refresh_token(identity=identity)
 
         response = make_response({"message": "Login successful"}, 200)
         response.set_cookie("access_token_cookie", access_token, httponly=True, max_age=3600)
@@ -98,5 +121,8 @@ def login_patient():
         return response
     except Exception as e:
         return {"error": f"An unexpected error occurred: {str(e)}"}, 500
+
+
+
 
 

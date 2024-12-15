@@ -1,82 +1,79 @@
-# import bcrypt
 from flask import make_response
 from flask_jwt_extended import create_access_token, create_refresh_token
 from app.models.user_model import User
-from app import bcrypt 
-from app import db
+from app import bcrypt, db
 from app.schemas.user_schema import user_schema
 
+
 def authenticate_user(email, password):
-    """
-    Authenticate the user by verifying their email and password.
-    Only supports bcrypt for password hashing.
-    """
-    user = User.query.filter_by(email=email).first()
-    if not user:
-        return {"error": "Invalid credentials"},400
+    try:
+        # Check if the user exists
+        user = User.query.filter_by(email=email).first()
+        if not user:
+            return {"error": "Invalid credentials"}, 400
 
-    # Verify bcrypt hash
-    if not bcrypt.check_password_hash(user.password_hash, password):
-        return {"error": "Invalid credentials"},400
+        # Verify password
+        if not bcrypt.check_password_hash(user.password_hash, password):
+            return {"error": "Invalid credentials"}, 400
 
-    # Generate JWT tokens
-    access_token = create_access_token(identity={"id": user.id, "email": user.email, "role": user.role})
-    refresh_token = create_refresh_token(identity={"id": user.id, "email": user.email, "role": user.role})
+        # Generate tokens
+        identity = {"id": user.id, "email": user.email, "role": user.role}
+        access_token = create_access_token(identity=identity)
+        refresh_token = create_refresh_token(identity=identity)
 
-    # Set tokens as HTTP-only cookies
-    response = make_response(user_schema.dump(user),200)
-    response.set_cookie("access_token_cookie", access_token, httponly=True, max_age=3600)
-    response.set_cookie("refresh_token_cookie", refresh_token, httponly=True, max_age=604800)
-    return response
+        # Set cookies
+        response = make_response(user_schema.dump(user), 200)
+        response.set_cookie("access_token_cookie", access_token, httponly=True, max_age=3600)
+        response.set_cookie("refresh_token_cookie", refresh_token, httponly=True, max_age=604800)
+        return response
+    except Exception as e:
+        return {"error": f"An unexpected error occurred: {str(e)}"}, 500
+
 
 def register_user(data):
-    """
-    Register a new user with the provided details.
-    Ensures email uniqueness and hashes the password using bcrypt.
-    """
-    email, password, name, role = data["email"], data["password"], data["name"], data.get("role", "Patient")
-
-    # Check if the email is already in use
-    if User.query.filter_by(email=email).first():
-        print(f"Email already exists: {email}")  # Debugging
-        return {"error": "Email already in use"}
-
     try:
-        # Hash password with bcrypt
-        print("Hashing password with bcrypt...")  # Debugging
+        email = data.get("email")
+        password = data.get("password")
+        name = data.get("name")
+        role = data.get("role", "Patient")
+
+        # Validate required fields
+        if not email or not password or not name or role not in ["Provider", "Admin"]:
+            return {"error": "Invalid input provided."}, 400
+
+        # Check for duplicate email
+        if User.query.filter_by(email=email).first():
+            return {"error": "Email already in use"}, 400
+
+        # Hash the password
         hashed_password = bcrypt.generate_password_hash(password).decode("utf-8")
-        print(f"Generated bcrypt hash: {hashed_password}")  # Debugging
 
         # Create new user
         new_user = User(email=email, password_hash=hashed_password, name=name, role=role)
-        db.session.add(new_user) # type: ignore
-        db.session.commit() # type: ignore
-        print(f"User {email} registered successfully.")  # Debugging
+        db.session.add(new_user)
+        db.session.commit()
 
         return {"message": "User registered successfully"}, 201
     except Exception as e:
-        print(f"Error during user registration: {e}")  # Debugging
-        db.session.rollback() # type: ignore
-        return {"error": "An unexpected error occurred. Contact support."}, 500
+        db.session.rollback()  # Roll back any changes in case of failure
+        return {"error": f"An unexpected error occurred: {str(e)}"}, 500
 
 
 def reset_user_password(email, new_password):
-    """
-    Reset a user's password. Hashes the new password using bcrypt.
-    """
-    user = User.query.filter_by(email=email).first()
-    if not user:
-        print(f"User not found: {email}")  # Debugging
-        return {"error": "User not found"}, 404
-
     try:
-        # Hash the new password with bcrypt
+        # Find user by email
+        user = User.query.filter_by(email=email).first()
+        if not user:
+            return {"error": "User not found"}, 404
+
+        # Hash the new password
         hashed_password = bcrypt.generate_password_hash(new_password).decode("utf-8")
         user.password_hash = hashed_password
-        db.session.commit() # type: ignore
-        print(f"Password for user {email} reset successfully.")  # Debugging
+        db.session.commit()
+
         return {"message": "Password reset successfully"}, 200
     except Exception as e:
-        print(f"Error during password reset: {e}")  # Debugging
-        db.session.rollback() # type: ignore
-        return {"error": "An unexpected error occurred. Contact support."}, 500
+        db.session.rollback()  # Roll back any changes in case of failure
+        return {"error": f"An unexpected error occurred: {str(e)}"}, 500
+
+

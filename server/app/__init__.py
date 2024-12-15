@@ -38,8 +38,10 @@ def create_app():
     app.config["JWT_COOKIE_CSRF_PROTECT"] = False
 
     # Enable CORS
-    app.config["CORS_ALLOWED_ORIGINS"] = ["http://localhost:5174"]
-    CORS(app, resources={r"/*": {"origins": "http://localhost:5173"}}, supports_credentials=True)
+    # app.config["CORS_ALLOWED_ORIGINS"] = ["http://localhost:5174"]
+    # CORS(app, resources={r"/*": {"origins": "http://localhost:5173"}}, supports_credentials=True)
+    CORS(app, resources={r"/*": {"origins": ["http://localhost:5173", "http://localhost:5174", "http://localhost:5175"]}}, supports_credentials=True)
+
 
     # Initialize Flask extensions
     db.init_app(app)
@@ -107,3 +109,5 @@ def register_cli_commands(app):
             print(f"Error seeding appointments: {e}")
 
     app.cli.add_command(seed_cli)
+
+

@@ -1,41 +1,81 @@
-import React, { useEffect, useState } from 'react';
-// import {fetchPatients} from "./utils/api";
-// import PatientCard from './components/Patients/PatientCard';
+import React, { useEffect, useState } from "react";
+import { Box, Typography, Button } from "@mui/material";
+import * as patientApi from "../../utils/patientApi";
 
 const Patients = () => {
   const [patients, setPatients] = useState([]);
-  const [isLoading, setIsLoading] = useState(true); // Add loading state
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const getPatients = async () => {
+    const loadPatients = async () => {
       try {
-        const response = await fetchPatients();
-        setPatients(response.data);
+        const data = await patientApi.fetchPatients(); // Use the API utility function
+        setPatients(data);
       } catch (error) {
-        console.error('Error fetching patients:', error);
-        // Handle error (e.g., display an error message)
-      } finally {
-        setIsLoading(false); // Set loading to false after fetching
+        console.error("Error fetching patients:", error);
+        setError("Failed to load patients. Please try again.");
       }
     };
 
-    getPatients();
+    loadPatients();
   }, []);
 
+  if (error) {
+    return (
+      <Box sx={{ padding: "2rem" }}>
+        <Typography variant="h6" color="error">
+          {error}
+        </Typography>
+      </Box>
+    );
+  }
+
   return (
-    <div>
-      <h2>Patients</h2>
-      {isLoading ? ( // Conditional rendering for loading state
-        <p>Loading patients...</p>
+    <Box sx={{ padding: "2rem" }}>
+      <Typography variant="h3" sx={{ marginBottom: "2rem", fontWeight: "bold" }}>
+        Patients
+      </Typography>
+      {patients.length === 0 ? (
+        <Typography variant="body1">No patients found.</Typography>
       ) : (
-        <div>
-          {patients.map((patient) => (
-            <PatientCard key={patient.id} patient={patient} />
-          ))}
-        </div>
+        patients.map((patient) => (
+          <Box
+            key={patient.id}
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: "1rem",
+              padding: "1rem",
+              border: "1px solid #ddd",
+              borderRadius: "8px",
+            }}
+          >
+            <Box>
+              <Typography variant="h5" sx={{ fontWeight: "bold" }}>
+                {patient.first_name} {patient.last_name}
+              </Typography>
+              <Typography variant="body1" color="text.secondary">
+                {patient.email}
+              </Typography>
+              <Typography variant="body1" color="text.secondary">
+                {patient.phone_number}
+              </Typography>
+            </Box>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => (window.location.href = `/patients/${patient.id}`)}
+            >
+              View Details
+            </Button>
+          </Box>
+        ))
       )}
-    </div>
+    </Box>
   );
 };
 
 export default Patients;
+
+

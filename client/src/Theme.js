@@ -1,49 +1,43 @@
-import { createTheme } from '@mui/material/styles';
+import { createTheme } from "@mui/material/styles";
 
-const theme = createTheme({
+const healthcareTheme = createTheme({
   palette: {
     primary: {
-      main: '#1976D2', // Blue
+      main: "#1976D2", // Trustworthy Blue
     },
     secondary: {
-      main: '#388E3C', // Green
-    },
-    warning: {
-      main: '#FF9800', // Orange
+      main: "#388E3C", // Calming Green
     },
     background: {
-      default: '#F5F5F5', // Light Gray
-      paper: '#FFFFFF', // White
+      default: "#F7F7F7", // Soft Off-white
+      paper: "#FFFFFF", // Clean White
     },
     text: {
-      primary: '#212121', // Dark Gray
-      secondary: '#757575', // Lighter Gray for subtitles
+      primary: "#2E2E2E", // Dark Gray
+      secondary: "#757575", // Muted Gray
     },
   },
   typography: {
-    fontFamily: 'Roboto, Arial, sans-serif',
+    fontFamily: "Roboto, Arial, sans-serif",
     h1: {
-      fontSize: '2rem',
+      fontSize: "3rem",
       fontWeight: 700,
+      color: "#2E2E2E",
     },
     h2: {
-      fontSize: '1.5rem',
+      fontSize: "2rem",
       fontWeight: 600,
+      color: "#2E2E2E",
     },
     body1: {
-      fontSize: '1rem',
-    },
-  },
-  components: {
-    MuiButton: {
-      styleOverrides: {
-        root: {
-          borderRadius: '8px',
-          textTransform: 'none', // Avoid uppercase text
-        },
-      },
+      fontSize: "1.25rem",
+      color: "#2E2E2E",
     },
   },
 });
 
-export default theme;
+
+export default healthcareTheme;
+
+
+
