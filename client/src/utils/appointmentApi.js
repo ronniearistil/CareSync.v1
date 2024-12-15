@@ -50,6 +50,7 @@
 //     }
 // };
 
+// Current Working Version 
 
 import api from './apiConfig';
 
@@ -87,10 +88,18 @@ export const createAppointment = async (appointment) => {
     }
 };
 
-// Update an appointment
+// Update an appointment (Partial Update)
 export const updateAppointment = async (id, appointment) => {
     try {
-        const { data } = await api.put(`/appointments/${id}`, appointment);
+        const payload = {};
+        // Include only updated fields in payload
+        Object.keys(appointment).forEach((key) => {
+            if (appointment[key] !== null && appointment[key] !== "") {
+                payload[key] = appointment[key];
+            }
+        });
+
+        const { data } = await api.patch(`/appointments/${id}`, payload);
         return data;
     } catch (error) {
         console.error(`Failed to update appointment with ID ${id}:`, error?.response?.data || error.message);
@@ -108,3 +117,6 @@ export const deleteAppointment = async (id) => {
         throw error;
     }
 };
+
+
+
