@@ -9,6 +9,7 @@
 // import AddPatientForm from "./components/authentication/auth_forms/AddPatientForm";
 // import AddUserForm from "./components/authentication/auth_forms/AddUserForm";
 // import Appointments from "./components/dashboard/Appointments";
+// import AppointmentCalendar from "./components/dashboard/AppointmentCalendar"; // Import AppointmentCalendar
 // import Analytics from "./components/dashboard/Analytics";
 // import News from "./components/news_container/News";
 // import About from "./pages/About";
@@ -43,8 +44,10 @@
 //                     <Route path="/add-patient" element={<AddPatientForm />} />
 //                     <Route path="/add-user" element={<AddUserForm />} />
 //                     <Route path="/appointments" element={<Appointments />} />
+//                     <Route path="/appointments/calendar" element={<AppointmentCalendar />} /> {/* Calendar Route */}
 //                     <Route path="/analytics" element={<Analytics />} />
 //                     <Route path="/news" element={<News />} />
+//                     
 // 
 //                     {/* New User Routes */}
 //                     <Route path="/users" element={<Users />} />
@@ -59,6 +62,8 @@
 // export default App;
 
 
+// Add Appointment Debugging
+
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ThemeProvider, CssBaseline } from "@mui/material";
@@ -70,7 +75,8 @@ import PatientDetails from "./components/patient_context/PatientDetails";
 import AddPatientForm from "./components/authentication/auth_forms/AddPatientForm";
 import AddUserForm from "./components/authentication/auth_forms/AddUserForm";
 import Appointments from "./components/dashboard/Appointments";
-import AppointmentCalendar from "./components/dashboard/AppointmentCalendar"; // Import AppointmentCalendar
+import AppointmentCalendar from "./components/dashboard/AppointmentCalendar";
+import AddAppointment from "./components/dashboard/AddAppointment"; // AddAppointment Component
 import Analytics from "./components/dashboard/Analytics";
 import News from "./components/news_container/News";
 import About from "./pages/About";
@@ -80,8 +86,8 @@ import Footer from "./components/layout/Footer";
 import LandingPage from "./components/layout/LandingPage";
 import PatientLoginPage from "./components/authentication/auth_pages/PatientLoginPage";
 import UserLoginPage from "./components/authentication/auth_pages/UserLoginPage";
-import Users from "./components/user_context/Users"; // New Users Component
-import UserDetails from "./components/user_context/UserDetails"; // New UserDetails Component
+import Users from "./components/user_context/Users";
+import UserDetails from "./components/user_context/UserDetails";
 
 const App = () => {
     return (
@@ -105,12 +111,12 @@ const App = () => {
                     <Route path="/add-patient" element={<AddPatientForm />} />
                     <Route path="/add-user" element={<AddUserForm />} />
                     <Route path="/appointments" element={<Appointments />} />
-                    <Route path="/appointments/calendar" element={<AppointmentCalendar />} /> {/* Calendar Route */}
+                    <Route path="/appointments/calendar" element={<AppointmentCalendar />} />
+                    <Route path="/appointments/add" element={<AddAppointment />} />
                     <Route path="/analytics" element={<Analytics />} />
                     <Route path="/news" element={<News />} />
-                    
 
-                    {/* New User Routes */}
+                    {/* User Routes */}
                     <Route path="/users" element={<Users />} />
                     <Route path="/users/:id" element={<UserDetails />} />
                 </Routes>
