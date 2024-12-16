@@ -1,3 +1,4 @@
+// // Appoinment adding Debugging 
 // 
 // import React, { useState } from "react";
 // import {
@@ -11,34 +12,38 @@
 //   TextField,
 // } from "@mui/material";
 // import SearchIcon from "@mui/icons-material/Search";
+// import { useNavigate } from "react-router-dom";
+// 
+// // Global Search Test.
+// 
+// import { searchGlobal } from "../../utils/searchApi";
 // 
 // const Navbar = () => {
-//   const [anchorElPatients, setAnchorElPatients] = useState(null); // Controls Patients dropdown
-//   const [anchorElUsers, setAnchorElUsers] = useState(null); // Controls Users dropdown
-//   const [anchorElAppointments, setAnchorElAppointments] = useState(null); // Controls Appointments dropdown
+//   const navigate = useNavigate();
+//   const [anchorElPatients, setAnchorElPatients] = useState(null);
+//   const [anchorElUsers, setAnchorElUsers] = useState(null);
+//   const [anchorElAppointments, setAnchorElAppointments] = useState(null);
 //   const [searchQuery, setSearchQuery] = useState("");
 // 
+//   // Global Search Test
+// 
+//   const [searchResults, setSearchResults] = useState([]);
+// 
+// 
 //   // Handlers for dropdowns
-//   const handlePatientsMenuOpen = (event) => setAnchorElPatients(event.currentTarget);
-//   const handlePatientsMenuClose = () => setAnchorElPatients(null);
-// 
-//   const handleUsersMenuOpen = (event) => setAnchorElUsers(event.currentTarget);
-//   const handleUsersMenuClose = () => setAnchorElUsers(null);
-// 
-//   const handleAppointmentsMenuOpen = (event) => setAnchorElAppointments(event.currentTarget);
-//   const handleAppointmentsMenuClose = () => setAnchorElAppointments(null);
+//   const handleMenuOpen = (setter) => (event) => setter(event.currentTarget);
+//   const handleMenuClose = (setter) => () => setter(null);
 // 
 //   // Search functionality
-//   const handleSearchChange = (event) => setSearchQuery(event.target.value);
 //   const handleSearchSubmit = () => {
-//     console.log("Search query:", searchQuery); // Replace with search functionality
+//     console.log("Search query:", searchQuery);
 //   };
 // 
 //   return (
 //     <AppBar
 //       position="static"
 //       sx={{
-//         backgroundColor: "#1976D2", // Primary blue color
+//         backgroundColor: "#1976D2",
 //         padding: "0.5rem",
 //       }}
 //     >
@@ -52,7 +57,7 @@
 //             cursor: "pointer",
 //             fontSize: "2rem",
 //           }}
-//           onClick={() => (window.location.href = "/")}
+//           onClick={() => navigate("/")}
 //         >
 //           CareSync
 //         </Typography>
@@ -61,7 +66,7 @@
 //         <Box sx={{ display: "flex", gap: 4 }}>
 //           {/* Patients Dropdown */}
 //           <Button
-//             onClick={handlePatientsMenuOpen}
+//             onClick={handleMenuOpen(setAnchorElPatients)}
 //             sx={{
 //               color: "white",
 //               textTransform: "none",
@@ -74,23 +79,23 @@
 //           <Menu
 //             anchorEl={anchorElPatients}
 //             open={Boolean(anchorElPatients)}
-//             onClose={handlePatientsMenuClose}
+//             onClose={handleMenuClose(setAnchorElPatients)}
 //           >
 //             <MenuItem
 //               sx={{ fontSize: "1.5rem" }}
-//               onClick={() => (window.location.href = "/patients")}
+//               onClick={() => navigate("/patients")}
 //             >
 //               View All Patients
 //             </MenuItem>
 //             <MenuItem
 //               sx={{ fontSize: "1.5rem" }}
-//               onClick={() => (window.location.href = "/add-patient")}
+//               onClick={() => navigate("/add-patient")}
 //             >
 //               Add New Patient
 //             </MenuItem>
 //             <MenuItem
 //               sx={{ fontSize: "1.5rem" }}
-//               onClick={() => (window.location.href = "/patients/reports")}
+//               onClick={() => navigate("/patients/reports")}
 //             >
 //               Patient Reports
 //             </MenuItem>
@@ -98,7 +103,7 @@
 // 
 //           {/* Users Dropdown */}
 //           <Button
-//             onClick={handleUsersMenuOpen}
+//             onClick={handleMenuOpen(setAnchorElUsers)}
 //             sx={{
 //               color: "white",
 //               textTransform: "none",
@@ -111,23 +116,23 @@
 //           <Menu
 //             anchorEl={anchorElUsers}
 //             open={Boolean(anchorElUsers)}
-//             onClose={handleUsersMenuClose}
+//             onClose={handleMenuClose(setAnchorElUsers)}
 //           >
 //             <MenuItem
 //               sx={{ fontSize: "1.5rem" }}
-//               onClick={() => (window.location.href = "/users")}
+//               onClick={() => navigate("/users")}
 //             >
 //               View All Users
 //             </MenuItem>
 //             <MenuItem
 //               sx={{ fontSize: "1.5rem" }}
-//               onClick={() => (window.location.href = "/add-user")}
+//               onClick={() => navigate("/add-user")}
 //             >
 //               Add New User
 //             </MenuItem>
 //             <MenuItem
 //               sx={{ fontSize: "1.5rem" }}
-//               onClick={() => (window.location.href = "/users/reports")}
+//               onClick={() => navigate("/users/reports")}
 //             >
 //               User Reports
 //             </MenuItem>
@@ -135,7 +140,7 @@
 // 
 //           {/* Appointments Dropdown */}
 //           <Button
-//             onClick={handleAppointmentsMenuOpen}
+//             onClick={handleMenuOpen(setAnchorElAppointments)}
 //             sx={{
 //               color: "white",
 //               textTransform: "none",
@@ -148,17 +153,17 @@
 //           <Menu
 //             anchorEl={anchorElAppointments}
 //             open={Boolean(anchorElAppointments)}
-//             onClose={handleAppointmentsMenuClose}
+//             onClose={handleMenuClose(setAnchorElAppointments)}
 //           >
 //             <MenuItem
 //               sx={{ fontSize: "1.5rem" }}
-//               onClick={() => (window.location.href = "/appointments/calendar")}
+//               onClick={() => navigate("/appointments/calendar")}
 //             >
 //               Calendar
 //             </MenuItem>
 //             <MenuItem
 //               sx={{ fontSize: "1.5rem" }}
-//               onClick={() => (window.location.href = "/appointments/add")}
+//               onClick={() => navigate("/appointments/add")}
 //             >
 //               Add Appointment
 //             </MenuItem>
@@ -166,7 +171,7 @@
 // 
 //           {/* About Page */}
 //           <Button
-//             onClick={() => (window.location.href = "/about")}
+//             onClick={() => navigate("/about")}
 //             sx={{
 //               color: "white",
 //               fontSize: "1.5rem",
@@ -183,7 +188,7 @@
 //             size="small"
 //             placeholder="Search..."
 //             value={searchQuery}
-//             onChange={handleSearchChange}
+//             onChange={(e) => setSearchQuery(e.target.value)}
 //             sx={{
 //               backgroundColor: "white",
 //               borderRadius: "4px",
@@ -210,8 +215,7 @@
 // 
 // export default Navbar;
 
-
-// Appoinment adding Debugging 
+// Global Search Test 12/16/2024
 
 import React, { useState } from "react";
 import {
@@ -223,9 +227,14 @@ import {
   Menu,
   MenuItem,
   TextField,
+  List,
+  ListItem,
+  ListItemText,
+  CircularProgress,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import { useNavigate } from "react-router-dom";
+import { searchGlobal } from "../../utils/searchApi";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -233,14 +242,37 @@ const Navbar = () => {
   const [anchorElUsers, setAnchorElUsers] = useState(null);
   const [anchorElAppointments, setAnchorElAppointments] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false);
 
   // Handlers for dropdowns
   const handleMenuOpen = (setter) => (event) => setter(event.currentTarget);
   const handleMenuClose = (setter) => () => setter(null);
 
   // Search functionality
-  const handleSearchSubmit = () => {
-    console.log("Search query:", searchQuery);
+  const handleSearchSubmit = async () => {
+    if (!searchQuery.trim()) {
+      console.error("Search query is empty");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const results = await searchGlobal(searchQuery); // Call the search API
+      setSearchResults(results.results || []); // Store results in state
+      setShowDropdown(true); // Show dropdown on search
+    } catch (error) {
+      console.error("Search failed:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Navigate to the full search results page
+  const handleViewAllResults = () => {
+    navigate("/search-results", { state: { results: searchResults } });
+    setShowDropdown(false); // Hide dropdown
   };
 
   return (
@@ -386,7 +418,7 @@ const Navbar = () => {
         </Box>
 
         {/* Search Bar */}
-        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1, position: "relative" }}>
           <TextField
             variant="outlined"
             size="small"
@@ -396,7 +428,7 @@ const Navbar = () => {
             sx={{
               backgroundColor: "white",
               borderRadius: "4px",
-              width: "200px",
+              width: "300px",
               fontSize: "1.5rem",
             }}
           />
@@ -408,9 +440,63 @@ const Navbar = () => {
               height: "50px",
             }}
             onClick={handleSearchSubmit}
+            disabled={loading}
           >
-            <SearchIcon fontSize="large" />
+            {loading ? <CircularProgress size={24} color="inherit" /> : <SearchIcon fontSize="large" />}
           </Button>
+
+          {/* Dropdown Search Results */}
+          {showDropdown && (
+            <List
+              sx={{
+                position: "absolute",
+                top: "60px",
+                left: "0",
+                backgroundColor: "white",
+                boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+                borderRadius: "4px",
+                width: "300px",
+                zIndex: 10,
+                maxHeight: "300px",
+                overflowY: "auto",
+              }}
+            >
+              {searchResults.length > 0 ? (
+                <>
+                  {searchResults.map((result) => (
+                    <ListItem
+                      key={result.id}
+                      sx={{ borderBottom: "1px solid #ddd", cursor: "pointer" }}
+                      onClick={() => navigate(result.route)}
+                    >
+                      <ListItemText
+                        primary={result.first_name || result.name}
+                        secondary={result.email}
+                      />
+                    </ListItem>
+                  ))}
+                  <ListItem
+                    sx={{
+                      textAlign: "center",
+                      cursor: "pointer",
+                      "&:hover": { backgroundColor: "#f0f0f0" },
+                    }}
+                    onClick={handleViewAllResults}
+                  >
+                    <Typography variant="body1" sx={{ fontWeight: "bold" }}>
+                      View All Results
+                    </Typography>
+                  </ListItem>
+                </>
+              ) : (
+                <ListItem>
+                  <Typography variant="body2" color="textSecondary">
+                    No results found
+                  </Typography>
+                </ListItem>
+              )}
+            </List>
+          )}
         </Box>
       </Toolbar>
     </AppBar>

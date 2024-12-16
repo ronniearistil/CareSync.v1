@@ -4,6 +4,7 @@
         "daygrid",
         "dotenv",
         "fullcalendar",
+        "ilike",
         "reqparse",
         "timegrid"
     ]
