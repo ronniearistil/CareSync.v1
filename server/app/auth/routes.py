@@ -124,9 +124,6 @@ def login_patient():
     except Exception as e:
         return {"error": f"An unexpected error occurred: {str(e)}"}, 500
 
-
-
-
 #Testing Search Bar 12/16/2024
 
 @auth_bp.route("/search", methods=["POST"])
