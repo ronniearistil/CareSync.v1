@@ -10,6 +10,8 @@ from sqlalchemy.exc import IntegrityError
 patient_schema = PatientSchema()
 patients_schema = PatientSchema(many=True)
 
+# appointments_schema = AppointmentSchema(many=True)
+
 class PatientResource(Resource):
     def get(self, patient_id=None):
         """
@@ -26,6 +28,8 @@ class PatientResource(Resource):
             return patients_schema.dump(patients), 200
         except Exception as e:
             return {"error": f"An unexpected error occurred: {str(e)}"}, 500
+
+
 
     def post(self):
         """

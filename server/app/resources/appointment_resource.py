@@ -100,4 +100,37 @@ class AppointmentResource(Resource):
         except Exception as e:
             logger.error(f"Error updating appointment: {e}")
             return {"error": "An error occurred while updating the appointment."}, 500
+    
+    
+    # Patch Test
+    
+    def patch(self, appointment_id):
+    # """
+    # Partially update an existing appointment.
+    # """
+        parser = reqparse.RequestParser()
+        parser.add_argument("date", required=False)
+        parser.add_argument("time", required=False)
+        parser.add_argument("status", required=False)
+        parser.add_argument("location", required=False)
+        parser.add_argument("provider_id", required=False, type=int)  # Optional
+        parser.add_argument("patient_id", required=False, type=int)  # Optional
+
+        args = parser.parse_args()
+
+        try:
+            appointment = Appointment.query.get(appointment_id)
+            if not appointment:
+                return {"error": "Appointment not found"}, 404
+
+            # Dynamically update fields if present
+            for key, value in args.items():
+                if value is not None:
+                    setattr(appointment, key, value)
+
+            db.session.commit()
+            return appointment_schema.dump(appointment), 200
+        except Exception as e:
+            return {"error": f"An error occurred while updating the appointment: {str(e)}"}, 500
+
 

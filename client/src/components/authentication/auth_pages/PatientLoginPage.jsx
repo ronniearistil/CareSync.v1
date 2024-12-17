@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import axios from "axios";
+import toast, { Toaster } from "react-hot-toast";
 
 const PatientLoginPage = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
-  const [error, setError] = useState(null);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -11,25 +11,30 @@ const PatientLoginPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    toast.loading("Logging in...");
+
     try {
       const response = await axios.post(
-        "http://localhost:5555/auth/patients/login",
+        "http://localhost:5555/patients/login", // Correct endpoint
         formData,
-        { withCredentials: true } // Ensure cookies are sent/received
+        { withCredentials: true } // Ensures cookies are handled
       );
 
-      setError(null);
-      localStorage.setItem("user", JSON.stringify(response.data)); // Save user info locally
-      window.location.href = "/patients"; // Redirect to patients page
+      toast.dismiss();
+      toast.success("Login successful!");
+      localStorage.setItem("user", JSON.stringify(response.data));
+      window.location.href = "/patients"; // Redirect on success
     } catch (err) {
-      setError(err.response?.data?.error || "Invalid login credentials.");
+      toast.dismiss();
+      const errorMessage = err.response?.data?.error || "Invalid login credentials.";
+      toast.error(errorMessage);
     }
   };
 
   return (
     <div style={{ maxWidth: "400px", margin: "0 auto", padding: "20px" }}>
+      <Toaster position="top-center" />
       <h1>Patient Login</h1>
-      {error && <p style={{ color: "red" }}>{error}</p>}
       <form onSubmit={handleSubmit}>
         <div style={{ marginBottom: "10px" }}>
           <label>Email:</label>
@@ -40,7 +45,13 @@ const PatientLoginPage = () => {
             value={formData.email}
             onChange={handleChange}
             required
-            style={{ width: "100%", padding: "8px", marginTop: "5px" }}
+            style={{
+              width: "100%",
+              padding: "8px",
+              marginTop: "5px",
+              borderRadius: "4px",
+              border: "1px solid #ccc",
+            }}
           />
         </div>
         <div style={{ marginBottom: "10px" }}>
@@ -52,7 +63,13 @@ const PatientLoginPage = () => {
             value={formData.password}
             onChange={handleChange}
             required
-            style={{ width: "100%", padding: "8px", marginTop: "5px" }}
+            style={{
+              width: "100%",
+              padding: "8px",
+              marginTop: "5px",
+              borderRadius: "4px",
+              border: "1px solid #ccc",
+            }}
           />
         </div>
         <button
@@ -62,7 +79,9 @@ const PatientLoginPage = () => {
             backgroundColor: "#1976D2",
             color: "white",
             border: "none",
+            borderRadius: "4px",
             cursor: "pointer",
+            width: "100%",
           }}
         >
           Login
@@ -73,4 +92,6 @@ const PatientLoginPage = () => {
 };
 
 export default PatientLoginPage;
+
+
 
