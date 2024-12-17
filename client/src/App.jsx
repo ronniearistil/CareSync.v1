@@ -100,6 +100,10 @@ import UserLoginPage from "./components/authentication/auth_pages/UserLoginPage"
 import Users from "./components/user_context/Users";
 import UserDetails from "./components/user_context/UserDetails";
 
+import AccountSettings from "./components/account/AccountSettings"; // Import the new component
+
+
+
 const App = () => {
     return (
         <ThemeProvider theme={theme}>
@@ -134,6 +138,7 @@ const App = () => {
                     <Route path="/appointments/add" element={<AddAppointment />} />
                     <Route path="/analytics" element={<Analytics />} />
                     <Route path="/news" element={<News />} />
+                    <Route path="/account" element={<AccountSettings />} /> {/* Add Account Route */}
 
                     {/* User Routes */}
                     <Route path="/users" element={<Users />} />

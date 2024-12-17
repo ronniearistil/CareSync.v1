@@ -60,17 +60,6 @@ def reset_password():
     except Exception as e:
         return {"error": f"An unexpected error occurred: {str(e)}"}, 500
 
-
-@auth_bp.route("/logout", methods=["POST"])
-def logout():
-    try:
-        response = make_response({"message": "Logout successful"}, 200)
-        unset_jwt_cookies(response)
-        return response
-    except Exception as e:
-        return {"error": f"An unexpected error occurred: {str(e)}"}, 500
-
-
 @auth_bp.route("/user/login", methods=["POST"])
 def login_user():
     try:
@@ -206,3 +195,58 @@ def global_search():
 
     except Exception as e:
         return {"error": f"An unexpected error occurred: {str(e)}"}, 500
+    
+from app.models.user_model import User
+from app.models.patient_model import Patient
+from flask_jwt_extended import jwt_required, get_jwt_identity
+
+@auth_bp.route("/me", methods=["GET"])
+@jwt_required()
+def get_user_profile():
+    try:
+        # Extract the current user identity from the JWT
+        current_user = get_jwt_identity()  # Contains {id, role, email}
+        user_id = current_user["id"]
+        role = current_user.get("role", None)
+
+        # Check role and fetch the correct model
+        if role == "Patient":
+            patient = Patient.query.get(user_id)
+            if not patient:
+                return {"error": "Patient not found"}, 404
+            return {
+                "id": patient.id,
+                "name": f"{patient.first_name} {patient.last_name}",
+                "email": patient.email,
+                "phone_number": patient.phone_number,
+                "role": "Patient"
+            }, 200
+
+        elif role in ["Provider", "Admin"]:
+            user = User.query.get(user_id)
+            if not user:
+                return {"error": "User not found"}, 404
+            return {
+                "id": user.id,
+                "name": user.name,
+                "email": user.email,
+                "role": role
+            }, 200
+
+        return {"error": "Invalid role"}, 400
+
+    except Exception as e:
+        return {"error": f"An unexpected error occurred: {str(e)}"}, 500
+
+@auth_bp.route("/logout", methods=["POST"])
+def logout():
+    try:
+        response = make_response({"message": "Logout successful"}, 200)
+        response.delete_cookie("access_token_cookie")  # Clear access token
+        response.delete_cookie("refresh_token_cookie")  # Clear refresh token
+        response.delete_cookie("csrf_access_token")  # Explicitly clear CSRF token
+        return response
+    except Exception as e:
+        return {"error": f"An unexpected error occurred: {str(e)}"}, 500
+
+

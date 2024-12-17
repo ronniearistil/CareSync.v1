@@ -1,20 +1,17 @@
 import axios from "axios";
+import toast from "react-hot-toast";
 
-const logout = async () => {
+const logout = async (navigate) => {
     try {
-        // Send logout request to the backend
         await axios.post("http://localhost:5555/auth/logout", {}, { withCredentials: true });
-
-        // Clear authentication cookies
-        document.cookie = "access_token_cookie=; Max-Age=0;";
-        document.cookie = "refresh_token_cookie=; Max-Age=0;";
-
-        // Redirect to the login page
-        window.location.href = "/login";
-    } catch (err) {
-        console.error("Logout failed", err);
-        alert("An error occurred while logging out. Please try again.");
+        localStorage.removeItem("user");
+        toast.success("Logged out successfully!");
+        navigate("/login/user");
+    } catch (error) {
+        toast.error("Failed to log out. Please try again.");
     }
 };
 
 export default logout;
+
+
