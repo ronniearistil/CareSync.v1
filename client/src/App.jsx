@@ -1,6 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ThemeProvider, CssBaseline } from "@mui/material";
+import { Toaster } from "react-hot-toast";
 import theme from "./theme";
 import Navbar from "./components/layout/Navbar";
 import Dashboard from "./components/layout/Dashboard";
@@ -28,6 +29,7 @@ const App = () => {
         <ThemeProvider theme={theme}>
             <CssBaseline />
             <Router>
+            <Toaster position="top-right" reverseOrder={false} /> {/* Add Toaster globally */}
                 <Navbar />
                 <Routes>
                     {/* Public Routes */}
@@ -37,6 +39,9 @@ const App = () => {
                     <Route path="/login/patient" element={<PatientLoginPage />} />
                     <Route path="/register" element={<RegisterPage />} />
                     <Route path="/reset-password" element={<PasswordResetPage />} />
+
+                    <Route path="/replace-patient/:id" element={<AddPatientForm mode="replace" />} />
+
 
                     {/* Protected Routes */}
                     <Route path="/dashboard" element={<Dashboard />} />

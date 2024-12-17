@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import {
@@ -14,6 +13,8 @@ import {
   Button,
   TextField,
 } from "@mui/material";
+import { showSuccessToast, showErrorToast } from "../../utils/toastUtils";
+
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SwapHorizIcon from "@mui/icons-material/SwapHoriz";
@@ -39,6 +40,7 @@ const PatientDetails = () => {
         setEditData(data); // Initialize edit data
       } catch (error) {
         console.error("Error fetching patient:", error);
+        showErrorToast("Failed to load patient details. Please try again.");
         setError("Failed to load patient details. Please try again.");
       }
     };
@@ -56,24 +58,39 @@ const PatientDetails = () => {
 
   const handleEditSubmit = async () => {
     try {
-      await patientApi.updatePatient(id, editData); // Submit updated data
-      setPatient(editData); // Update displayed data
+      const payload = {
+        first_name: editData.first_name || patient.first_name,
+        last_name: editData.last_name || patient.last_name,
+        email: editData.email || patient.email,
+        phone_number: editData.phone_number || patient.phone_number,
+        date_of_birth: editData.date_of_birth || patient.date_of_birth,
+        address: editData.address || patient.address,
+        password: editData.password || "defaultpassword", 
+      };
+
+      console.log("Submitting payload:", payload); // Debug log for verification
+
+      // Send the update request to the backend
+      await patientApi.updatePatient(id, payload);
+
+      // Update the local state to reflect the changes
+      setPatient(payload);
       setIsEditing(false);
-      alert("Patient updated successfully!");
+      showSuccessToast("Patient updated successfully!");
     } catch (error) {
-      console.error("Failed to update patient:", error);
-      alert("Failed to update patient. Please try again.");
+      console.error("Failed to update patient:", error.response?.data || error.message);
+      showErrorToast("Failed to update patient. Please check the input and try again.");
     }
   };
 
   const handleDelete = async () => {
     try {
       await patientApi.deletePatient(id); // Delete the patient
-      alert("Patient deleted successfully!");
+      showSuccessToast("Patient deleted successfully!");
       navigate("/patients"); // Redirect back to patients list
     } catch (error) {
       console.error("Failed to delete patient:", error);
-      alert("Failed to delete patient. Please try again.");
+      showErrorToast("Failed to delete patient. Please try again.");
     }
     setIsDeleteConfirmationOpen(false);
     handleMenuClose();
@@ -172,13 +189,6 @@ const PatientDetails = () => {
       <Typography variant="body1">
         <strong>Patient ID:</strong> {patient.id}
       </Typography>
-      <Typography variant="body1">
-        <strong>Provider(s):</strong> {patient.providers?.map((p) => p.name).join(", ") || "None"}
-      </Typography>
-      <Typography variant="body1">
-        <strong>Last Visit:</strong>{" "}
-        {patient.last_visit ? new Date(patient.last_visit).toLocaleDateString() : "No visits yet"}
-      </Typography>
 
       {/* Edit Dialog */}
       <Dialog open={isEditing} onClose={() => setIsEditing(false)} maxWidth="sm" fullWidth>
@@ -252,6 +262,7 @@ const PatientDetails = () => {
 };
 
 export default PatientDetails;
+
 
 
 // Debug - Somehow missing compplete patient Detail Upon Edit 
