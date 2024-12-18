@@ -248,5 +248,3 @@ def logout():
         return response
     except Exception as e:
         return {"error": f"An unexpected error occurred: {str(e)}"}, 500
-
-
