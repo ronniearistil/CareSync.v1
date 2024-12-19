@@ -70,7 +70,7 @@
 
 
 
-// Incorporating RBA Test
+// Incorporating RBA Test - Current Version 12/17/2024
 
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
@@ -263,6 +263,136 @@ export default App;
 //             </Router>
 //         </ThemeProvider>
 //     );
+// };
+// 
+// export default App;
+
+// MVP TEST
+
+// import React from "react";
+// import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+// import { ThemeProvider, CssBaseline } from "@mui/material";
+// import { Toaster } from "react-hot-toast";
+// import theme from "./theme";
+// import Navbar from "./components/layout/Navbar";
+// import Footer from "./components/layout/Footer";
+// import PrivateRoute from "./components/authentication/PrivateRoute";
+// 
+// // Public Pages
+// import LandingPage from "./components/layout/LandingPage";
+// import About from "./pages/About";
+// import UserLoginPage from "./components/authentication/auth_pages/UserLoginPage";
+// import PatientLoginPage from "./components/authentication/auth_pages/PatientLoginPage";
+// import UserRegisterPage from "./components/authentication/auth_pages/UserRegisterPage";
+// import PatientRegisterPage from "./components/authentication/auth_pages/PatientRegisterPage";
+// import PasswordResetPage from "./components/authentication/auth_pages/PasswordResetPage";
+// 
+// // Protected Pages
+// import Dashboard from "./components/layout/Dashboard";
+// import Patients from "./components/patient_context/Patients";
+// import PatientDetails from "./components/patient_context/PatientDetails";
+// import AddPatientForm from "./components/authentication/auth_forms/AddPatientForm";
+// import Appointments from "./components/dashboard/Appointments";
+// import AppointmentCalendar from "./components/dashboard/AppointmentCalendar";
+// import AddAppointment from "./components/dashboard/AddAppointment";
+// import Analytics from "./components/dashboard/Analytics";
+// import AccountSettings from "./components/account/AccountSettings";
+// 
+// const App = () => {
+//   return (
+//     <ThemeProvider theme={theme}>
+//       <CssBaseline />
+//       <Toaster position="top-right" reverseOrder={false} /> {/* Toaster globally */}
+//       <Router>
+//         <Navbar />
+//         <Routes>
+//           {/* Public Routes */}
+//           <Route path="/" element={<LandingPage />} />
+//           <Route path="/about" element={<About />} />
+//           <Route path="/login/user" element={<UserLoginPage />} />
+//           <Route path="/login/patient" element={<PatientLoginPage />} />
+//           <Route path="/register/user" element={<UserRegisterPage />} />
+//           <Route path="/register/patient" element={<PatientRegisterPage />} />
+//           <Route path="/reset-password" element={<PasswordResetPage />} />
+// 
+//           {/* Protected Routes */}
+//           <Route
+//             path="/dashboard"
+//             element={
+//               <PrivateRoute role="Admin">
+//                 <Dashboard />
+//               </PrivateRoute>
+//             }
+//           />
+//           <Route
+//             path="/patients"
+//             element={
+//               <PrivateRoute role="Admin">
+//                 <Patients />
+//               </PrivateRoute>
+//             }
+//           />
+//           <Route
+//             path="/patients/:id"
+//             element={
+//               <PrivateRoute role="Admin">
+//                 <PatientDetails />
+//               </PrivateRoute>
+//             }
+//           />
+//           <Route
+//             path="/add-patient"
+//             element={
+//               <PrivateRoute role="Admin">
+//                 <AddPatientForm />
+//               </PrivateRoute>
+//             }
+//           />
+//           <Route
+//             path="/appointments"
+//             element={
+//               <PrivateRoute>
+//                 <Appointments />
+//               </PrivateRoute>
+//             }
+//           />
+//           <Route
+//             path="/appointments/calendar"
+//             element={
+//               <PrivateRoute>
+//                 <AppointmentCalendar />
+//               </PrivateRoute>
+//             }
+//           />
+//           <Route
+//             path="/appointments/add"
+//             element={
+//               <PrivateRoute>
+//                 <AddAppointment />
+//               </PrivateRoute>
+//             }
+//           />
+//           <Route
+//             path="/analytics"
+//             element={
+//               <PrivateRoute role="Admin">
+//                 <Analytics />
+//               </PrivateRoute>
+//             }
+//           />
+//           <Route
+//             path="/account"
+//             element={
+//               <PrivateRoute>
+//                 <AccountSettings />
+//               </PrivateRoute>
+//             }
+//           />
+//         </Routes>
+//         <Footer />
+//       </Router>
+//     </ThemeProvider>
+//   );
 // };
 // 
 // export default App;
