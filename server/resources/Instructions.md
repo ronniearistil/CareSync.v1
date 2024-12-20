@@ -1,6 +1,10 @@
 # Run seed file
 python -m app.seeds
 
+# Password Hash
+    python rehash_passwords.py
+
+
 # Run Python 
 python run.py
 

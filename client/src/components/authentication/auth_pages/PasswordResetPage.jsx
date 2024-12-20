@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 const PasswordResetPage = () => {
     const [formData, setFormData] = useState({
@@ -19,9 +20,12 @@ const PasswordResetPage = () => {
             const response = await axios.post("http://localhost:5555/auth/reset_password", formData);
             setSuccess(response.data.message);
             setError(null);
+            toast.success("Password reset successfully!");
         } catch (err) {
-            setError(err.response?.data?.error || "An unexpected error occurred.");
+            const errorMessage = err.response?.data?.error || "An unexpected error occurred.";
+            setError(errorMessage);
             setSuccess(null);
+            toast.error(errorMessage);
         }
     };
 
@@ -64,4 +68,6 @@ const PasswordResetPage = () => {
 };
 
 export default PasswordResetPage;
+
+
 

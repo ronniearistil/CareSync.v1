@@ -93,6 +93,7 @@ import RegisterPage from "./components/authentication/auth_pages/UserRegisterPag
 import PatientRegisterPage from "./components/authentication/auth_pages/PatientRegisterPage"; // Import PatientRegisterPage
 import UserRegisterPage from "./components/authentication/auth_pages/UserRegisterPage"; // Import UserRegisterPage
 import PasswordResetPage from "./components/authentication/auth_pages/PasswordResetPage";
+import PatientPasswordReset from "./components/authentication/auth_pages/PatientLoginPage";
 import Footer from "./components/layout/Footer";
 import LandingPage from "./components/layout/LandingPage";
 import PatientLoginPage from "./components/authentication/auth_pages/PatientLoginPage";
@@ -126,6 +127,7 @@ const App = () => {
 
                     {/* Replace Patient */}
                     <Route path="/replace-patient/:id" element={<AddPatientForm mode="replace" />} />
+                    <Route path="/patients/reset-password" element={<PatientPasswordReset />} />
 
                     {/* Protected Routes */}
                     <Route path="/dashboard" element={<Dashboard />} />
