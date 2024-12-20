@@ -189,6 +189,15 @@ const PatientDetails = () => {
       <Typography variant="body1">
         <strong>Patient ID:</strong> {patient.id}
       </Typography>
+      {/* Button to navigate to Care Details */}
+<Button
+  variant="contained"
+  color="primary"
+  onClick={() => navigate(`/patients/${id}/care-details`)}
+  sx={{ marginTop: "1rem" }}
+>
+  View Care Details
+</Button>
 
       {/* Edit Dialog */}
       <Dialog open={isEditing} onClose={() => setIsEditing(false)} maxWidth="sm" fullWidth>
