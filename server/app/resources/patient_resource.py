@@ -167,77 +167,76 @@ class PatientResource(Resource):
     def post(self):
         """Create a new patient."""
         try:
+            # Enforce JSON Content-Type
+            if not request.is_json:
+                return {"error": "Invalid Content-Type. Expected application/json"}, 415
+
+            # Parse and sanitize input
             json_data = request.get_json()
-            print("Raw JSON data:", json_data)
+            json_data["email"] = json_data["email"].strip().lower()  # Normalize email
 
-            # Normalize email before schema validation
-            if "email" in json_data:
-                json_data["email"] = json_data["email"].strip().lower()
+            # Validate data
+            data = patient_schema.load(json_data)
 
-            data = patient_schema.load(json_data)  # Validate input data
-            print("Sanitized data after schema validation:", data)
-
-            # Check for existing patient
+            # Check for existing email
             existing_patient = Patient.query.filter(
                 db.func.lower(Patient.email) == data["email"]
             ).first()
-            print("Existing patient query result:", existing_patient)
-
             if existing_patient:
                 return {"error": "A patient with this email already exists."}, 400
 
-            # Create new patient
+            # Create and hash password
             new_patient = Patient(
                 first_name=data["first_name"],
                 last_name=data["last_name"],
-                email=data["email"].strip().lower(),
+                email=data["email"],
                 phone_number=data.get("phone_number"),
                 date_of_birth=data.get("date_of_birth"),
                 address=data.get("address"),
-                password_hash=bcrypt.generate_password_hash(data["password"]).decode("utf-8"),  # Hash the password
+                password_hash=bcrypt.generate_password_hash(data["password"]).decode("utf-8"),
             )
+
+            # Save to database
             db.session.add(new_patient)
             db.session.commit()
-            # Serialize and return the created patient
-            serialized_patient = patient_schema.dump(new_patient)
-            print("Serialized patient data:", serialized_patient)
-            return {"patient": serialized_patient}, 201
+            return {"patient": patient_schema.dump(new_patient)}, 201
 
         except ValidationError as err:
             return {"errors": err.messages}, 400
-        except IntegrityError as e:
+        except IntegrityError:
             db.session.rollback()
-            print("IntegrityError details:", e.orig.args)
             return {"error": "A patient with this email already exists."}, 400
         except Exception as e:
             db.session.rollback()
-            print("Unexpected error:", str(e))
             return {"error": f"An unexpected error occurred: {str(e)}"}, 500
 
     def put(self, patient_id):
         """Update an existing patient by ID."""
         try:
+            # Enforce JSON Content-Type
+            if not request.is_json:
+                return {"error": "Invalid Content-Type. Expected application/json"}, 415
+
             json_data = request.get_json()
+            json_data["email"] = json_data["email"].strip().lower()
 
-            # Normalize email before schema validation
-            if "email" in json_data:
-                json_data["email"] = json_data["email"].strip().lower()
-
+            # Find patient
             patient = Patient.query.get(patient_id)
             if not patient:
                 return {"error": "Patient not found"}, 404
 
-            data = patient_schema.load(json_data, partial=True)  # Partial update
+            # Validate input and update fields
+            data = patient_schema.load(json_data, partial=True)
             for key, value in data.items():
-                setattr(patient, key, value)  # Update fields dynamically
+                setattr(patient, key, value)
 
             db.session.commit()
             return patient_schema.dump(patient), 200
+
         except ValidationError as err:
             return {"errors": err.messages}, 400
-        except IntegrityError as e:
+        except IntegrityError:
             db.session.rollback()
-            print("IntegrityError details:", e.orig.args)
             return {"error": "A patient with this email already exists."}, 400
         except Exception as e:
             db.session.rollback()
@@ -246,31 +245,33 @@ class PatientResource(Resource):
     def patch(self, patient_id):
         """Partially update an existing patient by ID."""
         try:
+            # Enforce JSON Content-Type
+            if not request.is_json:
+                return {"error": "Invalid Content-Type. Expected application/json"}, 415
+
             json_data = request.get_json()
+            json_data["email"] = json_data["email"].strip().lower()
 
-            # Normalize email before schema validation
-            if "email" in json_data:
-                json_data["email"] = json_data["email"].strip().lower()
-
+            # Find patient
             patient = Patient.query.get(patient_id)
             if not patient:
                 return {"error": "Patient not found"}, 404
 
-            data = patient_schema.load(json_data, partial=True)  # Partial update
+            # Validate and update fields
+            data = patient_schema.load(json_data, partial=True)
             for key, value in data.items():
                 setattr(patient, key, value)
 
             db.session.commit()
             return patient_schema.dump(patient), 200
+
         except ValidationError as err:
             return {"errors": err.messages}, 400
-        except IntegrityError as e:
+        except IntegrityError:
             db.session.rollback()
-            print("IntegrityError details:", e.orig.args)
             return {"error": "A patient with this email already exists."}, 400
         except Exception as e:
             db.session.rollback()
-            print("Unexpected error:", str(e))
             return {"error": f"An unexpected error occurred: {str(e)}"}, 500
 
     def delete(self, patient_id):

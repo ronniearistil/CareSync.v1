@@ -4,11 +4,12 @@ import { TextField, Button, Box, Typography, CircularProgress } from "@mui/mater
 import { Formik, Field, Form } from "formik";
 import * as Yup from "yup";
 import * as patientApi from "../../../utils/patientApi";
-// import { showSuccessToast, showErrorToast } from "../../../utils/toastUtils";
+import { toast } from "react-hot-toast";
 
 const AddPatientForm = ({ mode, onSuccess }) => {
   const { id } = useParams();
   const navigate = useNavigate();
+
   const [initialValues, setInitialValues] = useState({
     first_name: "",
     last_name: "",
@@ -24,10 +25,7 @@ const AddPatientForm = ({ mode, onSuccess }) => {
     first_name: Yup.string().required("First name is required"),
     last_name: Yup.string().required("Last name is required"),
     email: Yup.string().email("Invalid email address").required("Email is required"),
-    phone_number: Yup.string().matches(
-      /^\d{10}$/,
-      "Phone number must be exactly 10 digits"
-    ),
+    phone_number: Yup.string().matches(/^\d{10}$/, "Phone number must be 10 digits"),
     date_of_birth: Yup.date().required("Date of birth is required"),
     address: Yup.string().required("Address is required"),
     password: mode !== "replace" ? Yup.string().required("Password is required") : Yup.string(),
@@ -39,7 +37,6 @@ const AddPatientForm = ({ mode, onSuccess }) => {
       const fetchPatient = async () => {
         try {
           const data = await patientApi.fetchPatientById(id);
-          console.log("Fetched patient data:", data);
           setInitialValues({
             first_name: data.first_name || "",
             last_name: data.last_name || "",
@@ -47,14 +44,12 @@ const AddPatientForm = ({ mode, onSuccess }) => {
             phone_number: data.phone_number || "",
             date_of_birth: data.date_of_birth || "",
             address: data.address || "",
-            password: "", // Password is not returned for security reasons
+            password: "", // Password not returned for security
           });
         } catch (error) {
-          console.error("Failed to fetch patient:", error);
-          showErrorToast("Failed to load patient details.");
+          toast.error("Failed to load patient details.");
         }
       };
-
       fetchPatient();
     }
   }, [id, mode]);
@@ -68,41 +63,37 @@ const AddPatientForm = ({ mode, onSuccess }) => {
         setSubmitting(true);
         try {
           const payload = {
-            first_name: values.first_name.trim(), // Remove whitespace
+            first_name: values.first_name.trim(),
             last_name: values.last_name.trim(),
-            email: values.email.trim().toLowerCase(), // Normalize email
+            email: values.email.trim().toLowerCase(),
             phone_number: values.phone_number.trim(),
             date_of_birth: new Date(values.date_of_birth).toLocaleDateString("en-US", {
               year: "numeric",
               month: "2-digit",
               day: "2-digit",
-            }), // Format date as MM/DD/YYYY
+            }), // Format to MM/DD/YYYY
             address: values.address.trim(),
-            ...(mode !== "replace" && { password: values.password.trim() }), // Include password only if adding
+            ...(mode !== "replace" && { password: values.password.trim() }), // Include password if adding
           };
-      
-          console.log("Payload being sent to backend:", payload);
-      
+
           if (mode === "replace" && id) {
             await patientApi.updatePatient(id, payload);
-            showSuccessToast("Patient updated successfully!");
+            toast.success("Patient updated successfully!");
           } else {
             await patientApi.createPatient(payload);
-            showSuccessToast("Patient added successfully!");
+            toast.success("Patient added successfully!");
           }
-      
+
           if (onSuccess) onSuccess();
           navigate("/patients");
         } catch (error) {
-          console.error("Error while saving patient data:", error.response?.data || error);
-          showErrorToast(
+          toast.error(
             error.response?.data?.error || "Failed to save patient details. Please try again."
           );
         } finally {
           setSubmitting(false);
         }
       }}
-      
     >
       {({ errors, touched, handleChange, handleBlur, isSubmitting }) => (
         <Form>
@@ -218,3 +209,4 @@ const AddPatientForm = ({ mode, onSuccess }) => {
 };
 
 export default AddPatientForm;
+

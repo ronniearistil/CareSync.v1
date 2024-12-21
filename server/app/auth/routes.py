@@ -297,3 +297,84 @@ def global_search():
     except Exception as e:
         logger.error(f"Global search error: {str(e)}")
         return {"error": "An unexpected error occurred"}, 500
+
+
+# Missing Patient Route
+
+@auth_bp.route("/update", methods=["PATCH"])
+@jwt_required()
+def update_user_profile():
+    try:
+        # Get user identity from the JWT
+        current_user = get_jwt_identity()
+        user_id = current_user["id"]
+        role = current_user.get("role", None)
+
+        # Parse request data
+        data = request.get_json()
+
+        # Validate required fields for update
+        allowed_fields = ["name", "email", "phone_number"]
+        update_data = {key: value for key, value in data.items() if key in allowed_fields}
+
+        if not update_data:
+            return {"error": "No valid fields provided for update"}, 400
+
+        # Update Patient
+        if role == "Patient":
+            patient = Patient.query.get(user_id)
+            if not patient:
+                return {"error": "Patient not found"}, 404
+
+            for key, value in update_data.items():
+                setattr(patient, key, value)
+            db.session.commit()
+
+            return {
+                "message": "Patient profile updated successfully",
+                "data": {
+                    "id": patient.id,
+                    "name": f"{patient.first_name} {patient.last_name}",
+                    "email": patient.email,
+                    "phone_number": patient.phone_number,
+                },
+            }, 200
+
+        # Update User (Admin/Provider)
+        elif role in ["Provider", "Admin"]:
+            user = User.query.get(user_id)
+            if not user:
+                return {"error": "User not found"}, 404
+
+            for key, value in update_data.items():
+                setattr(user, key, value)
+            db.session.commit()
+
+            return {
+                "message": "User profile updated successfully",
+                "data": {
+                    "id": user.id,
+                    "name": user.name,
+                    "email": user.email,
+                },
+            }, 200
+
+        return {"error": "Invalid role"}, 400
+
+    except Exception as e:
+        db.session.rollback()
+        return {"error": f"An unexpected error occurred: {str(e)}"}, 500
+
+@auth_bp.route("/patients/logout", methods=["POST"])
+def logout_patient():
+    try:
+        response = make_response({"message": "Logout successful"}, 200)
+        response.delete_cookie("access_token_cookie")
+        response.delete_cookie("refresh_token_cookie")
+        return response
+    except Exception as e:
+        logger.error(f"Logout error: {str(e)}")
+        return {"error": "An unexpected error occurred"}, 500
+
+
+
