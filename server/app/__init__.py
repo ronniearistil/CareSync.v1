@@ -69,6 +69,7 @@ def register_blueprints(app):
     from app.routes.news_routes import news_bp
     from app.routes.provider_patient_routes import provider_patient_bp
     from app.routes.user_routes import user_bp
+    from app.routes.health_record_routes import health_record_bp
 
     # Register blueprints with their prefixes
     app.register_blueprint(auth_bp, url_prefix="/auth")
@@ -79,6 +80,7 @@ def register_blueprints(app):
     app.register_blueprint(news_bp, url_prefix="/news")
     app.register_blueprint(provider_patient_bp, url_prefix="/provider_patients")
     app.register_blueprint(user_bp, url_prefix="/users")
+    app.register_blueprint(health_record_bp, url_prefix="/health_records")
 
 def register_cli_commands(app):
     """
