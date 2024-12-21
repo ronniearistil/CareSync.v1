@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import {
@@ -14,6 +13,8 @@ import {
   Button,
   TextField,
 } from "@mui/material";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SwapHorizIcon from "@mui/icons-material/SwapHoriz";
@@ -39,6 +40,7 @@ const UserDetails = () => {
         setEditData(data); // Initialize edit data
       } catch (error) {
         console.error("Error fetching user:", error);
+        toast.error("Failed to load user details. Please try again.");
         setError("Failed to load user details. Please try again.");
       }
     };
@@ -59,21 +61,21 @@ const UserDetails = () => {
       await userApi.updateUser(id, editData); // Submit updated data
       setUser(editData); // Update displayed data
       setIsEditing(false);
-      alert("User updated successfully!");
+      toast.success("User updated successfully!");
     } catch (error) {
       console.error("Failed to update user:", error);
-      alert("Failed to update user. Please try again.");
+      toast.error("Failed to update user. Please try again.");
     }
   };
 
   const handleDelete = async () => {
     try {
       await userApi.deleteUser(id); // Delete the user
-      alert("User deleted successfully!");
+      toast.success("User deleted successfully!");
       navigate("/users"); // Redirect back to users list
     } catch (error) {
       console.error("Failed to delete user:", error);
-      alert("Failed to delete user. Please try again.");
+      toast.error("Failed to delete user. Please try again.");
     }
     setIsDeleteConfirmationOpen(false);
     handleMenuClose();

@@ -13,7 +13,8 @@ import {
   Button,
   TextField,
 } from "@mui/material";
-// import { showSuccessToast, showErrorToast } from "../../utils/toastUtils";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -40,7 +41,7 @@ const PatientDetails = () => {
         setEditData(data); // Initialize edit data
       } catch (error) {
         console.error("Error fetching patient:", error);
-        showErrorToast("Failed to load patient details. Please try again.");
+        toast.error("Failed to load patient details. Please try again.");
         setError("Failed to load patient details. Please try again.");
       }
     };
@@ -76,21 +77,21 @@ const PatientDetails = () => {
       // Update the local state to reflect the changes
       setPatient(payload);
       setIsEditing(false);
-      showSuccessToast("Patient updated successfully!");
+      toast.success("Patient updated successfully!");
     } catch (error) {
       console.error("Failed to update patient:", error.response?.data || error.message);
-      showErrorToast("Failed to update patient. Please check the input and try again.");
+      toast.error("Failed to update patient. Please check the input and try again.");
     }
   };
 
   const handleDelete = async () => {
     try {
       await patientApi.deletePatient(id); // Delete the patient
-      showSuccessToast("Patient deleted successfully!");
+      toast.success("Patient deleted successfully!");
       navigate("/patients"); // Redirect back to patients list
     } catch (error) {
       console.error("Failed to delete patient:", error);
-      showErrorToast("Failed to delete patient. Please try again.");
+      toast.error("Failed to delete patient. Please try again.");
     }
     setIsDeleteConfirmationOpen(false);
     handleMenuClose();
@@ -126,7 +127,6 @@ const PatientDetails = () => {
 
   return (
     <Box sx={{ padding: "2rem" }}>
-      {/* Go Back Button */}
       <Button
         startIcon={<ArrowBackIcon />}
         onClick={() => navigate("/patients")}
@@ -135,7 +135,6 @@ const PatientDetails = () => {
         Back to Patients List
       </Button>
 
-      {/* Header with Patient Name and Menu */}
       <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <Typography variant="h3" sx={{ fontWeight: "bold" }}>
           {patient.first_name} {patient.last_name}
@@ -157,7 +156,7 @@ const PatientDetails = () => {
               transition: "background-color 0.2s ease",
             },
             "& .MuiMenuItem-root:hover": {
-              backgroundColor: "#e0e0e0", // Hover color
+              backgroundColor: "#e0e0e0",
             },
           }}
         >
@@ -176,7 +175,6 @@ const PatientDetails = () => {
         </Menu>
       </Box>
 
-      {/* Patient Details */}
       <Typography variant="body1" sx={{ marginTop: "1rem" }}>
         <strong>Email:</strong> {patient.email}
       </Typography>
@@ -189,17 +187,7 @@ const PatientDetails = () => {
       <Typography variant="body1">
         <strong>Patient ID:</strong> {patient.id}
       </Typography>
-      {/* Button to navigate to Care Details */}
-<Button
-  variant="contained"
-  color="primary"
-  onClick={() => navigate(`/patients/${id}/care-details`)}
-  sx={{ marginTop: "1rem" }}
->
-  View Care Details
-</Button>
 
-      {/* Edit Dialog */}
       <Dialog open={isEditing} onClose={() => setIsEditing(false)} maxWidth="sm" fullWidth>
         <DialogTitle>Edit Patient Details</DialogTitle>
         <DialogContent>
@@ -246,7 +234,6 @@ const PatientDetails = () => {
         </DialogActions>
       </Dialog>
 
-      {/* Delete Confirmation Dialog */}
       <Dialog
         open={isDeleteConfirmationOpen}
         onClose={() => setIsDeleteConfirmationOpen(false)}
@@ -271,3 +258,5 @@ const PatientDetails = () => {
 };
 
 export default PatientDetails;
+
+

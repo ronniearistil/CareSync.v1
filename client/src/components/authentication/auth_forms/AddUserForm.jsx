@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { Formik, Field, Form } from "formik";
 import * as Yup from "yup";
 import * as userApi from "../../../utils/userApi";
-import { toast } from "react-hot-toast"; // Import Hot Toast
+import { toast } from "react-hot-toast"; 
 
 const AddUserForm = ({ onSuccess }) => {
   const navigate = useNavigate();
@@ -40,13 +40,13 @@ const AddUserForm = ({ onSuccess }) => {
       onSubmit={async (values, { setSubmitting, resetForm }) => {
         setSubmitting(true);
         try {
-          await userApi.createUser(values); // Call API to create user
-          toast.success("User added successfully!"); // Success notification
+          await userApi.createUser(values); 
+          toast.success("User added successfully!");
 
-          resetForm(); // Reset the form
+          resetForm(); 
 
-          if (onSuccess) onSuccess(); // Callback for success
-          navigate("/dashboard"); // Navigate after success
+          if (onSuccess) onSuccess(); 
+          navigate("/dashboard"); 
         } catch (err) {
           toast.error(
             `Failed to add user: ${

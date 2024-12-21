@@ -79,7 +79,7 @@ class Patient(db.Model):
     password_hash = db.Column(db.String(255), nullable=False)
 
     # Relationships
-    providers = db.relationship('ProviderPatient', foreign_keys='ProviderPatient.patient_id', back_populates='patient')
+    providers = db.relationship('ProviderPatient', foreign_keys='ProviderPatient.patient_id', back_populates='patient',cascade='all, delete') # Removes the relationship but keeps ProviderPatient records.
     appointments = db.relationship('Appointment', back_populates='patient', cascade='all, delete-orphan')
     health_records = db.relationship('HealthRecord', back_populates='patient', cascade='all, delete-orphan')
 

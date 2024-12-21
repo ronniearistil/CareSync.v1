@@ -81,7 +81,7 @@ class User(db.Model):
     # Relationships
     health_records = db.relationship('HealthRecord', back_populates='user', cascade='all, delete-orphan')
     appointments = db.relationship('Appointment', back_populates='user', cascade='all, delete-orphan')
-    patients = db.relationship('ProviderPatient', foreign_keys='ProviderPatient.provider_id', back_populates='provider')
+    patients = db.relationship('ProviderPatient', foreign_keys='ProviderPatient.provider_id', back_populates='provider', cascade='all, delete')  # Only deletes relationships, not patients
     analytics = db.relationship("Analytics", back_populates="user", cascade="all, delete-orphan")
 
     # Add the missing relationship for user_recommendations
