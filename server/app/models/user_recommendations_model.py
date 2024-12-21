@@ -12,5 +12,3 @@ class UserRecommendation(db.Model):
     recommendation = db.relationship("Recommendation", back_populates="user_recommendations")
 
 
-
-

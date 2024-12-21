@@ -62,7 +62,7 @@ const Footer = () => (
         Email Us
       </a>
       <a
-        href="https://github.com/ronniearistil/CareSync"
+        href="https://github.com/ronniearistil/CareSync.v1.git"
         target="_blank"
         rel="noopener noreferrer"
         style={{

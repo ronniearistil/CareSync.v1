@@ -6,6 +6,7 @@
         "dotenv",
         "fullcalendar",
         "ilike",
+        "jsonify",
         "reqparse",
         "timegrid"
     ]

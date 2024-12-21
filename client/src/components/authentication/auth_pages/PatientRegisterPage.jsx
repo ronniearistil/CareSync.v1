@@ -21,40 +21,33 @@ const PatientRegisterPage = () => {
   });
 
   // Handle Form Submission
-  const handleSubmit = async (values, { setSubmitting, resetForm }) => {
-    try {
-      // Reformat date_of_birth to MM/DD/YYYY
-      const formattedDateOfBirth = new Date(values.date_of_birth).toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "2-digit",
-        day: "2-digit",
-      });
-  
-      // Payload matches the backend structure
+const handleSubmit = async (values, { setSubmitting, resetForm }) => {
+  try {
+    // Prevent duplicate toast messages
+    if (!toast.isActive("user-success")) {
       const payload = {
         first_name: values.first_name,
         last_name: values.last_name,
         email: values.email,
         phone_number: values.phone_number,
-        date_of_birth: formattedDateOfBirth, // MM/DD/YYYY format
+        date_of_birth: values.date_of_birth,
         address: values.address,
         password: values.password,
       };
-  
-      console.log("Payload being sent:", payload); // Debug payload
-  
-      // API call to register a patient
-      await axios.post("http://localhost:5555/patients", payload);
-  
-      toast.success("Patient account created successfully!");
-      resetForm();
-    } catch (err) {
-      toast.error(err.response?.data?.error || "Failed to register patient.");
-    } finally {
-      setSubmitting(false);
-    }
-  };
 
+      await axios.post("http://localhost:5555/auth/register", payload);
+
+      // Single toast message with ID
+      toast.success("User account created successfully!", { id: "user-success" });
+
+      resetForm();
+    }
+  } catch (err) {
+    toast.error(err.response?.data?.error || "Failed to register user.");
+  } finally {
+    setSubmitting(false);
+  }
+};
 
   return (
     <div style={{ maxWidth: "400px", margin: "0 auto", padding: "20px" }}>

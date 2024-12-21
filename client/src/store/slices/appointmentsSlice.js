@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import * as api from "../../utils/api"; // Namespace import
+import * as api from "../../utils/appointmentApi"; // Namespace import
 
 export const loadAppointments = createAsyncThunk(
     'appointments/load',
