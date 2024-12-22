@@ -76,6 +76,7 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ThemeProvider, CssBaseline } from "@mui/material";
 import { Toaster } from "react-hot-toast";
+import "react-toastify/dist/ReactToastify.css";
 import theme from "./theme";
 import Navbar from "./components/layout/Navbar";
 import Dashboard from "./components/layout/Dashboard";
