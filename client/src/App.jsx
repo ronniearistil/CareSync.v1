@@ -76,6 +76,7 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ThemeProvider, CssBaseline } from "@mui/material";
 import { Toaster } from "react-hot-toast";
+import "react-toastify/dist/ReactToastify.css";
 import theme from "./theme";
 import Navbar from "./components/layout/Navbar";
 import Dashboard from "./components/layout/Dashboard";
@@ -92,7 +93,7 @@ import About from "./pages/About";
 import RegisterPage from "./components/authentication/auth_pages/UserRegisterPage";
 import PatientRegisterPage from "./components/authentication/auth_pages/PatientRegisterPage"; // Import PatientRegisterPage
 import UserRegisterPage from "./components/authentication/auth_pages/UserRegisterPage"; // Import UserRegisterPage
-import PasswordResetPage from "./components/authentication/auth_pages/PasswordResetPage";
+import PasswordResetPage from "./components/authentication/auth_pages/UserPasswordResetPage";
 import PatientPasswordReset from "./components/authentication/auth_pages/PatientLoginPage";
 import Footer from "./components/layout/Footer";
 import LandingPage from "./components/layout/LandingPage";

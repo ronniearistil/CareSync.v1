@@ -22,6 +22,9 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import * as patientApi from "../../utils/patientApi";
 
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 const PatientDetails = () => {
   const { id } = useParams(); // Get patient ID from URL
   const navigate = useNavigate();
@@ -40,8 +43,8 @@ const PatientDetails = () => {
         setEditData(data); // Initialize edit data
       } catch (error) {
         console.error("Error fetching patient:", error);
-        showErrorToast("Failed to load patient details. Please try again.");
-        setError("Failed to load patient details. Please try again.");
+        toast.error("Failed to load patient details. Please try again.");
+        // setError("Failed to load patient details. Please try again.");
       }
     };
 
@@ -76,21 +79,21 @@ const PatientDetails = () => {
       // Update the local state to reflect the changes
       setPatient(payload);
       setIsEditing(false);
-      showSuccessToast("Patient updated successfully!");
+      toast.success("Patient updated successfully!");
     } catch (error) {
       console.error("Failed to update patient:", error.response?.data || error.message);
-      showErrorToast("Failed to update patient. Please check the input and try again.");
+      toast.error("Failed to update patient. Please check the input and try again.");
     }
   };
 
   const handleDelete = async () => {
     try {
       await patientApi.deletePatient(id); // Delete the patient
-      showSuccessToast("Patient deleted successfully!");
+      toast.success("Patient deleted successfully!");
       navigate("/patients"); // Redirect back to patients list
     } catch (error) {
       console.error("Failed to delete patient:", error);
-      showErrorToast("Failed to delete patient. Please try again.");
+      toast.error("Failed to delete patient. Please try again.");
     }
     setIsDeleteConfirmationOpen(false);
     handleMenuClose();

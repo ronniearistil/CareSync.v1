@@ -13,7 +13,7 @@ const PatientRegisterPage = () => {
     phone_number: Yup.string()
       .matches(/^\d{10}$/, "Phone number must be 10 digits")
       .required("Phone number is required"),
-    date_of_birth: Yup.string().required("Date of birth is required"),
+    date_of_birth: Yup.date().required("Date of birth is required"),
     address: Yup.string().required("Address is required"),
     password: Yup.string()
       .min(8, "Password must be at least 8 characters")
@@ -21,33 +21,45 @@ const PatientRegisterPage = () => {
   });
 
   // Handle Form Submission
-const handleSubmit = async (values, { setSubmitting, resetForm }) => {
-  try {
-    // Prevent duplicate toast messages
-    if (!toast.isActive("user-success")) {
+  const handleSubmit = async (values, { setSubmitting, resetForm }) => {
+    try {
+      // Format date_of_birth to MM/DD/YYYY
+      const formattedDOB = new Date(values.date_of_birth).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+      });
+
       const payload = {
-        first_name: values.first_name,
-        last_name: values.last_name,
-        email: values.email,
-        phone_number: values.phone_number,
-        date_of_birth: values.date_of_birth,
-        address: values.address,
-        password: values.password,
+        first_name: values.first_name.trim(),
+        last_name: values.last_name.trim(),
+        email: values.email.trim().toLowerCase(),
+        phone_number: values.phone_number.trim(),
+        date_of_birth: formattedDOB, // Formatted date
+        address: values.address.trim(),
+        password: values.password.trim(),
       };
 
-      await axios.post("http://localhost:5555/auth/register", payload);
+      console.log("Payload:", payload);
 
-      // Single toast message with ID
-      toast.success("User account created successfully!", { id: "user-success" });
+      // Send POST request to the /patients endpoint
+      await axios.post("http://localhost:5555/patients", payload, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
+      toast.success("Patient registered successfully!");
       resetForm();
+    } catch (err) {
+      console.error("API Error:", err.response?.data || err);
+      toast.error(
+        err.response?.data?.error || "Failed to register patient. Please try again."
+      );
+    } finally {
+      setSubmitting(false);
     }
-  } catch (err) {
-    toast.error(err.response?.data?.error || "Failed to register user.");
-  } finally {
-    setSubmitting(false);
-  }
-};
+  };
 
   return (
     <div style={{ maxWidth: "400px", margin: "0 auto", padding: "20px" }}>
@@ -165,5 +177,6 @@ const handleSubmit = async (values, { setSubmitting, resetForm }) => {
 };
 
 export default PatientRegisterPage;
+
 
 
