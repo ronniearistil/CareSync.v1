@@ -102,8 +102,14 @@ import UserLoginPage from "./components/authentication/auth_pages/UserLoginPage"
 import Users from "./components/user_context/Users";
 import UserDetails from "./components/user_context/UserDetails";
 import CareDetails from "./components/patient_context/CareDetails";
+import RecommendationsDashboard from './components/dashboard/RecommendationsDashboard';
 
-import AccountSettings from "./components/account/AccountSettings"; // Import the new component
+import UserRecommendationList from "./components/recommendations/UserRecommendationList";
+import PatientRecommendations from "./components/recommendations/PatientRecommendations";
+
+import RecommendationList from './components/recommendations/RecommendationList';
+
+import AccountSettings from "./components/account/AccountSettings"; 
 
 
 const App = () => {
@@ -143,7 +149,12 @@ const App = () => {
                     <Route path="/analytics" element={<Analytics />} />
                     <Route path="/news" element={<News />} />
                     <Route path="/account" element={<AccountSettings />} /> {/* Add Account Route */}
-
+                    <Route path="/dashboard/recommendations" element={<RecommendationsDashboard userId={1} />} />
+                    
+                    <Route path="/recommendations" element={<RecommendationList />} />
+                    <Route path="/user-recommendations" element={<UserRecommendationList />} />
+                    <Route path="/patients/recommendations" element={<PatientRecommendations />} />
+                    
                     {/* User Routes */}
                     <Route path="/users" element={<Users />} />
                     <Route path="/users/:id" element={<UserDetails />} />

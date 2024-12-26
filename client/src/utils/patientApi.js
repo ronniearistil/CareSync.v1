@@ -65,3 +65,15 @@ export const deletePatient = async (id) => {
         throw error;
     }
 };
+
+// Fetch all patient recommendations
+export const fetchPatientRecommendations = async () => {
+    try {
+        const { data } = await api.get('/patients/recommendations');
+        return data;
+    } catch (error) {
+        console.error('Failed to fetch patient recommendations:', error);
+        throw error;
+    }
+};
+

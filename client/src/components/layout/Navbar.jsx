@@ -259,10 +259,10 @@ const Navbar = () => {
         const response = await fetch("http://localhost:5555/auth/me", {
           credentials: "include",
         });
-  
+
         if (response.ok) {
           const userData = await response.json();
-  
+
           // Check if it's a 'Patient' or another role ('Admin'/'Provider')
           if (userData.role === "Patient") {
             // Fetch patient details if role is 'Patient'
@@ -272,7 +272,7 @@ const Navbar = () => {
                 credentials: "include",
               }
             );
-  
+
             if (patientResponse.ok) {
               const patientData = await patientResponse.json();
               setUserName(`${patientData.first_name} ${patientData.last_name}`);
@@ -291,10 +291,10 @@ const Navbar = () => {
         toast.error("Failed to fetch user profile.");
       }
     };
-  
+
     fetchUser();
   }, []);
-  
+
   const handleMenuOpen = (setter) => (event) => setter(event.currentTarget);
   const handleMenuClose = (setter) => () => setter(null);
 
@@ -332,6 +332,10 @@ const Navbar = () => {
             <MenuItem sx={{ fontSize: "1.5rem" }} onClick={() => navigate("/patients")}>View All Patients</MenuItem>
             <MenuItem sx={{ fontSize: "1.5rem" }} onClick={() => navigate("/add-patient")}>Add New Patient</MenuItem>
             <MenuItem sx={{ fontSize: "1.5rem" }} onClick={() => navigate("/patients/reports")}>Patient Reports</MenuItem>
+
+            <MenuItem sx={{ fontSize: "1.5rem" }} onClick={() => navigate("/patients/recommendations")}>
+              Recommendations
+            </MenuItem>
           </Menu>
 
           <Button
@@ -344,6 +348,10 @@ const Navbar = () => {
             <MenuItem sx={{ fontSize: "1.5rem" }} onClick={() => navigate("/users")}>View All Users</MenuItem>
             <MenuItem sx={{ fontSize: "1.5rem" }} onClick={() => navigate("/add-user")}>Add New User</MenuItem>
             <MenuItem sx={{ fontSize: "1.5rem" }} onClick={() => navigate("/users/reports")}>User Reports</MenuItem>
+
+            <MenuItem sx={{ fontSize: "1.5rem" }} onClick={() => navigate("/users/recommendations")}>
+              Recommendations
+            </MenuItem>
           </Menu>
 
           <Button
@@ -356,6 +364,20 @@ const Navbar = () => {
             <MenuItem sx={{ fontSize: "1.5rem" }} onClick={() => navigate("/appointments/calendar")}>Calendar</MenuItem>
             <MenuItem sx={{ fontSize: "1.5rem" }} onClick={() => navigate("/appointments/add")}>Add Appointment</MenuItem>
           </Menu>
+
+          {/* Dashboard Button */}
+
+          <Button
+            sx={{
+              color: "white",
+              textTransform: "none",
+              fontWeight: "bold",
+              fontSize: "2rem",
+            }}
+            onClick={() => navigate("/dashboard")}
+          >
+            Dashboard
+          </Button>
 
           <Button onClick={() => navigate("/about")} sx={{ color: "white", fontSize: "1.5rem" }}>About</Button>
         </Box>
