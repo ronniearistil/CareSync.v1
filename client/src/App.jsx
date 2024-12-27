@@ -104,7 +104,7 @@ import UserDetails from "./components/user_context/UserDetails";
 import CareDetails from "./components/patient_context/CareDetails";
 import RecommendationsDashboard from './components/dashboard/RecommendationsDashboard';
 
-import UserRecommendationList from "./components/recommendations/UserRecommendationList";
+// import UserRecommendationList from "./components/recommendations/UserRecommendationList";
 import PatientRecommendations from "./components/recommendations/PatientRecommendations";
 
 import RecommendationList from './components/recommendations/RecommendationList';
@@ -152,7 +152,7 @@ const App = () => {
                     <Route path="/dashboard/recommendations" element={<RecommendationsDashboard userId={1} />} />
                     
                     <Route path="/recommendations" element={<RecommendationList />} />
-                    <Route path="/user-recommendations" element={<UserRecommendationList />} />
+                    {/* <Route path="/user-recommendations" element={<UserRecommendationList />} /> */}
                     <Route path="/patients/recommendations" element={<PatientRecommendations />} />
                     
                     {/* User Routes */}
