@@ -6,7 +6,7 @@ import {
 } from '../../utils/UserRecommendationApi';
 
 import { fetchRecommendations } from '../../utils/recommendationApi'; 
-import { fetchUsers } from '../../utils/userApi'; 
+import { fetchPatients } from '../../utils/patientApi'; 
 import {
     Button,
     Select,
@@ -19,10 +19,10 @@ import {
 import toast from 'react-hot-toast';
 
 const UserRecommendationList = () => {
-    const [userRecommendations, setUserRecommendations] = useState([]);
-    const [users, setUsers] = useState([]);
     const [recommendations, setRecommendations] = useState([]);
-    const [selectedUser, setSelectedUser] = useState('');
+    const [patients, setPatients] = useState([]);
+    const [userRecommendations, setUserRecommendations] = useState([]);
+    const [selectedPatient, setSelectedPatient] = useState('');
     const [selectedRecommendation, setSelectedRecommendation] = useState('');
     const [loading, setLoading] = useState(true);
 
@@ -31,16 +31,20 @@ const UserRecommendationList = () => {
         const loadData = async () => {
             try {
                 setLoading(true);
-                const usersData = await fetchUsers();
-                const recommendationsData = await fetchRecommendations();
-                const userRecommendationsData = await fetchUserRecommendations();
 
-                setUsers(usersData);
+                // Fetch patients, recommendations, and user recommendations
+                const patientsData = await fetchPatients(); // Patients endpoint
+                const recommendationsData = await fetchRecommendations(); // Recommendations endpoint
+                const userRecommendationsData = await fetchUserRecommendations(); // User Recommendations endpoint
+
+                // Set states
+                setPatients(patientsData);
                 setRecommendations(recommendationsData);
                 setUserRecommendations(userRecommendationsData);
                 setLoading(false);
             } catch (error) {
-                toast.error('Failed to load data.');
+                console.error("Error loading data:", error);
+                toast.error('Failed to load data. Please try again.');
                 setLoading(false);
             }
         };
@@ -49,40 +53,46 @@ const UserRecommendationList = () => {
 
     // Add Recommendation
     const handleAddRecommendation = async () => {
-        if (!selectedUser || !selectedRecommendation) {
-            toast.error('Please select both user and recommendation.');
+        if (!selectedPatient || !selectedRecommendation) {
+            toast.error('Please select both patient and recommendation.');
             return;
         }
 
         // Prevent duplicates
         const exists = userRecommendations.some(
             (ur) =>
-                ur.user_id === selectedUser && ur.recommendation_id === selectedRecommendation
+                ur.patient_id === selectedPatient && ur.recommendation_id === selectedRecommendation
         );
         if (exists) {
-            toast.error('This recommendation already exists for the user.');
+            toast.error('This recommendation already exists for the patient.');
             return;
         }
 
         try {
-            await createUserRecommendation(selectedUser, selectedRecommendation);
-            toast.success('User recommendation added successfully!');
+            await createUserRecommendation(selectedPatient, selectedRecommendation); // Create recommendation
+            toast.success('Patient recommendation added successfully!');
+            
+            // Refresh recommendations
             const updatedRecommendations = await fetchUserRecommendations();
             setUserRecommendations(updatedRecommendations);
         } catch (error) {
-            toast.error('Failed to add user recommendation.');
+            console.error("Error adding recommendation:", error);
+            toast.error('Failed to add patient recommendation.');
         }
     };
 
     // Delete Recommendation
-    const handleDeleteRecommendation = async (userId, recommendationId) => {
+    const handleDeleteRecommendation = async (patientId, recommendationId) => {
         try {
-            await deleteUserRecommendation(userId, recommendationId);
-            toast.success('User recommendation deleted successfully!');
+            await deleteUserRecommendation(patientId, recommendationId); // Delete recommendation
+            toast.success('Patient recommendation deleted successfully!');
+            
+            // Refresh recommendations
             const updatedRecommendations = await fetchUserRecommendations();
             setUserRecommendations(updatedRecommendations);
         } catch (error) {
-            toast.error('Failed to delete user recommendation.');
+            console.error("Error deleting recommendation:", error);
+            toast.error('Failed to delete patient recommendation.');
         }
     };
 
@@ -97,18 +107,18 @@ const UserRecommendationList = () => {
 
     return (
         <Box sx={{ padding: '1rem' }}>
-            <h2>User Recommendations</h2>
+            <h2>Patient Recommendations</h2>
 
-            {/* Dropdowns for selecting user and recommendation */}
+            {/* Dropdowns for selecting patient and recommendation */}
             <FormControl sx={{ minWidth: 200, marginRight: 2 }}>
-                <InputLabel>User</InputLabel>
+                <InputLabel>Patient</InputLabel>
                 <Select
-                    value={selectedUser}
-                    onChange={(e) => setSelectedUser(e.target.value)}
+                    value={selectedPatient}
+                    onChange={(e) => setSelectedPatient(e.target.value)}
                 >
-                    {users.map((user) => (
-                        <MenuItem key={user.id} value={user.id}>
-                            {user.name}
+                    {patients.map((patient) => (
+                        <MenuItem key={patient.id} value={patient.id}>
+                            {patient.name}
                         </MenuItem>
                     ))}
                 </Select>
@@ -132,17 +142,17 @@ const UserRecommendationList = () => {
                 Add Recommendation
             </Button>
 
-            {/* Display user recommendations */}
+            {/* Display patient recommendations */}
             <ul style={{ marginTop: '1rem' }}>
                 {userRecommendations.map((ur) => (
-                    <li key={`${ur.user_id}-${ur.recommendation_id}`}>
-                        User {ur.user_id} - Recommendation {ur.recommendation_id}
+                    <li key={`${ur.patient_id}-${ur.recommendation_id}`}>
+                        Patient {ur.patient_id} - Recommendation {ur.recommendation_id}
                         <Button
                             variant="outlined"
                             color="error"
                             sx={{ marginLeft: '1rem' }}
                             onClick={() =>
-                                handleDeleteRecommendation(ur.user_id, ur.recommendation_id)
+                                handleDeleteRecommendation(ur.patient_id, ur.recommendation_id)
                             }
                         >
                             Delete
@@ -155,5 +165,6 @@ const UserRecommendationList = () => {
 };
 
 export default UserRecommendationList;
+
 
 
