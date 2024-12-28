@@ -6,15 +6,25 @@ import {
   CircularProgress,
   LinearProgress,
   Button,
+  Grid,
+  Box,
 } from "@mui/material";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import GroupIcon from "@mui/icons-material/Group";
+import EventIcon from "@mui/icons-material/Event";
+import AssignmentIcon from "@mui/icons-material/Assignment";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import ErrorIcon from "@mui/icons-material/Error";
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
 
 const Analytics = () => {
   const [analytics, setAnalytics] = useState({
     active_users: 0,
     total_users: 0,
+    active_patients: 0,
+    total_patients: 0,
     active_appointments: 0,
     canceled_appointments: 0,
     overdue_records: 0,
@@ -42,8 +52,75 @@ const Analytics = () => {
     fetchAnalytics();
   }, []);
 
-  // Show loading spinner while data is being fetched
-  if (loading) return <CircularProgress sx={{ margin: "2rem auto", display: "block" }} />;
+  if (loading)
+    return <CircularProgress sx={{ margin: "2rem auto", display: "block" }} />;
+
+  const analyticsData = [
+    {
+      title: "Total Patients",
+      value: analytics.total_patients,
+      icon: <GroupIcon sx={{ fontSize: 30, color: "#1976D2" }} />, // Blue icon
+      buttonLabel: "View Patients",
+      link: "/patients",
+      color: "primary",
+    },
+    {
+      title: "Active Patients",
+      value: analytics.active_patients,
+      icon: <GroupIcon sx={{ fontSize: 30, color: "#4CAF50" }} />, // Green icon
+      buttonLabel: "View Active",
+      link: "/patients?status=active",
+      color: "success",
+    },
+    {
+      title: "Active Users",
+      value: analytics.active_users,
+      icon: <PersonAddIcon sx={{ fontSize: 30, color: "#1976D2" }} />, // Blue icon
+      buttonLabel: "View Users",
+      link: "/users",
+      color: "primary",
+    },
+    {
+      title: "Active Appointments",
+      value: analytics.active_appointments,
+      icon: <EventIcon sx={{ fontSize: 30, color: "#1976D2" }} />, // Blue icon
+      buttonLabel: "View Active",
+      link: "/appointments?status=Active",
+      color: "primary",
+    },
+    {
+      title: "Canceled Appointments",
+      value: analytics.canceled_appointments,
+      icon: <ErrorIcon sx={{ fontSize: 30, color: "#F44336" }} />, // Red icon
+      buttonLabel: "View Canceled",
+      link: "/appointments?status=Cancelled",
+      color: "error",
+    },
+    {
+      title: "Overdue Records",
+      value: analytics.overdue_records,
+      icon: <AssignmentIcon sx={{ fontSize: 30, color: "#FF9800" }} />, // Orange icon
+      buttonLabel: "View Overdue",
+      link: "/records?status=Overdue",
+      color: "warning",
+    },
+    {
+      title: "Completed Procedures",
+      value: analytics.completed_procedures,
+      icon: <CheckCircleIcon sx={{ fontSize: 30, color: "#4CAF50" }} />, // Green icon
+      buttonLabel: "View Completed",
+      link: "/records?status=Completed",
+      color: "success",
+    },
+    {
+      title: "New Users (Last 30 Days)",
+      value: analytics.new_users,
+      icon: <PersonAddIcon sx={{ fontSize: 30, color: "#9C27B0" }} />, // Purple icon
+      buttonLabel: "View Users",
+      link: "/users?filter=new",
+      color: "secondary",
+    },
+  ];
 
   return (
     <Card
@@ -64,94 +141,45 @@ const Analytics = () => {
           Analytics Overview
         </Typography>
 
-        {/* Active Users */}
-        <Typography sx={{ marginBottom: "1rem", fontSize: "1.1rem" }}>
-          Active Users: <strong>{analytics.active_users}</strong>
-        </Typography>
-        <LinearProgress
-          variant="determinate"
-          value={(analytics.active_users / analytics.total_users) * 100}
-          sx={{ height: 10, borderRadius: 5 }}
-        />
-        <Typography sx={{ marginTop: "0.5rem", fontSize: "0.9rem" }}>
-          Total Users: {analytics.total_users}
-        </Typography>
-
-        {/* Active Appointments */}
-        <Typography sx={{ marginTop: "1.5rem", fontSize: "1.1rem" }}>
-          Active Appointments: <strong>{analytics.active_appointments}</strong>
-          <Button
-            size="small"
-            sx={{ marginLeft: 2 }}
-            variant="contained"
-            color="primary"
-            onClick={() => navigate("/appointments?status=Active")}
-          >
-            View Active
-          </Button>
-        </Typography>
-
-        {/* Canceled Appointments */}
-        <Typography sx={{ marginTop: "1.5rem", fontSize: "1.1rem" }}>
-          Canceled Appointments: <strong>{analytics.canceled_appointments}</strong>
-          <Button
-            size="small"
-            sx={{ marginLeft: 2 }}
-            variant="contained"
-            color="error"
-            onClick={() => navigate("/appointments?status=Cancelled")}
-          >
-            View Canceled
-          </Button>
-        </Typography>
-
-        {/* Overdue Health Records */}
-        <Typography sx={{ marginTop: "1.5rem", fontSize: "1.1rem" }}>
-          Overdue Records: <strong>{analytics.overdue_records}</strong>
-          <Button
-            size="small"
-            sx={{ marginLeft: 2 }}
-            variant="contained"
-            color="warning"
-            onClick={() => navigate("/records?status=Overdue")}
-          >
-            View Overdue
-          </Button>
-        </Typography>
-
-        {/* Completed Procedures */}
-        <Typography sx={{ marginTop: "1.5rem", fontSize: "1.1rem" }}>
-          Completed Procedures: <strong>{analytics.completed_procedures}</strong>
-          <Button
-            size="small"
-            sx={{ marginLeft: 2 }}
-            variant="contained"
-            color="success"
-            onClick={() => navigate("/records?status=Completed")}
-          >
-            View Completed
-          </Button>
-        </Typography>
-
-        {/* New Users */}
-        <Typography sx={{ marginTop: "1.5rem", fontSize: "1.1rem" }}>
-          New Users (Last 30 Days): <strong>{analytics.new_users}</strong>
-          <Button
-            size="small"
-            sx={{ marginLeft: 2 }}
-            variant="contained"
-            color="secondary"
-            onClick={() => navigate("/users?filter=new")}
-          >
-            View Users
-          </Button>
-        </Typography>
+        <Grid container spacing={2}>
+          {analyticsData.map((item, index) => (
+            <Grid item xs={12} sm={6} md={4} key={index}>
+              <Card
+                sx={{
+                  padding: "1rem",
+                  textAlign: "center",
+                  boxShadow: 2,
+                }}
+              >
+                <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "1rem" }}>
+                  {item.icon}
+                </Box>
+                <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+                  {item.title}
+                </Typography>
+                <Typography variant="h5" sx={{ margin: "0.5rem 0" }}>
+                  {item.value}
+                </Typography>
+                <Button
+                  size="small"
+                  variant="contained"
+                  color={item.color}
+                  onClick={() => navigate(item.link)}
+                >
+                  {item.buttonLabel}
+                </Button>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
       </CardContent>
     </Card>
   );
 };
 
 export default Analytics;
+
+
 
 
 

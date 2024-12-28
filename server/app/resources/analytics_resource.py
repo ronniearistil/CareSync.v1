@@ -8,6 +8,8 @@ from app.models.appointment_model import Appointment
 from app.models.health_record_model import HealthRecord
 from sqlalchemy import func
 
+from app.models.patient_model import Patient
+
 # Helper function to calculate analytics data
 from datetime import datetime, timedelta
 from sqlalchemy import func
@@ -47,16 +49,27 @@ def calculate_analytics():
         new_users = db.session.query(func.count(User.id)).filter(
             User.id >= total_users - 10  # Approximation using sequential IDs
         ).scalar()
+        
+        # Total patients
+        total_patients = db.session.query(func.count(Patient.id)).scalar()
+
+        # Active patients based on scheduled appointments
+        active_patients = db.session.query(func.count(Appointment.patient_id.distinct())) \
+            .filter(Appointment.status == "Scheduled").scalar()
+
 
         return {
-            "total_users": total_users,
-            "active_users": active_users,
-            "active_appointments": active_appointments,
-            "canceled_appointments": canceled_appointments,
-            "overdue_records": overdue_records,
-            "completed_procedures": completed_procedures,
-            "new_users": new_users,
-        }
+    "total_users": total_users,
+    "active_users": active_users,
+    "total_patients": total_patients,  # Added
+    "active_patients": active_patients,  # Added
+    "active_appointments": active_appointments,
+    "canceled_appointments": canceled_appointments,
+    "overdue_records": overdue_records,
+    "completed_procedures": completed_procedures,
+    "new_users": new_users,
+}
+
 
     except Exception as e:
         print(f"Error in calculate_analytics: {str(e)}")
