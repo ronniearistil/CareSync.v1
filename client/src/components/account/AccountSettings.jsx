@@ -20,7 +20,7 @@ const AccountSettings = () => {
     phone_number: "",
     new_password: "",
   });
-  const [role, setRole] = useState(""); // Track role to conditionally show phone_number
+  const [role, setRole] = useState(""); 
 
   // Fetch user data on mount
   useEffect(() => {
@@ -108,7 +108,6 @@ const AccountSettings = () => {
 
   return (
     <Container maxWidth="sm" sx={{ mt: 4 }}>
-      <Toaster position="top-center" />
       <Paper elevation={3} sx={{ p: 4, borderRadius: "8px" }}>
         <Typography variant="h5" sx={{ mb: 3, fontWeight: "bold", textAlign: "center" }}>
           Account Settings

@@ -1,9 +1,12 @@
-import React from "react";
-import { Box, Typography } from "@mui/material";
+import React, { useState } from "react";
+import { Box, Typography, Button, Stack } from "@mui/material";
 import Analytics from "../dashboard/Analytics";
 import AppointmentCalendar from "../dashboard/AppointmentCalendar";
 
 const Dashboard = () => {
+  const [showAnalytics, setShowAnalytics] = useState(true);
+  const [showAppointments, setShowAppointments] = useState(false);
+
   return (
     <Box
       sx={{
@@ -16,8 +19,24 @@ const Dashboard = () => {
       <Typography variant="h1" gutterBottom>
         Dashboard
       </Typography>
-      <Analytics />
-      <AppointmentCalendar />
+
+      <Stack direction="row" spacing={2} mb={4}>
+        <Button
+          variant="contained"
+          onClick={() => setShowAnalytics((prev) => !prev)}
+        >
+          {showAnalytics ? "Hide Analytics" : "Show Analytics"}
+        </Button>
+        <Button
+          variant="contained"
+          onClick={() => setShowAppointments((prev) => !prev)}
+        >
+          {showAppointments ? "Hide Appointments" : "Show Appointments"}
+        </Button>
+      </Stack>
+
+      {showAnalytics && <Analytics />}
+      {showAppointments && <AppointmentCalendar />}
     </Box>
   );
 };

@@ -31,8 +31,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-hot-toast";
 
 const PatientRecommendations = () => {
   // States
@@ -123,7 +122,6 @@ const PatientRecommendations = () => {
 
   return (
     <Box sx={{ padding: "2rem" }}>
-      <ToastContainer />
       <Typography variant="h4" sx={{ marginBottom: "1rem" }}>
         Patient Recommendations
       </Typography>

@@ -79,11 +79,17 @@ const Navbar = () => {
   };
 
   return (
-    <AppBar position="static" sx={{ backgroundColor: "#1976D2", padding: "1rem" }}>
+    <AppBar position="static" sx={{ backgroundColor: "#1976D2", padding: "3rem" }}>
       <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
         <Typography
-          variant="h4"
-          sx={{ fontWeight: "bold", color: "white", cursor: "pointer", fontSize: "3rem" }}
+          variant="h3"
+          sx={{
+            fontWeight: "bold",
+            color: "white",
+            cursor: "pointer",
+            fontSize: "3rem",
+            '&:hover': { color: "#64B5F6" }, // Hover effect
+          }}
           onClick={() => navigate("/")}
         >
           CareSync
@@ -116,10 +122,6 @@ const Navbar = () => {
             <MenuItem sx={{ fontSize: "1.5rem" }} onClick={() => navigate("/users")}>View All Users</MenuItem>
             <MenuItem sx={{ fontSize: "1.5rem" }} onClick={() => navigate("/add-user")}>Add New User</MenuItem>
             <MenuItem sx={{ fontSize: "1.5rem" }} onClick={() => navigate("/users/reports")}>User Reports</MenuItem>
-
-            {/* <MenuItem sx={{ fontSize: "1.5rem" }} onClick={() => navigate("/users/recommendations")}>
-              Recommendations
-            </MenuItem> */}
           </Menu>
 
           <Button

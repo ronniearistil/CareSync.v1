@@ -38,9 +38,11 @@ const UserRegisterPage = () => {
 
   const handleSubmit = async (values, { setSubmitting, resetForm }) => {
     try {
-      await axios.post("http://localhost:5555/auth/register", values);
-      toast.success("User account created successfully!");
-      resetForm();
+      const response = await axios.post("http://localhost:5555/auth/register", values);
+      if (response.status === 201) {
+        toast.success("User account created successfully!");
+        resetForm();
+      }
     } catch (err) {
       toast.error(err.response?.data?.error || "Failed to register user.");
     } finally {
@@ -50,7 +52,6 @@ const UserRegisterPage = () => {
 
   return (
     <FormContainer elevation={3}>
-      <Toaster position="top-center" />
       <Typography
         variant="h4"
         component="h1"
@@ -65,73 +66,57 @@ const UserRegisterPage = () => {
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
       >
-        {({ values, handleChange, isSubmitting }) => (
+        {({ touched, errors, isSubmitting }) => (
           <Form>
             <Box mb={2}>
-              <TextField
+              <Field
+                as={TextField}
                 name="name"
                 label="Name"
-                value={values.name}
-                onChange={handleChange}
                 fullWidth
                 required
-              />
-              <ErrorMessage
-                name="name"
-                component="div"
-                style={{ color: "red", marginTop: "4px" }}
+                error={Boolean(touched.name && errors.name)}
+                helperText={touched.name && errors.name}
               />
             </Box>
             <Box mb={2}>
-              <TextField
+              <Field
+                as={TextField}
                 name="email"
                 label="Email"
                 type="email"
-                value={values.email}
-                onChange={handleChange}
                 fullWidth
                 required
-              />
-              <ErrorMessage
-                name="email"
-                component="div"
-                style={{ color: "red", marginTop: "4px" }}
+                error={Boolean(touched.email && errors.email)}
+                helperText={touched.email && errors.email}
               />
             </Box>
             <Box mb={2}>
-              <TextField
+              <Field
+                as={TextField}
                 name="password"
                 label="Password"
                 type="password"
-                value={values.password}
-                onChange={handleChange}
                 fullWidth
                 required
-              />
-              <ErrorMessage
-                name="password"
-                component="div"
-                style={{ color: "red", marginTop: "4px" }}
+                error={Boolean(touched.password && errors.password)}
+                helperText={touched.password && errors.password}
               />
             </Box>
             <Box mb={2}>
-              <TextField
+              <Field
+                as={TextField}
                 name="role"
                 label="Role"
                 select
-                value={values.role}
-                onChange={handleChange}
                 fullWidth
                 required
+                error={Boolean(touched.role && errors.role)}
+                helperText={touched.role && errors.role}
               >
                 <MenuItem value="Provider">Provider</MenuItem>
                 <MenuItem value="Admin">Admin</MenuItem>
-              </TextField>
-              <ErrorMessage
-                name="role"
-                component="div"
-                style={{ color: "red", marginTop: "4px" }}
-              />
+              </Field>
             </Box>
             <Box mt={3} textAlign="center">
               <Button
@@ -152,6 +137,7 @@ const UserRegisterPage = () => {
 };
 
 export default UserRegisterPage;
+
 
 
 

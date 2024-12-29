@@ -51,7 +51,7 @@ const LandingPage = () => {
           color: "#1976D2",
         }}
       >
-        Welcome to CareSync
+        Welcome to CareSynq
       </Typography>
       <Typography
         variant="h6"
@@ -180,7 +180,6 @@ const LandingPage = () => {
         </DialogActions>
       </Dialog>
 
-      {/* Footer */}
       <Box
         sx={{
           position: "absolute",
@@ -189,13 +188,9 @@ const LandingPage = () => {
           right: 0,
           padding: "1rem",
           textAlign: "center",
-          // backgroundColor: "#1976D2",
           color: "white",
         }}
       >
-        {/* <Typography variant="body2">
-          © {new Date().getFullYear()} CareSync - All Rights Reserved
-        </Typography> */}
       </Box>
     </Box>
   );
