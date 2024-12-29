@@ -92,3 +92,30 @@ class RecommendationResource(Resource):
             return {"message": "Recommendation deleted successfully"}, 200
         except Exception as e:
             return {"error": str(e)}, 500
+
+    def patch(self, recommendation_id):
+        """Partially update a recommendation."""
+        parser = reqparse.RequestParser()
+        parser.add_argument("text", required=False)
+        parser.add_argument("category", required=False)
+        parser.add_argument("age_group", required=False)
+        args = parser.parse_args()
+
+        try:
+            recommendation = Recommendation.query.get(recommendation_id)
+            if not recommendation:
+                return {"error": "Recommendation not found"}, 404
+
+            # Apply updates only for fields present in the request
+            if args["text"]:
+                recommendation.text = args["text"]
+            if args["category"]:
+                recommendation.category = args["category"]
+            if args["age_group"]:
+                recommendation.age_group = args["age_group"]
+
+            db.session.commit()
+            return {"message": "Recommendation updated successfully"}, 200
+        except Exception as e:
+            db.session.rollback()
+            return {"error": str(e)}, 500

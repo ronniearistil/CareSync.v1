@@ -22,8 +22,7 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import * as patientApi from "../../utils/patientApi";
 
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-hot-toast";
 
 const PatientDetails = () => {
   const { id } = useParams(); // Get patient ID from URL

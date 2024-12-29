@@ -1,21 +1,21 @@
 import React from "react";
-import { Link } from "react-router-dom"; // Import Link for navigation
+import { Link } from "react-router-dom"; 
 import { Box, Typography } from "@mui/material";
 
 const Footer = () => (
   <Box
     component="footer"
     sx={{
-      backgroundColor: "#1976D2", // Trustworthy Blue as background
+      backgroundColor: "#1976D2", 
       textAlign: "center",
-      padding: "0.5rem 0", // Reduced padding to half the size
+      padding: "0.5rem 0",
       position: "fixed",
       bottom: 0,
       width: "100%",
     }}
   >
     <Typography sx={{ color: "#FFFFFF", fontWeight: "bold", fontSize: "0.9rem" }}>
-      &copy; 2024 CareSync - All Rights Reserved
+      &copy; 2024 CareSynq - All Rights Reserved
     </Typography>
     <Typography sx={{ color: "#FFFFFF", fontSize: "0.75rem", marginBottom: "0.25rem" }}>
       Empowering Healthcare Coordination for Providers and Patients
@@ -25,7 +25,7 @@ const Footer = () => (
         display: "flex",
         justifyContent: "center",
         gap: "1rem",
-        marginTop: "0.25rem", // Reduced margin for a compact layout
+        marginTop: "0.25rem", 
       }}
     >
       {/* Navigation Links */}
@@ -33,7 +33,7 @@ const Footer = () => (
         to="/about"
         style={{
           textDecoration: "none",
-          color: "#FFFFFF", // White text for links
+          color: "#FFFFFF", 
           fontSize: "0.75rem",
         }}
       >
@@ -45,7 +45,7 @@ const Footer = () => (
         rel="noopener noreferrer"
         style={{
           textDecoration: "none",
-          color: "#FFFFFF", // White text for links
+          color: "#FFFFFF",
           fontSize: "0.75rem",
         }}
       >
@@ -55,19 +55,19 @@ const Footer = () => (
         href="mailto:contact@caresync.com"
         style={{
           textDecoration: "none",
-          color: "#FFFFFF", // White text for links
+          color: "#FFFFFF",
           fontSize: "0.75rem",
         }}
       >
         Email Us
       </a>
       <a
-        href="https://github.com/ronniearistil/CareSync.v1.git"
+        href="https://github.com/ronniearistil/CareSynq.git"
         target="_blank"
         rel="noopener noreferrer"
         style={{
           textDecoration: "none",
-          color: "#FFFFFF", // White text for links
+          color: "#FFFFFF", 
           fontSize: "0.75rem",
         }}
       >

@@ -1,82 +1,7 @@
-// // Current Working Versin 12/16/2024
-// import React from "react";
-// import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-// import { ThemeProvider, CssBaseline } from "@mui/material";
-// import { Toaster } from "react-hot-toast";
-// import theme from "./theme";
-// import Navbar from "./components/layout/Navbar";
-// import Dashboard from "./components/layout/Dashboard";
-// import Patients from "./components/patient_context/Patients";
-// import PatientDetails from "./components/patient_context/PatientDetails";
-// import AddPatientForm from "./components/authentication/auth_forms/AddPatientForm";
-// import AddUserForm from "./components/authentication/auth_forms/AddUserForm";
-// import Appointments from "./components/dashboard/Appointments";
-// import AppointmentCalendar from "./components/dashboard/AppointmentCalendar";
-// import AddAppointment from "./components/dashboard/AddAppointment"; // AddAppointment Component
-// import Analytics from "./components/dashboard/Analytics";
-// import News from "./components/news_container/News";
-// import About from "./pages/About";
-// import RegisterPage from "./components/authentication/auth_pages/RegisterPage";
-// import PasswordResetPage from "./components/authentication/auth_pages/PasswordResetPage";
-// import Footer from "./components/layout/Footer";
-// import LandingPage from "./components/layout/LandingPage";
-// import PatientLoginPage from "./components/authentication/auth_pages/PatientLoginPage";
-// import UserLoginPage from "./components/authentication/auth_pages/UserLoginPage";
-// import Users from "./components/user_context/Users";
-// import UserDetails from "./components/user_context/UserDetails";
-// 
-// const App = () => {
-//     return (
-//         <ThemeProvider theme={theme}>
-//             <CssBaseline />
-//             <Router>
-//             <Toaster position="top-right" reverseOrder={false} /> {/* Add Toaster globally */}
-//                 <Navbar />
-//                 <Routes>
-//                     {/* Public Routes */}
-//                     <Route path="/" element={<LandingPage />} />
-//                     <Route path="/about" element={<About />} />
-//                     <Route path="/login/user" element={<UserLoginPage />} />
-//                     <Route path="/login/patient" element={<PatientLoginPage />} />
-//                     <Route path="/register" element={<RegisterPage />} />
-//                     <Route path="/reset-password" element={<PasswordResetPage />} />
-// 
-//                     <Route path="/replace-patient/:id" element={<AddPatientForm mode="replace" />} />
-// 
-// 
-//                     {/* Protected Routes */}
-//                     <Route path="/dashboard" element={<Dashboard />} />
-//                     <Route path="/patients" element={<Patients />} />
-//                     <Route path="/patients/:id" element={<PatientDetails />} />
-//                     <Route path="/add-patient" element={<AddPatientForm />} />
-//                     <Route path="/add-user" element={<AddUserForm />} />
-//                     <Route path="/appointments" element={<Appointments />} />
-//                     <Route path="/appointments/calendar" element={<AppointmentCalendar />} />
-//                     <Route path="/appointments/add" element={<AddAppointment />} />
-//                     <Route path="/analytics" element={<Analytics />} />
-//                     <Route path="/news" element={<News />} />
-// 
-//                     {/* User Routes */}
-//                     <Route path="/users" element={<Users />} />
-//                     <Route path="/users/:id" element={<UserDetails />} />
-//                 </Routes>
-//                 <Footer />
-//             </Router>
-//         </ThemeProvider>
-//     );
-// };
-// 
-// export default App;
-
-
-
-// Incorporating RBA Test - Current Version 12/17/2024
-
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { ThemeProvider, CssBaseline } from "@mui/material";
+import { ThemeProvider, CssBaseline, Box } from "@mui/material";
 import { Toaster } from "react-hot-toast";
-import "react-toastify/dist/ReactToastify.css";
 import theme from "./theme";
 import Navbar from "./components/layout/Navbar";
 import Dashboard from "./components/layout/Dashboard";
@@ -91,8 +16,8 @@ import Analytics from "./components/dashboard/Analytics";
 import News from "./components/news_container/News";
 import About from "./pages/About";
 import RegisterPage from "./components/authentication/auth_pages/UserRegisterPage";
-import PatientRegisterPage from "./components/authentication/auth_pages/PatientRegisterPage"; // Import PatientRegisterPage
-import UserRegisterPage from "./components/authentication/auth_pages/UserRegisterPage"; // Import UserRegisterPage
+import PatientRegisterPage from "./components/authentication/auth_pages/PatientRegisterPage";
+import UserRegisterPage from "./components/authentication/auth_pages/UserRegisterPage";
 import PasswordResetPage from "./components/authentication/auth_pages/UserPasswordResetPage";
 import PatientPasswordReset from "./components/authentication/auth_pages/PatientLoginPage";
 import Footer from "./components/layout/Footer";
@@ -102,59 +27,86 @@ import UserLoginPage from "./components/authentication/auth_pages/UserLoginPage"
 import Users from "./components/user_context/Users";
 import UserDetails from "./components/user_context/UserDetails";
 import CareDetails from "./components/patient_context/CareDetails";
-
-import AccountSettings from "./components/account/AccountSettings"; // Import the new component
-
+import RecommendationsDashboard from './components/dashboard/RecommendationsDashboard';
+import PatientRecommendations from "./components/recommendations/PatientRecommendations";
+import RecommendationList from './components/recommendations/RecommendationList';
+import AccountSettings from "./components/account/AccountSettings"; 
 
 const App = () => {
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline />
-            <Router>
-                <Toaster position="top-right" reverseOrder={false} /> {/* Add Toaster globally */}
-                <Navbar />
-                <Routes>
-                    {/* Public Routes */}
-                    <Route path="/" element={<LandingPage />} />
-                    <Route path="/about" element={<About />} />
-                    <Route path="/login/user" element={<UserLoginPage />} />
-                    <Route path="/login/patient" element={<PatientLoginPage />} />
-                    
-                    {/* Role-Based Registration */}
-                    <Route path="/register/patient" element={<PatientRegisterPage />} />
-                    <Route path="/register/user" element={<UserRegisterPage />} />
+            <Box
+    sx={{
+        minHeight: "100vh",
+        background: "linear-gradient(135deg, #F0F4F8 0%, #D9E2EC 50%, #BCCCDC 100%)",
+        backgroundSize: "400% 400%",
+        animation: "gradientBG 10s ease infinite", // Faster animation for visibility
+    }}
+>
+    <style>
+        {`
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        `}
+    </style>
 
-                    <Route path="/reset-password" element={<PasswordResetPage />} />
+                <Router>
+                    <Toaster position="top-right" reverseOrder={false} />
+                    <Navbar />
+                    <Routes>
+                        {/* Public Routes */}
+                        <Route path="/" element={<LandingPage />} />
+                        <Route path="/about" element={<About />} />
+                        <Route path="/login/user" element={<UserLoginPage />} />
+                        <Route path="/login/patient" element={<PatientLoginPage />} />
+                        
+                        {/* Role-Based Registration */}
+                        <Route path="/register/patient" element={<PatientRegisterPage />} />
+                        <Route path="/register/user" element={<UserRegisterPage />} />
 
-                    {/* Replace Patient */}
-                    <Route path="/replace-patient/:id" element={<AddPatientForm mode="replace" />} />
-                    <Route path="/patients/reset-password" element={<PatientPasswordReset />} />
-                    <Route path="/patients/:patientId/care-details" element={<CareDetails />} />
+                        <Route path="/reset-password" element={<PasswordResetPage />} />
 
-                    {/* Protected Routes */}
-                    <Route path="/dashboard" element={<Dashboard />} />
-                    <Route path="/patients" element={<Patients />} />
-                    <Route path="/patients/:id" element={<PatientDetails />} />
-                    <Route path="/add-patient" element={<AddPatientForm />} />
-                    <Route path="/add-user" element={<AddUserForm />} />
-                    <Route path="/appointments" element={<Appointments />} />
-                    <Route path="/appointments/calendar" element={<AppointmentCalendar />} />
-                    <Route path="/appointments/add" element={<AddAppointment />} />
-                    <Route path="/analytics" element={<Analytics />} />
-                    <Route path="/news" element={<News />} />
-                    <Route path="/account" element={<AccountSettings />} /> {/* Add Account Route */}
+                        {/* Replace Patient */}
+                        <Route path="/replace-patient/:id" element={<AddPatientForm mode="replace" />} />
+                        <Route path="/patients/reset-password" element={<PatientPasswordReset />} />
+                        <Route path="/patients/:patientId/care-details" element={<CareDetails />} />
 
-                    {/* User Routes */}
-                    <Route path="/users" element={<Users />} />
-                    <Route path="/users/:id" element={<UserDetails />} />
-                </Routes>
-                <Footer />
-            </Router>
+                        {/* Protected Routes */}
+                        <Route path="/dashboard" element={<Dashboard />} />
+                        <Route path="/patients" element={<Patients />} />
+                        <Route path="/patients/:id" element={<PatientDetails />} />
+                        <Route path="/providers/:id" element={<UserDetails />} />
+                        <Route path="/add-patient" element={<AddPatientForm />} />
+                        <Route path="/add-user" element={<AddUserForm />} />
+                        <Route path="/appointments" element={<Appointments />} />
+                        <Route path="/appointments/calendar" element={<AppointmentCalendar />} />
+                        <Route path="/appointments/add" element={<AddAppointment />} />
+                        <Route path="/analytics" element={<Analytics />} />
+                        <Route path="/news" element={<News />} />
+                        <Route path="/account" element={<AccountSettings />} />
+                        <Route path="/dashboard/recommendations" element={<RecommendationsDashboard userId={1} />} />
+                        
+                        <Route path="/recommendations" element={<RecommendationList />} />
+                        <Route path="/patients/recommendations" element={<PatientRecommendations />} />
+                        
+                        {/* User Routes */}
+                        <Route path="/users" element={<Users />} />
+                        <Route path="/users/:id" element={<UserDetails />} />
+                    </Routes>
+                    <Footer />
+                </Router>
+            </Box>
         </ThemeProvider>
     );
 };
 
 export default App;
+
+
 
 
 // Testing Protected Routes 12/16/2024 - Will optimize later. 

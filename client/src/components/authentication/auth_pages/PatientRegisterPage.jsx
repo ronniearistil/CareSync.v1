@@ -63,7 +63,6 @@ const PatientRegisterPage = () => {
 
   return (
     <div style={{ maxWidth: "400px", margin: "0 auto", padding: "20px" }}>
-      <Toaster position="top-center" />
       <h1 style={{ textAlign: "center", marginBottom: "1rem", color: "#1976D2" }}>
         Patient Sign Up
       </h1>

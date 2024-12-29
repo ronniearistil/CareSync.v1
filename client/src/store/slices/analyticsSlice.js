@@ -1,6 +1,5 @@
 
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import * as api from "../../utils/analyticsApi"; // Namespace import
 
 export const loadAnalytics = createAsyncThunk('analytics/load', async () => {
     const data = await api.fetchAnalytics(); // Use the namespace to access fetchAnalytics

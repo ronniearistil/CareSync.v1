@@ -1,11 +1,11 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import * as api from "../../utils/appointmentApi"; // Namespace import
+import * as api from "../../utils/appointmentApi"; 
 
 export const loadAppointments = createAsyncThunk(
     'appointments/load',
     async (_, thunkAPI) => {
         try {
-            const data = await api.fetchAppointments(); // Use api.fetchAppointments
+            const data = await api.fetchAppointments(); 
             return data;
         } catch (error) {
             return thunkAPI.rejectWithValue(error.message);
