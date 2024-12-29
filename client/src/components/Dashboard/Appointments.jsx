@@ -315,11 +315,21 @@ const Appointments = () => {
     fetchData();
   }, []);
 
+  const getPatientName = (id) => {
+    const patient = patients.find((p) => p.id === id);
+    return patient ? `${patient.first_name} ${patient.last_name}` : "N/A";
+  };
+
+  const getProviderName = (id) => {
+    const provider = providers.find((p) => p.id === id);
+    return provider ? provider.name : "Unassigned";
+  };
+
   const filteredAppointments = appointments.filter((appointment) => {
     const matchesDate = !filter.date || appointment.date === filter.date;
     const matchesTime = !filter.time || appointment.time === filter.time;
-    const matchesPatient = !filter.patient || appointment.patient_id?.toString().includes(filter.patient);
-    const matchesProvider = !filter.provider || appointment.user_id?.toString().includes(filter.provider);
+    const matchesPatient = !filter.patient || getPatientName(appointment.patient_id).toLowerCase().includes(filter.patient.toLowerCase());
+    const matchesProvider = !filter.provider || getProviderName(appointment.user_id).toLowerCase().includes(filter.provider.toLowerCase());
     const matchesStatus = !filter.status || appointment.status === filter.status;
     return matchesDate && matchesTime && matchesPatient && matchesProvider && matchesStatus;
   });
@@ -344,7 +354,7 @@ const Appointments = () => {
       console.error("Failed to save changes:", err);
     }
   };
-
+  
   const handleDeleteAppointment = async (id) => {
     if (window.confirm("Are you sure you want to delete this appointment?")) {
       try {
@@ -394,14 +404,14 @@ const Appointments = () => {
           size="small"
         />
         <TextField
-          label="Patient ID"
+          label="Patient Name"
           name="patient"
           value={filter.patient}
           onChange={handleFilterChange}
           size="small"
         />
         <TextField
-          label="Provider ID"
+          label="Provider Name"
           name="provider"
           value={filter.provider}
           onChange={handleFilterChange}
@@ -419,9 +429,6 @@ const Appointments = () => {
           <MenuItem value="Completed">Completed</MenuItem>
           <MenuItem value="Cancelled">Cancelled</MenuItem>
         </Select>
-        <Button variant="outlined" onClick={() => setFilter({ date: "", time: "", status: "" })}>
-          Reset Filters
-        </Button>
       </Paper>
 
       <Paper elevation={2}>
@@ -430,8 +437,8 @@ const Appointments = () => {
             <TableRow>
               <TableCell>Date</TableCell>
               <TableCell>Time</TableCell>
-              <TableCell>Patient ID</TableCell>
-              <TableCell>Provider ID</TableCell>
+              <TableCell>Patient Name</TableCell>
+              <TableCell>Provider Name</TableCell>
               <TableCell>Status</TableCell>
               <TableCell align="center">Actions</TableCell>
             </TableRow>
@@ -445,13 +452,13 @@ const Appointments = () => {
                   sx={{ cursor: "pointer", color: "blue" }}
                   onClick={() => navigate(`/patients/${appointment.patient_id}`)}
                 >
-                  {appointment.patient_id || "N/A"}
+                  {getPatientName(appointment.patient_id)}
                 </TableCell>
                 <TableCell
                   sx={{ cursor: "pointer", color: "blue" }}
                   onClick={() => navigate(`/providers/${appointment.user_id}`)}
                 >
-                  {appointment.user_id || "Unassigned"}
+                  {getProviderName(appointment.user_id)}
                 </TableCell>
                 <TableCell>{appointment.status}</TableCell>
                 <TableCell align="center">
@@ -467,37 +474,7 @@ const Appointments = () => {
           </TableBody>
         </Table>
       </Paper>
-
-      {editingAppointment && (
-        <Dialog open onClose={() => setEditingAppointment(null)}>
-          <DialogTitle>Edit Appointment</DialogTitle>
-          <DialogContent>
-            <TextField
-              label="Date"
-              value={editingAppointment.date}
-              onChange={(e) => setEditingAppointment({ ...editingAppointment, date: e.target.value })}
-              fullWidth
-              sx={{ marginBottom: "1rem" }}
-            />
-            <TextField
-              label="Time"
-              value={editingAppointment.time}
-              onChange={(e) => setEditingAppointment({ ...editingAppointment, time: e.target.value })}
-              fullWidth
-            />
-            <TextField
-              label="Provider ID"
-              value={editingAppointment.user_id || ""}
-              onChange={(e) => setEditingAppointment({ ...editingAppointment, user_id: e.target.value })}
-              fullWidth
-            />
-          </DialogContent>
-          <DialogActions>
-            <Button variant="contained" onClick={handleSaveEdit}>Save</Button>
-            <Button variant="outlined" onClick={() => setEditingAppointment(null)}>Cancel</Button>
-          </DialogActions>
-        </Dialog>
-      )}
+      
     </Box>
   );
 };
