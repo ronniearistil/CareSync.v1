@@ -9,7 +9,6 @@ flask = "*"
 flask-sqlalchemy = "3.0.3"
 Werkzeug = "2.2.2"
 flask-migrate = "*"
-flask-marshmallow = "*"
 flask-bcrypt ="*"
 flask-caching = "*"
 psycopg2-binary = "*"
@@ -20,6 +19,8 @@ pytest = "*"
 pytest-flask = "*"
 flask-restful = "*"
 python-dotenv = "*"
+flask-marshmallow = "*"
+marshmallow-sqlalchemy = "*"
 
 [dev-packages]
 

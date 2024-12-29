@@ -19,3 +19,12 @@ psql -U care_sync_user -d care_sync
 
 # To view all data from a table
 SELECT * FROM patients;
+
+
+# For Local Development: http://127.0.0.1:5555/
+
+python run.py
+
+# For Deployment (Gunicorn): http://127.0.0.1:8000/
+
+gunicorn run:app
