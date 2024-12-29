@@ -38,23 +38,23 @@ const LandingPage = () => {
         alignItems: "center",
         textAlign: "center",
         padding: "4rem 2rem",
-        backgroundColor: "#F7F7F7",
+        background: "transparent",
         minHeight: "100vh",
       }}
     >
       {/* Header Section */}
       <Typography
-        variant="h2"
+        variant="h1"
         sx={{
-          marginBottom: "1.5rem",
+          marginBottom: "3rem",
           fontWeight: "bold",
           color: "#1976D2",
         }}
       >
-        Welcome to CareSync
+        Welcome to CareSynq
       </Typography>
       <Typography
-        variant="h6"
+        variant="h5"
         sx={{
           marginBottom: "3rem",
           color: "#2E2E2E",
@@ -180,7 +180,6 @@ const LandingPage = () => {
         </DialogActions>
       </Dialog>
 
-      {/* Footer */}
       <Box
         sx={{
           position: "absolute",
@@ -189,13 +188,9 @@ const LandingPage = () => {
           right: 0,
           padding: "1rem",
           textAlign: "center",
-          backgroundColor: "#1976D2",
           color: "white",
         }}
       >
-        <Typography variant="body2">
-          © {new Date().getFullYear()} CareSync - All Rights Reserved
-        </Typography>
       </Box>
     </Box>
   );

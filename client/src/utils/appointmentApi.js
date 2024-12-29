@@ -1,5 +1,3 @@
-// Current Working Version 
-
 import api from './apiConfig';
 
 // Fetch all appointments

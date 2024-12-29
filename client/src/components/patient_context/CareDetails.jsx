@@ -23,9 +23,8 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-hot-toast";
 import * as Yup from "yup";
-import "react-toastify/dist/ReactToastify.css";
 import * as healthRecordApi from "../../utils/healthRecordApi";
 
 const CareDetails = () => {
@@ -147,7 +146,6 @@ const CareDetails = () => {
   return (
     <Box sx={{ padding: "2rem" }}>
       {/* Toast Notifications */}
-      <ToastContainer />
 
       {/* Header */}
       <Typography variant="h4" sx={{ fontWeight: "bold", marginBottom: "1rem" }}>

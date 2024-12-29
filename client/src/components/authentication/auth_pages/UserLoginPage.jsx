@@ -1,84 +1,96 @@
-// MVP Test
-
-import React, { useState } from "react";
+import React from "react";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
 import axios from "axios";
+import { toast } from "react-hot-toast";
 
 const UserLoginPage = () => {
-  const [formData, setFormData] = useState({ email: "", password: "" });
-  const [error, setError] = useState(null);
+  const validationSchema = Yup.object().shape({
+    email: Yup.string().email("Invalid email format").required("Email is required"),
+    password: Yup.string().min(8, "Password must be at least 8 characters").required("Password is required"),
+  });
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async (values, { setSubmitting }) => {
     try {
       const response = await axios.post(
         "http://localhost:5555/auth/user/login",
         {
-          email: formData.email, // Match the expected structure
-          password: formData.password,
+          email: values.email,
+          password: values.password,
         },
-        { withCredentials: true } // Ensure cookies are sent/received if required
+        { withCredentials: true }
       );
 
-      setError(null);
-
-      // Save the user information in localStorage
       localStorage.setItem("user", JSON.stringify(response.data));
-      window.location.href = "/dashboard"; // Redirect to dashboard
+      toast.success("Login successful!");
+      window.location.href = "/dashboard";
     } catch (err) {
-      setError(err.response?.data?.error || "Invalid login credentials.");
+      toast.error(err.response?.data?.error || "Invalid login credentials.");
+    } finally {
+      setSubmitting(false);
     }
   };
 
   return (
     <div style={{ maxWidth: "400px", margin: "0 auto", padding: "20px" }}>
       <h1>User Login</h1>
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      <form onSubmit={handleSubmit}>
-        <div style={{ marginBottom: "10px" }}>
-          <label>Email:</label>
-          <input
-            type="email"
-            name="email"
-            placeholder="Email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-            style={{ width: "100%", padding: "8px", marginTop: "5px" }}
-          />
-        </div>
-        <div style={{ marginBottom: "10px" }}>
-          <label>Password:</label>
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            value={formData.password}
-            onChange={handleChange}
-            required
-            style={{ width: "100%", padding: "8px", marginTop: "5px" }}
-          />
-        </div>
-        <button
-          type="submit"
-          style={{
-            padding: "10px 20px",
-            backgroundColor: "#1976D2",
-            color: "white",
-            border: "none",
-            cursor: "pointer",
-          }}
-        >
-          Login
-        </button>
-      </form>
+      <Formik
+        initialValues={{ email: "", password: "" }}
+        validationSchema={validationSchema}
+        onSubmit={handleSubmit}
+      >
+        {({ isSubmitting }) => (
+          <Form>
+            <div style={{ marginBottom: "10px" }}>
+              <label>Email:</label>
+              <Field
+                type="email"
+                name="email"
+                placeholder="Email"
+                style={{ width: "100%", padding: "8px", marginTop: "5px" }}
+              />
+              <ErrorMessage
+                name="email"
+                component="div"
+                style={{ color: "red", marginTop: "4px" }}
+              />
+            </div>
+            <div style={{ marginBottom: "10px" }}>
+              <label>Password:</label>
+              <Field
+                type="password"
+                name="password"
+                placeholder="Password"
+                style={{ width: "100%", padding: "8px", marginTop: "5px" }}
+              />
+              <ErrorMessage
+                name="password"
+                component="div"
+                style={{ color: "red", marginTop: "4px" }}
+              />
+            </div>
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              style={{
+                padding: "10px 20px",
+                backgroundColor: "#1976D2",
+                color: "white",
+                border: "none",
+                cursor: "pointer",
+              }}
+            >
+              {isSubmitting ? "Logging in..." : "Login"}
+            </button>
+          </Form>
+        )}
+      </Formik>
     </div>
   );
 };
 
 export default UserLoginPage;
+
+
 
 

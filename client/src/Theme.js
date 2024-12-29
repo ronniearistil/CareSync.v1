@@ -11,6 +11,7 @@ const healthcareTheme = createTheme({
     background: {
       default: "#F7F7F7", // Soft Off-white
       paper: "#FFFFFF", // Clean White
+      dynamic: "#E3F2FD", // Light Blue for dynamic use
     },
     text: {
       primary: "#2E2E2E", // Dark Gray
@@ -36,8 +37,8 @@ const healthcareTheme = createTheme({
   },
 });
 
-
 export default healthcareTheme;
+
 
 
 
