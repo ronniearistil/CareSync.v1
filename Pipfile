@@ -21,6 +21,7 @@ flask-restful = "*"
 python-dotenv = "*"
 flask-marshmallow = "*"
 marshmallow-sqlalchemy = "*"
+gunicorn = "==21.2.0"
 
 [dev-packages]
 
