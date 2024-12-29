@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ThemeProvider, CssBaseline, Box } from "@mui/material";
 import { Toaster } from "react-hot-toast";
@@ -33,18 +33,27 @@ import RecommendationList from './components/recommendations/RecommendationList'
 import AccountSettings from "./components/account/AccountSettings"; 
 
 const App = () => {
-    const [background, setBackground] = useState("background.default");
-
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline />
             <Box
-                sx={{
-                    minHeight: "100vh",
-                    backgroundColor: (theme) => theme.palette.background[background],
-                    transition: "background-color 0.5s ease",
-                }}
-            >
+    sx={{
+        minHeight: "100vh",
+        background: "linear-gradient(135deg, #F0F4F8 0%, #D9E2EC 50%, #BCCCDC 100%)",
+        backgroundSize: "400% 400%",
+        animation: "gradientBG 10s ease infinite", // Faster animation for visibility
+    }}
+>
+    <style>
+        {`
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        `}
+    </style>
+
                 <Router>
                     <Toaster position="top-right" reverseOrder={false} />
                     <Navbar />
@@ -70,6 +79,7 @@ const App = () => {
                         <Route path="/dashboard" element={<Dashboard />} />
                         <Route path="/patients" element={<Patients />} />
                         <Route path="/patients/:id" element={<PatientDetails />} />
+                        <Route path="/providers/:id" element={<UserDetails />} />
                         <Route path="/add-patient" element={<AddPatientForm />} />
                         <Route path="/add-user" element={<AddUserForm />} />
                         <Route path="/appointments" element={<Appointments />} />
@@ -82,7 +92,7 @@ const App = () => {
                         
                         <Route path="/recommendations" element={<RecommendationList />} />
                         <Route path="/patients/recommendations" element={<PatientRecommendations />} />
-
+                        
                         {/* User Routes */}
                         <Route path="/users" element={<Users />} />
                         <Route path="/users/:id" element={<UserDetails />} />

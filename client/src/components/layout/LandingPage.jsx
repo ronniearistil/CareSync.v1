@@ -38,7 +38,7 @@ const LandingPage = () => {
         alignItems: "center",
         textAlign: "center",
         padding: "4rem 2rem",
-        backgroundColor: "#F7F7F7",
+        background: "transparent",
         minHeight: "100vh",
       }}
     >
@@ -54,7 +54,7 @@ const LandingPage = () => {
         Welcome to CareSynq
       </Typography>
       <Typography
-        variant="h6"
+        variant="h5"
         sx={{
           marginBottom: "3rem",
           color: "#2E2E2E",
