@@ -9,6 +9,8 @@ from flask_bcrypt import Bcrypt
 # from flask_caching import Cache
 from datetime import timedelta
 import os
+from .config import Config
+
 
 # Initialize Flask extensions
 db = SQLAlchemy()
@@ -26,7 +28,8 @@ def create_app():
 
     # Load configuration from Config class in config.py
     # app.config.from_object("app.config.Config")
-    app.config.from_object("server.app.config.Config")
+    app.config.from_object(Config)
+
 
 
     # Set database URI
