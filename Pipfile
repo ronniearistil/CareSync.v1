@@ -19,6 +19,7 @@ faker = "*"
 pytest = "*"
 pytest-flask = "*"
 flask-restful = "*"
+python-dotenv = "*"
 
 [dev-packages]
 
