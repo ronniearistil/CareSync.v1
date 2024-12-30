@@ -25,3 +25,4 @@ instance/
 Thumbs.db
 
 .venv/
+colors.sh.save
