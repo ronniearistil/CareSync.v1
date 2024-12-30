@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchSearchResults, setQuery, clearSearch } from "../../store/slices/searchSlice";
 import toast from "react-hot-toast";
-import logout from "../authentication/Logout";
+import logout from "../authentication/logout";
 
 const Navbar = () => {
   const navigate = useNavigate();
