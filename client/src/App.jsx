@@ -10,7 +10,7 @@ import PatientDetails from "./components/patient_context/PatientDetails";
 import AddPatientForm from "./components/authentication/auth_forms/AddPatientForm";
 import AddUserForm from "./components/authentication/auth_forms/AddUserForm";
 import Appointments from "./components/Dashboard/Appointments";
-import AppointmentCalendar from "./components/dashboard/AppointmentCalendar";
+import AppointmentCalendar from "./components/Dashboard/AppointmentCalendar";
 import AddAppointment from "./components/Dashboard/AddAppointment";
 import Analytics from "./components/Dashboard/Analytics";
 import News from "./components/news_container/News";
