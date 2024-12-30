@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Box, Typography, Button, Stack } from "@mui/material";
-import Analytics from "../dashboard/Analytics";
+import Analytics from "../Dashboard/Analytics";
 import AppointmentCalendar from "../dashboard/AppointmentCalendar";
 
 const Dashboard = () => {
