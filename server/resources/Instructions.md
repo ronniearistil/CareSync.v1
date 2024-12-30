@@ -37,3 +37,9 @@ gunicorn --chdir server app.app:app
 
 # Working Commend with Error
 gunicorn --chdir server app:create_app
+
+# Working Commend with Error
+gunicorn --chdir server "app:create_app()"
+
+# Environment 
+source .venv/bin/activate
