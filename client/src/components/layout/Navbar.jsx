@@ -24,43 +24,42 @@ const Navbar = () => {
 
   useEffect(() => {
     const fetchUser = async () => {
-      try {
-        // Fetch user profile
-        const response = await fetch("http://localhost:5555/auth/me", {
-          credentials: "include",
-        });
+  try {
+    const response = await fetch("http://localhost:5555/auth/me", {
+      credentials: "include",
+    });
 
-        if (response.ok) {
-          const userData = await response.json();
+    if (response.ok) {
+      const userData = await response.json();
 
-          // Check if it's a 'Patient' or another role ('Admin'/'Provider')
-          if (userData.role === "Patient") {
-            // Fetch patient details if role is 'Patient'
-            const patientResponse = await fetch(
-              `http://localhost:5555/patients/${userData.id}`,
-              {
-                credentials: "include",
-              }
-            );
+      if (userData.type === "user") {
+        // Handle User (Provider/Admin)
+        setUserName(userData.name || "Guest");
+      } else if (userData.type === "patient") {
+        // Handle Patient
+        const patientResponse = await fetch(
+          `http://localhost:5555/patients/${userData.id}`,
+          { credentials: "include" }
+        );
 
-            if (patientResponse.ok) {
-              const patientData = await patientResponse.json();
-              setUserName(`${patientData.first_name} ${patientData.last_name}`);
-            } else {
-              setUserName("Guest");
-            }
-          } else {
-            // For 'Admin' or 'Provider', use the name from the initial profile response
-            setUserName(userData.name || "Guest");
-          }
+        if (patientResponse.ok) {
+          const patientData = await patientResponse.json();
+          setUserName(`${patientData.first_name} ${patientData.last_name}`);
         } else {
           setUserName("Guest");
         }
-      } catch (error) {
+      } else {
         setUserName("Guest");
-        toast.error("Failed to fetch user profile.");
       }
-    };
+    } else {
+      setUserName("Guest");
+    }
+  } catch (error) {
+    console.error("Fetch Error:", error);
+    setUserName("Guest");
+    toast.error("Failed to fetch user profile.");
+  }
+};
 
     fetchUser();
   }, []);
@@ -107,7 +106,7 @@ const Navbar = () => {
           <Menu anchorEl={anchorElPatients} open={Boolean(anchorElPatients)} onClose={handleMenuClose(setAnchorElPatients)}>
             <MenuItem sx={{ fontSize: "1.5rem" }} onClick={() => navigate("/patients")}>View All Patients</MenuItem>
             <MenuItem sx={{ fontSize: "1.5rem" }} onClick={() => navigate("/add-patient")}>Add New Patient</MenuItem>
-            <MenuItem sx={{ fontSize: "1.5rem" }} onClick={() => navigate("/patients/reports")}>Patient Reports</MenuItem>
+            {/* <MenuItem sx={{ fontSize: "1.5rem" }} onClick={() => navigate("/patients/reports")}>Patient Reports</MenuItem> */}
 
             <MenuItem sx={{ fontSize: "1.5rem" }} onClick={() => navigate("/patients/recommendations")}>
               Recommendations
@@ -123,7 +122,7 @@ const Navbar = () => {
           <Menu anchorEl={anchorElUsers} open={Boolean(anchorElUsers)} onClose={handleMenuClose(setAnchorElUsers)}>
             <MenuItem sx={{ fontSize: "1.5rem" }} onClick={() => navigate("/users")}>View All Users</MenuItem>
             <MenuItem sx={{ fontSize: "1.5rem" }} onClick={() => navigate("/add-user")}>Add New User</MenuItem>
-            <MenuItem sx={{ fontSize: "1.5rem" }} onClick={() => navigate("/users/reports")}>User Reports</MenuItem>
+            {/* <MenuItem sx={{ fontSize: "1.5rem" }} onClick={() => navigate("/users/reports")}>User Reports</MenuItem> */}
           </Menu>
 
           <Button
