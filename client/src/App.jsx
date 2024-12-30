@@ -2,7 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ThemeProvider, CssBaseline, Box } from "@mui/material";
 import { Toaster } from "react-hot-toast";
-import theme from "./theme";
+import theme from "./Theme";
 import Navbar from "./components/layout/Navbar";
 import Dashboard from "./components/layout/Dashboard";
 import Patients from "./components/patient_context/Patients";
