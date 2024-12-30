@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Box, Typography, Button, Stack } from "@mui/material";
 import Analytics from "../Dashboard/Analytics";
-import AppointmentCalendar from "../dashboard/AppointmentCalendar";
+import AppointmentCalendar from "../Dashboard/AppointmentCalendar";
 
 const Dashboard = () => {
   const [showAnalytics, setShowAnalytics] = useState(true);
