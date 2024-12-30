@@ -280,33 +280,33 @@ def create_app():
     """
     Create and configure the Flask app.
     """
-    # Configure static folder for React build files
+    # Configure Flask app and React static files
     app = Flask(__name__, static_folder="../client/dist", static_url_path="/")
 
     # Load configuration
     app.config.from_object(Config)
 
-    # Set database configuration
+    # Database configuration
     app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("SQLALCHEMY_DATABASE_URI")
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
-    # JWT configurations
+    # JWT configuration
     app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=1)
     app.config["JWT_REFRESH_TOKEN_EXPIRES"] = timedelta(days=7)
     app.config["JWT_TOKEN_LOCATION"] = ["cookies"]
     app.config["JWT_COOKIE_CSRF_PROTECT"] = False
 
     # Enable CORS
-    CORS(app, resources={r"/*": {"origins": ["http://localhost:5173"]}}, supports_credentials=True)
+    CORS(app, resources={r"/*": {"origins": Config.CORS_ALLOWED_ORIGINS}}, supports_credentials=True)
 
-    # Initialize Flask extensions
+    # Initialize extensions
     db.init_app(app)
     migrate.init_app(app, db)
     jwt.init_app(app)
     ma.init_app(app)
     bcrypt.init_app(app)
 
-    # Register routes and commands
+    # Register routes and CLI commands
     register_blueprints(app)
     register_cli_commands(app)
 
@@ -322,6 +322,7 @@ def create_app():
         return send_from_directory(app.static_folder, "index.html")
 
     return app
+
 
 def register_blueprints(app):
     """
@@ -349,6 +350,7 @@ def register_blueprints(app):
     app.register_blueprint(user_bp, url_prefix="/users")
     app.register_blueprint(health_record_bp, url_prefix="/health_records")
     app.register_blueprint(user_recommendation_bp, url_prefix="/user_recommendations")
+
 
 def register_cli_commands(app):
     """
