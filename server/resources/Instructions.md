@@ -27,4 +27,4 @@ python run.py
 
 # For Deployment (Gunicorn): http://127.0.0.1:8000/
 
-gunicorn run:app
+PYTHONPATH=server pipenv run gunicorn -w 4 -b 0.0.0.0:8000 server.run:app
