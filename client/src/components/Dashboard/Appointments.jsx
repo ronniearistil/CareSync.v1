@@ -328,8 +328,16 @@ const Appointments = () => {
   const filteredAppointments = appointments.filter((appointment) => {
     const matchesDate = !filter.date || appointment.date === filter.date;
     const matchesTime = !filter.time || appointment.time === filter.time;
-    const matchesPatient = !filter.patient || getPatientName(appointment.patient_id).toLowerCase().includes(filter.patient.toLowerCase());
-    const matchesProvider = !filter.provider || getProviderName(appointment.user_id).toLowerCase().includes(filter.provider.toLowerCase());
+    const matchesPatient =
+      !filter.patient ||
+      getPatientName(appointment.patient_id)
+        .toLowerCase()
+        .includes(filter.patient.toLowerCase());
+    const matchesProvider =
+      !filter.provider ||
+      getProviderName(appointment.user_id)
+        .toLowerCase()
+        .includes(filter.provider.toLowerCase());
     const matchesStatus = !filter.status || appointment.status === filter.status;
     return matchesDate && matchesTime && matchesPatient && matchesProvider && matchesStatus;
   });
@@ -339,7 +347,9 @@ const Appointments = () => {
     setFilter((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleEditAppointment = (appointment) => setEditingAppointment(appointment);
+  const handleEditAppointment = (appointment) => {
+    setEditingAppointment(appointment);
+  };
 
   const handleSaveEdit = async () => {
     try {
@@ -354,7 +364,7 @@ const Appointments = () => {
       console.error("Failed to save changes:", err);
     }
   };
-  
+
   const handleDeleteAppointment = async (id) => {
     if (window.confirm("Are you sure you want to delete this appointment?")) {
       try {
@@ -474,7 +484,6 @@ const Appointments = () => {
           </TableBody>
         </Table>
       </Paper>
-      
     </Box>
   );
 };
