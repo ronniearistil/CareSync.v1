@@ -27,7 +27,7 @@ import UserLoginPage from "./components/authentication/auth_pages/UserLoginPage"
 import Users from "./components/user_context/Users";
 import UserDetails from "./components/user_context/UserDetails";
 import CareDetails from "./components/patient_context/CareDetails";
-import RecommendationsDashboard from './components/dashboard/RecommendationsDashboard';
+import RecommendationsDashboard from './components/Dashboard/RecommendationsDashboard';
 import PatientRecommendations from "./components/recommendations/PatientRecommendations";
 import RecommendationList from './components/recommendations/RecommendationList';
 import AccountSettings from "./components/account/AccountSettings"; 
