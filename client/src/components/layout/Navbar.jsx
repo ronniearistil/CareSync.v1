@@ -94,7 +94,7 @@ const Navbar = () => {
           }}
           onClick={() => navigate("/")}
         >
-          CareSync
+          CareSynq
         </Typography>
 
         <Box sx={{ display: "flex", gap: 4 }}>
