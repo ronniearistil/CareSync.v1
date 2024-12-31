@@ -257,6 +257,7 @@
 
 # Deployment Test 12/30/2024
 
+import os
 from flask import Flask, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -266,7 +267,6 @@ from flask_cors import CORS
 from flask.cli import AppGroup
 from flask_bcrypt import Bcrypt
 from datetime import timedelta
-import os
 from .config import Config
 
 # Initialize Flask extensions
@@ -276,13 +276,14 @@ jwt = JWTManager()
 ma = Marshmallow()
 bcrypt = Bcrypt()
 
-
 def create_app():
     """
     Create and configure the Flask app.
     """
-    # Configure static folder for React build files
-    app = Flask(__name__, static_folder="../client/dist", static_url_path="/")
+    # Dynamically resolve static folder path
+    static_folder_path = os.path.join(os.getcwd(), "client/dist")
+
+    app = Flask(__name__, static_folder=static_folder_path, static_url_path="/")
 
     # Load configuration
     app.config.from_object(Config)
@@ -298,7 +299,15 @@ def create_app():
     app.config["JWT_COOKIE_CSRF_PROTECT"] = False
 
     # Enable CORS
-    CORS(app, resources={r"/*": {"origins": ["http://localhost:5173"]}}, supports_credentials=True)
+    CORS(app, resources={
+        r"/*": {
+            "origins": [
+                "http://localhost:5173", 
+                "http://localhost:5555", 
+                "https://caresynq.onrender.com"
+            ]
+        }
+    }, supports_credentials=True)
 
     # Initialize Flask extensions
     db.init_app(app)
@@ -323,7 +332,6 @@ def create_app():
         return send_from_directory(app.static_folder, "index.html")
 
     return app
-
 
 def register_blueprints(app):
     """
@@ -351,7 +359,6 @@ def register_blueprints(app):
     app.register_blueprint(user_bp, url_prefix="/users")
     app.register_blueprint(health_record_bp, url_prefix="/health_records")
     app.register_blueprint(user_recommendation_bp, url_prefix="/user_recommendations")
-
 
 def register_cli_commands(app):
     """
