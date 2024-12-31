@@ -258,6 +258,7 @@
 # Deployment Test 12/30/2024
 
 import os
+print("Static Folder Path:", os.path.abspath("../client/dist"))
 from flask import Flask, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
