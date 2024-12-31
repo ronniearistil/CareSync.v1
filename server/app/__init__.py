@@ -276,6 +276,7 @@ jwt = JWTManager()
 ma = Marshmallow()
 bcrypt = Bcrypt()
 
+
 def create_app():
     """
     Create and configure the Flask app.
@@ -317,11 +318,12 @@ def create_app():
         """
         Serve React static files for all non-API routes.
         """
-        if path and os.path.exists(os.path.join(app.static_folder, path)):
+        if path != "" and os.path.exists(app.static_folder + "/" + path):
             return send_from_directory(app.static_folder, path)
         return send_from_directory(app.static_folder, "index.html")
 
     return app
+
 
 def register_blueprints(app):
     """
@@ -349,6 +351,7 @@ def register_blueprints(app):
     app.register_blueprint(user_bp, url_prefix="/users")
     app.register_blueprint(health_record_bp, url_prefix="/health_records")
     app.register_blueprint(user_recommendation_bp, url_prefix="/user_recommendations")
+
 
 def register_cli_commands(app):
     """
