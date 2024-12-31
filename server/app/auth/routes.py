@@ -117,9 +117,10 @@ def login_user():
             return {"error": "Invalid credentials"}, 401
 
         # Generate tokens
-        identity = {"id": user.id, "email": user.email, "role": user.role}
+        identity = str(user.id)  # Ensure identity is a string (User ID)
         access_token = create_access_token(identity=identity)
         refresh_token = create_refresh_token(identity=identity)
+
 
         response = make_response({"message": "Login successful"}, 200)
         response.set_cookie("access_token_cookie", access_token, httponly=True, max_age=3600)
@@ -147,10 +148,9 @@ def login_patient():
         if not patient or not bcrypt.check_password_hash(patient.password_hash, password):
             return {"error": "Invalid credentials"}, 401
 
-        # Generate tokens
-        identity = {"id": patient.id, "email": patient.email}
-        access_token = create_access_token(identity=identity)
-        refresh_token = create_refresh_token(identity=identity)
+        # Generate tokens using INTEGER ID (consistent with /auth/me)
+        access_token = create_access_token(identity=str(patient.id))  # Store ID as string
+        refresh_token = create_refresh_token(identity=str(patient.id))
 
         # Create the response
         response = make_response({"message": "Login successful"}, 200)
@@ -162,20 +162,27 @@ def login_patient():
         return {"error": "An unexpected error occurred"}, 500
 
 
+
 @auth_bp.route("/me", methods=["GET"])
 @jwt_required()
 def get_user_profile():
     try:
-        # Extract the current user identity from the JWT
-        current_user = get_jwt_identity()  # Contains {id, role, email}
-        user_id = current_user["id"]
-        role = current_user.get("role", None)
+        # Extract user ID from JWT (stored as a string)
+        user_id = int(get_jwt_identity())  # Convert back to integer
 
-        # Check role and fetch the correct model
-        if role == "Patient":
-            patient = Patient.query.get(user_id)
-            if not patient:
-                return {"error": "Patient not found"}, 404
+        # Query User (Admin/Provider)
+        user = User.query.get(user_id)
+        if user:
+            return {
+                "id": user.id,
+                "name": user.name,
+                "email": user.email,
+                "role": user.role
+            }, 200
+
+        # Query Patient
+        patient = Patient.query.get(user_id)
+        if patient:
             return {
                 "id": patient.id,
                 "name": f"{patient.first_name} {patient.last_name}",
@@ -184,22 +191,13 @@ def get_user_profile():
                 "role": "Patient"
             }, 200
 
-        elif role in ["Provider", "Admin"]:
-            user = User.query.get(user_id)
-            if not user:
-                return {"error": "User not found"}, 404
-            return {
-                "id": user.id,
-                "name": user.name,
-                "email": user.email,
-                "role": role
-            }, 200
-
-        return {"error": "Invalid role"}, 400
+        # If no user found
+        return {"error": "User not found"}, 404
 
     except Exception as e:
         logger.error(f"Get user profile error: {str(e)}")
         return {"error": "An unexpected error occurred"}, 500
+
 
 @auth_bp.route("/logout", methods=["POST"])
 def logout():

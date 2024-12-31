@@ -11,17 +11,19 @@ class Config:
     JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY")
 
     # Database Configuration
-    # SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL")
     SQLALCHEMY_DATABASE_URI = os.getenv("SQLALCHEMY_DATABASE_URI")
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     # JWT Configuration
     JWT_ACCESS_TOKEN_EXPIRES = 3600
     JWT_REFRESH_TOKEN_EXPIRES = 604800
-    JWT_TOKEN_LOCATION = ["cookies"]
+    JWT_TOKEN_LOCATION = ["cookies"]  # Use cookies for token storage
+    JWT_COOKIE_CSRF_PROTECT = False   # Disable CSRF protection for simplicity (can be re-enabled later)
+    JWT_COOKIE_SAMESITE = "Lax"       # Support cross-origin requests with cookies
+    JWT_COOKIE_SECURE = False         # Set False for HTTP during local testing; switch to True in production
 
     # CORS Configuration
-    CORS_ALLOWED_ORIGINS = os.getenv("CORS_ALLOWED_ORIGINS", "http://localhost:5174")
+    CORS_ALLOWED_ORIGINS = os.getenv("CORS_ALLOWED_ORIGINS", "").split(",")  # Handle multiple origins
     
     
     

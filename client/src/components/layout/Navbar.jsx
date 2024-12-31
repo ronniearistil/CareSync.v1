@@ -24,45 +24,40 @@ const Navbar = () => {
 
   useEffect(() => {
     const fetchUser = async () => {
-  try {
-    const response = await fetch("http://localhost:5555/auth/me", {
-      credentials: "include",
-    });
-
-    if (response.ok) {
-      const userData = await response.json();
-
-      if (userData.type === "user") {
-        // Handle User (Provider/Admin)
-        setUserName(userData.name || "Guest");
-      } else if (userData.type === "patient") {
-        // Handle Patient
-        const patientResponse = await fetch(
-          `http://localhost:5555/patients/${userData.id}`,
-          { credentials: "include" }
-        );
-
-        if (patientResponse.ok) {
-          const patientData = await patientResponse.json();
-          setUserName(`${patientData.first_name} ${patientData.last_name}`);
+      try {
+        const response = await fetch("http://localhost:5555/auth/me", {
+          credentials: "include",
+        });
+  
+        if (response.ok) {
+          const userData = await response.json();
+  
+          if (userData.role === "Patient") {
+            // Extract first name for Patient
+            const firstName = userData.name.split(" ")[0]; // Take the first word as first name
+            setUserName(`Welcome, ${firstName}`);
+          } else if (userData.role === "Provider" || userData.role === "Admin") {
+            // Extract first name for User
+            const firstName = userData.name.split(" ")[0]; // Take the first word as first name
+            setUserName(`Welcome, ${firstName}`);
+          } else {
+            setUserName("Welcome, please login");
+          }
         } else {
-          setUserName("Guest");
+          setUserName("Welcome, please login");
         }
-      } else {
-        setUserName("Guest");
+      } catch (error) {
+        console.error("Fetch Error:", error);
+        setUserName("Welcome, please login");
+        toast.error("Failed to fetch user profile.");
       }
-    } else {
-      setUserName("Guest");
-    }
-  } catch (error) {
-    console.error("Fetch Error:", error);
-    setUserName("Guest");
-    toast.error("Failed to fetch user profile.");
-  }
-};
-
+    };
+  
     fetchUser();
   }, []);
+  
+  
+  
 
   const handleMenuOpen = (setter) => (event) => setter(event.currentTarget);
   const handleMenuClose = (setter) => () => setter(null);
