@@ -280,15 +280,15 @@ def create_app():
     """
     Create and configure the Flask app.
     """
-    # Dynamically resolve static folder path
-    static_folder_path = os.path.join(os.getcwd(), "client/dist")
+    # Explicit path for static folder (React build)
+    static_folder_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "client/dist"))
 
     app = Flask(__name__, static_folder=static_folder_path, static_url_path="/")
 
     # Load configuration
     app.config.from_object(Config)
 
-    # Set database configuration
+    # Database configuration
     app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("SQLALCHEMY_DATABASE_URI")
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
@@ -302,8 +302,8 @@ def create_app():
     CORS(app, resources={
         r"/*": {
             "origins": [
-                "http://localhost:5173", 
-                "http://localhost:5555", 
+                "http://localhost:5173",
+                "http://localhost:5555",
                 "https://caresynq.onrender.com"
             ]
         }
@@ -327,7 +327,7 @@ def create_app():
         """
         Serve React static files for all non-API routes.
         """
-        if path != "" and os.path.exists(app.static_folder + "/" + path):
+        if path != "" and os.path.exists(os.path.join(app.static_folder, path)):
             return send_from_directory(app.static_folder, path)
         return send_from_directory(app.static_folder, "index.html")
 
