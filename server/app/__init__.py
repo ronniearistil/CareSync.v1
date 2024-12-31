@@ -327,10 +327,15 @@ def create_app():
         """
         Serve React static files for all non-API routes.
         """
-        if path != "" and os.path.exists(os.path.join(app.static_folder, path)):
-            return send_from_directory(app.static_folder, path)
-        return send_from_directory(app.static_folder, "index.html")
+        static_folder = os.path.join(os.path.dirname(__file__), "../client/dist")
+        index_file = os.path.join(static_folder, "index.html")
 
+        # Check if requested path exists
+        if path != "" and os.path.exists(os.path.join(static_folder, path)):
+            return send_from_directory(static_folder, path)
+
+        # Serve React index.html for non-API routes
+        return send_from_directory(static_folder, "index.html")
     return app
 
 def register_blueprints(app):
