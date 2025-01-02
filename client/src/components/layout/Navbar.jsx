@@ -28,18 +28,18 @@ const Navbar = () => {
         const response = await fetch("http://localhost:5555/auth/me", {
           credentials: "include",
         });
-  
+
         if (response.ok) {
           const userData = await response.json();
-  
+
           if (userData.role === "Patient") {
             // Extract first name for Patient
             const firstName = userData.name.split(" ")[0]; // Take the first word as first name
-            setUserName(`Welcome, ${firstName}`);
+            setUserName(`Welcome back, ${firstName}`);
           } else if (userData.role === "Provider" || userData.role === "Admin") {
             // Extract first name for User
             const firstName = userData.name.split(" ")[0]; // Take the first word as first name
-            setUserName(`Welcome, ${firstName}`);
+            setUserName(`Welcome back, ${firstName}!`);
           } else {
             setUserName("Welcome, please login");
           }
@@ -52,12 +52,12 @@ const Navbar = () => {
         toast.error("Failed to fetch user profile.");
       }
     };
-  
+
     fetchUser();
   }, []);
-  
-  
-  
+
+
+
 
   const handleMenuOpen = (setter) => (event) => setter(event.currentTarget);
   const handleMenuClose = (setter) => () => setter(null);
@@ -181,9 +181,18 @@ const Navbar = () => {
         </Box>
 
         <Box>
-          <Button onClick={handleMenuOpen(setAnchorElProfile)} sx={{ color: "white", fontSize: "1.5rem", fontWeight: "bold" }}>
+          <Button
+            onClick={handleMenuOpen(setAnchorElProfile)}
+            sx={{
+              color: "white",
+              fontSize: "1.5rem",
+              fontWeight: "bold",
+              textTransform: "none" // <-- Override uppercase behavior
+            }}
+          >
             {userName}
           </Button>
+
           <Menu anchorEl={anchorElProfile} open={Boolean(anchorElProfile)} onClose={handleMenuClose(setAnchorElProfile)}>
             <MenuItem onClick={() => navigate("/account")}>Account Settings</MenuItem>
             <MenuItem
@@ -200,3 +209,4 @@ const Navbar = () => {
 };
 
 export default Navbar;
+
