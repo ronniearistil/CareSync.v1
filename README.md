@@ -97,7 +97,7 @@ CareSynq is a robust healthcare management platform designed to streamline colla
 
 ### Database Schema:
 
-A PostgreSQL schema connects providers, patients, appointments, and recommendations, enabling flexible querying and scalability.  
+A PostgreSQL schema connects providers, patients, appointments, analytics, and recommendations, enabling flexible querying and scalability.  
 
 ---
 
@@ -129,7 +129,7 @@ flask db upgrade
 
 6. Start the server:  
 
-flask run  
+python run.py  
 
 ---
 
@@ -142,7 +142,7 @@ npm install
 
 3. Start the React development server:  
 
-npm start  
+npm run dev 
 
 ---
 
