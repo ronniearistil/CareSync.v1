@@ -28,3 +28,7 @@ python run.py
 # For Deployment (Gunicorn): http://127.0.0.1:8000/
 
 PYTHONPATH=server pipenv run gunicorn -w 4 -b 0.0.0.0:8000 server.run:app
+
+Start COmmend: gunicorn --chdir server "app:create_app()"
+
+Build Commend: pip install -r requirements.txt && npm install --prefix client && npm run build --prefix client
