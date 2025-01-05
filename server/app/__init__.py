@@ -71,6 +71,8 @@ def create_app():
         static_folder = os.path.join(os.path.dirname(__file__), "../client/dist")
         index_file = os.path.join(static_folder, "index.html")
 
+        print(f"Requested path: {path}")  # Add debug log
+
         # Check if requested path exists
         if path != "" and os.path.exists(os.path.join(static_folder, path)):
             return send_from_directory(static_folder, path)
@@ -135,5 +137,6 @@ def register_cli_commands(app):
             print(f"Error seeding appointments: {e}")
 
     app.cli.add_command(seed_cli)
+
 
 
