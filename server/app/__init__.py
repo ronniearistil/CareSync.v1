@@ -173,8 +173,8 @@ def create_app():
     """
     Create and configure the Flask app.
     """
-    # Static folder for React build
-    static_folder_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "dist"))
+    # Static folder points to 'server/static'
+    static_folder_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "static"))
     app = Flask(__name__, static_folder=static_folder_path, static_url_path="/")
 
     # Load configuration
@@ -219,19 +219,15 @@ def create_app():
         """
         Serve React static files for all non-API routes.
         """
-        print(f"Requested path: {path}")  # Debug log
+        # Debug log
+        print(f"Requested path: {path}")
+        print(f"Static folder path: {static_folder_path}")  # Debug log
 
         # Serve files if path exists
         if path != "" and os.path.exists(os.path.join(static_folder_path, path)):
             return send_from_directory(static_folder_path, path)
 
-        # Fallback to React index.html
-        return send_from_directory(static_folder_path, "index.html")
-
-    # Handle 404 errors by serving React index.html
-    @app.errorhandler(404)
-    def not_found(e):
-        print("404 Error - Serving React index.html")
+        # Serve React index.html as fallback
         return send_from_directory(static_folder_path, "index.html")
 
     return app
