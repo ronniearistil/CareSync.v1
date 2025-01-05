@@ -79,6 +79,13 @@ def create_app():
 
         # Serve React index.html for non-API routes
         return send_from_directory(static_folder, "index.html")
+
+    # Handle 404 errors by serving React index.html
+    @app.errorhandler(404)
+    def not_found(e):
+        print("404 Error - Serving React index.html")
+        return send_from_directory(static_folder_path, "index.html")
+
     return app
 
 def register_blueprints(app):
@@ -137,6 +144,7 @@ def register_cli_commands(app):
             print(f"Error seeding appointments: {e}")
 
     app.cli.add_command(seed_cli)
+
 
 
 
