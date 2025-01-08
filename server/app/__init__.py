@@ -161,7 +161,7 @@
 
 # Test 2
 
-from flask import Flask, send_from_directory
+from flask import Flask, send_from_directory, redirect
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_jwt_extended import JWTManager
@@ -237,36 +237,30 @@ def create_app():
     register_cli_commands(app)
 
     # Serve React Frontend
+def create_app():
+    """
+    Create and configure the Flask app.
+    """
+    app = Flask(__name__)
+
+    # Enable CORS
+    CORS(app)
+
+    # Redirect requests to React frontend
     @app.route("/", defaults={"path": ""})
     @app.route("/<path:path>")
-    def serve_react(path):
+    def serve_frontend(path):
         """
-        Serve React static files for all non-API routes.
+        Redirect all non-API requests to React frontend URL.
         """
-        try:
-            print(f"Requested path: {path}")  # Debug log
+        frontend_url = "https://caresync-rful.onrender.com"
+        return redirect(f"{frontend_url}/{path}")
 
-            # Serve files if path exists
-            if path != "" and static_folder_path and os.path.exists(os.path.join(static_folder_path, path)):
-                return send_from_directory(static_folder_path, path)
-
-            # Fallback to React index.html
-            if static_folder_path:
-                return send_from_directory(static_folder_path, "index.html")
-            else:
-                return {"error": "Frontend not available"}, 404
-        except Exception as e:
-            print(f"Error serving React file: {e}")
-            return {"error": "Frontend not available"}, 404
-
-    # Handle 404 errors by serving React index.html
+    # Handle 404 errors by redirecting to React frontend
     @app.errorhandler(404)
     def not_found(e):
-        print("404 Error - Serving React index.html")
-        if static_folder_path:
-            return send_from_directory(static_folder_path, "index.html")
-        else:
-            return {"error": "Frontend not available"}, 404
+        frontend_url = "https://caresync-rful.onrender.com"
+        return redirect(frontend_url)
 
     return app
 
