@@ -173,11 +173,19 @@ def create_app():
     Create and configure the Flask app.
     """
     # Static folder for React build
+    # Static folder for React build
     static_folder_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../client/dist"))
-    if not os.path.exists(static_folder_path):
-        static_folder_path = None  # Skip static folder setup for backend-only deployment
 
+    # Log static path for debugging
+    print(f"Static folder path: {static_folder_path}")
+
+    # Check if the static folder exists
+    if not os.path.exists(static_folder_path):
+        raise FileNotFoundError(f"Static folder not found: {static_folder_path}")
+
+    # Initialize Flask app
     app = Flask(__name__, static_folder=static_folder_path, static_url_path="/")
+
 
     # Load configuration
     app.config.from_object(Config)
