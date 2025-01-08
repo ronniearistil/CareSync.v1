@@ -175,6 +175,13 @@ def create_app():
     """
     # Static folder for React build
     static_folder_path = os.path.join(os.path.dirname(__file__), "dist")
+    print(f"Static folder path: {static_folder_path}")
+    print(f"Exists: {os.path.exists(static_folder_path)}")
+    if os.path.exists(static_folder_path):
+        print(f"Files: {os.listdir(static_folder_path)}")
+    else:
+        print("Static folder not found!")
+
     app = Flask(__name__, static_folder=static_folder_path, static_url_path="/")
 
     # Load configuration
