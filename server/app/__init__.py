@@ -161,7 +161,7 @@
 
 # Test 2
 
-from flask import Flask, send_from_directory, redirect
+from flask import Flask, send_from_directory, redirect, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_jwt_extended import JWTManager
@@ -210,20 +210,32 @@ def create_app():
             "origins": [
                 "http://localhost:5173",
                 "http://localhost:5555",
-                "https://caresynq.onrender.com",
-                "https://caresync-rful.onrender.com"
-            ]
+                "https://caresynq-7ykc.onrender.com",  # Correct URL
+                "https://caresync-rful.onrender.com"   # Frontend URL
+            ],
+            "supports_credentials": True,
+            "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+            "allow_headers": ["Content-Type", "Authorization"],
         }
-    }, supports_credentials=True)
+    })
 
-    # Add CORS headers
     @app.after_request
     def add_cors_headers(response):
-        response.headers["Access-Control-Allow-Origin"] = "*"
-        response.headers["Access-Control-Allow-Credentials"] = "true"
-        response.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS"
-        response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
+        origin = request.headers.get("Origin")
+        allowed_origins = [
+            "http://localhost:5173",
+            "http://localhost:5555",
+            "https://caresynq-7ykc.onrender.com",  # Correct URL
+            "https://caresync-rful.onrender.com"   # Frontend URL
+        ]
+
+        if origin in allowed_origins:
+            response.headers["Access-Control-Allow-Origin"] = origin
+            response.headers["Access-Control-Allow-Credentials"] = "true"
+            response.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS"
+            response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
         return response
+
 
     # Initialize Extensions
     db.init_app(app)

@@ -1,17 +1,18 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: 'http://localhost:5555',
-    withCredentials: true,
+    baseURL: 'https://caresynq-7ykc.onrender.com', // Updated Backend URL
+    withCredentials: true, // Ensure credentials are included for CORS
 });
 
+// Intercept responses to handle errors globally
 api.interceptors.response.use(
     (response) => response,
     (error) => {
         if (error.response) {
             if (error.response.status === 401) {
                 console.error("Unauthorized! Redirecting to login.");
-                window.location.href = "/login";
+                window.location.href = "/login"; // Redirect to login on unauthorized error
             } else {
                 console.error(`API Error: ${error.response.status} - ${error.response.statusText}`);
             }
@@ -25,4 +26,5 @@ api.interceptors.response.use(
 );
 
 export default api;
+
 
