@@ -247,11 +247,14 @@ def create_app():
             print(f"Requested path: {path}")  # Debug log
 
             # Serve files if path exists
-            if path != "" and os.path.exists(os.path.join(static_folder_path or "", path)):
+            if path != "" and static_folder_path and os.path.exists(os.path.join(static_folder_path, path)):
                 return send_from_directory(static_folder_path, path)
 
             # Fallback to React index.html
-            return send_from_directory(static_folder_path or "", "index.html")
+            if static_folder_path:
+                return send_from_directory(static_folder_path, "index.html")
+            else:
+                return {"error": "Frontend not available"}, 404
         except Exception as e:
             print(f"Error serving React file: {e}")
             return {"error": "Frontend not available"}, 404
@@ -260,9 +263,13 @@ def create_app():
     @app.errorhandler(404)
     def not_found(e):
         print("404 Error - Serving React index.html")
-        return send_from_directory(static_folder_path or "", "index.html")
+        if static_folder_path:
+            return send_from_directory(static_folder_path, "index.html")
+        else:
+            return {"error": "Frontend not available"}, 404
 
     return app
+
 
 def register_blueprints(app):
     """
