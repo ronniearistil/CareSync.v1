@@ -11,18 +11,13 @@ export default defineConfig(({ mode }) => ({
   },
   server: {
     proxy: {
-      '/analytics': {
-        target: 'http://localhost:5555',
+      '/api': {
+        target: 'https://caresynq.onrender.com', // Backend URL
         changeOrigin: true,
-        secure: false,
-      },
-      '/appointments': {
-        target: 'http://localhost:5555',
-        changeOrigin: true,
-        secure: false,
+        secure: true,
       },
     },
   },
-  // Add base path for production only
-  base: mode === 'production' ? './' : '/',
+  // Use '/' as the base for production builds
+  base: mode === 'production' ? '/' : '/',
 }));
