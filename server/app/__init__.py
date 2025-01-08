@@ -196,7 +196,8 @@ def create_app():
             "origins": [
                 "http://localhost:5173",
                 "http://localhost:5555",
-                "https://caresynq.onrender.com"
+                "https://caresynq.onrender.com",  # Backend
+                "https://caresync-rful.onrender.com"  # Frontend
             ]
         }
     }, supports_credentials=True)
