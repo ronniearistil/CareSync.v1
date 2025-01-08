@@ -204,31 +204,18 @@ def create_app():
     app.config["JWT_TOKEN_LOCATION"] = ["cookies"]
     app.config["JWT_COOKIE_CSRF_PROTECT"] = False
 
-    # Enable CORS
-    CORS(app, resources={
-        r"/*": {
-            "origins": [
-                "http://localhost:5173",
-                "http://localhost:5555",
-                "https://caresynq-7ykc.onrender.com",  # Correct URL
-                "https://caresync-rful.onrender.com"   # Frontend URL
-            ],
-            "supports_credentials": True,
-            "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-            "allow_headers": ["Content-Type", "Authorization"],
-        }
-    })
+# Enable CORS with specific origins
+    CORS(app, supports_credentials=True)
 
     @app.after_request
     def add_cors_headers(response):
-        origin = request.headers.get("Origin")
+        # Allow only trusted origins
         allowed_origins = [
             "http://localhost:5173",
-            "http://localhost:5555",
-            "https://caresynq-7ykc.onrender.com",  # Correct URL
-            "https://caresync-rful.onrender.com"   # Frontend URL
+            "https://caresync-rful.onrender.com",  # Frontend
+            "https://caresynq-7ykc.onrender.com"  # Backend
         ]
-
+        origin = request.headers.get("Origin")
         if origin in allowed_origins:
             response.headers["Access-Control-Allow-Origin"] = origin
             response.headers["Access-Control-Allow-Credentials"] = "true"
