@@ -173,7 +173,7 @@ def create_app():
     Create and configure the Flask app.
     """
     # Static folder for React build
-    static_folder_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../dist"))
+    static_folder_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../client/dist"))
     if not os.path.exists(static_folder_path):
         static_folder_path = None  # Skip static folder setup for backend-only deployment
 
@@ -224,23 +224,33 @@ def create_app():
     register_blueprints(app)
     register_cli_commands(app)
 
-# Serve a JSON response for root and 404 routes in backend-only deployment
+    # Serve React Frontend
     @app.route("/", defaults={"path": ""})
     @app.route("/<path:path>")
-    def backend_only_response(path):
+    def serve_react(path):
         """
-        Return a JSON response for backend-only deployments.
+        Serve React static files for all non-API routes.
         """
-        return {"message": "Backend service running. No frontend available."}, 200
+        try:
+            print(f"Requested path: {path}")  # Debug log
 
+            # Serve files if path exists
+            if path != "" and os.path.exists(os.path.join(static_folder_path, path)):
+                return send_from_directory(static_folder_path, path)
 
+            # Fallback to React index.html
+            return send_from_directory(static_folder_path, "index.html")
+        except Exception as e:
+            print(f"Error serving React file: {e}")
+            return send_from_directory(static_folder_path, "index.html")
+
+    # Handle 404 errors by serving React index.html
     @app.errorhandler(404)
     def not_found(e):
-        """
-        Handle 404 errors for backend-only deployment.
-        """
-        return {"error": "Resource not found"}, 404
+        print("404 Error - Serving React index.html")
+        return send_from_directory(static_folder_path, "index.html")
 
+    return app
 
 def register_blueprints(app):
     """
