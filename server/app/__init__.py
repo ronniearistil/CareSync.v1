@@ -224,33 +224,23 @@ def create_app():
     register_blueprints(app)
     register_cli_commands(app)
 
-    # Serve React Frontend
+# Serve a JSON response for root and 404 routes in backend-only deployment
     @app.route("/", defaults={"path": ""})
     @app.route("/<path:path>")
-    def serve_react(path):
+    def backend_only_response(path):
         """
-        Serve React static files for all non-API routes.
+        Return a JSON response for backend-only deployments.
         """
-        try:
-            print(f"Requested path: {path}")  # Debug log
+        return {"message": "Backend service running. No frontend available."}, 200
 
-            # Serve files if path exists
-            if path != "" and os.path.exists(os.path.join(static_folder_path, path)):
-                return send_from_directory(static_folder_path, path)
 
-            # Fallback to React index.html
-            return send_from_directory(static_folder_path, "index.html")
-        except Exception as e:
-            print(f"Error serving React file: {e}")
-            return send_from_directory(static_folder_path, "index.html")
-
-    # Handle 404 errors by serving React index.html
     @app.errorhandler(404)
     def not_found(e):
-        print("404 Error - Serving React index.html")
-        return send_from_directory(static_folder_path, "index.html")
+        """
+        Handle 404 errors for backend-only deployment.
+        """
+        return {"error": "Resource not found"}, 404
 
-    return app
 
 def register_blueprints(app):
     """
