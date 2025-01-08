@@ -174,7 +174,8 @@ def create_app():
     """
     # Static folder for React build
     # Static folder for React build
-    static_folder_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../client/dist"))
+    static_folder_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../client/dist"))
+
 
     # Log static path for debugging
     print(f"Static folder path: {static_folder_path}")
