@@ -1,3 +1,5 @@
+# # Further Test
+# 
 # from flask import Flask, send_from_directory
 # from flask_sqlalchemy import SQLAlchemy
 # from flask_migrate import Migrate
@@ -21,19 +23,21 @@
 #     """
 #     Create and configure the Flask app.
 #     """
-#     # Explicit path for static folder (React build)
-#     static_folder_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "client/dist"))
+#     # Static folder for React build
+#     static_folder_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../client/dist"))
+#     if not os.path.exists(static_folder_path):
+#         static_folder_path = None  # Skip static folder setup for backend-only deployment
 # 
 #     app = Flask(__name__, static_folder=static_folder_path, static_url_path="/")
 # 
-#     # Load configuration from Config class in config.py
+#     # Load configuration
 #     app.config.from_object(Config)
 # 
-#     # Set database URI
+#     # Database Config
 #     app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("SQLALCHEMY_DATABASE_URI")
 #     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 # 
-#     # Set JWT configurations
+#     # JWT Config
 #     app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=1)
 #     app.config["JWT_REFRESH_TOKEN_EXPIRES"] = timedelta(days=7)
 #     app.config["JWT_TOKEN_LOCATION"] = ["cookies"]
@@ -45,40 +49,51 @@
 #             "origins": [
 #                 "http://localhost:5173",
 #                 "http://localhost:5555",
-#                 "https://caresynq.onrender.com"
+#                 "https://caresynq.onrender.com",
+#                 "https://caresync-rful.onrender.com"
 #             ]
 #         }
 #     }, supports_credentials=True)
 # 
-#     # Initialize Flask extensions
+#     # Add CORS headers
+#     @app.after_request
+#     def add_cors_headers(response):
+#         response.headers["Access-Control-Allow-Origin"] = "*"
+#         response.headers["Access-Control-Allow-Credentials"] = "true"
+#         response.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS"
+#         response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
+#         return response
+# 
+#     # Initialize Extensions
 #     db.init_app(app)
 #     migrate.init_app(app, db)
 #     jwt.init_app(app)
 #     ma.init_app(app)
 #     bcrypt.init_app(app)
 # 
-#     # Register blueprints and CLI commands
+#     # Register Routes
 #     register_blueprints(app)
 #     register_cli_commands(app)
 # 
-#     # Serve React static files for frontend routes
+#     # Serve React Frontend
 #     @app.route("/", defaults={"path": ""})
 #     @app.route("/<path:path>")
 #     def serve_react(path):
 #         """
 #         Serve React static files for all non-API routes.
 #         """
-#         static_folder = os.path.join(os.path.dirname(__file__), "../client/dist")
-#         index_file = os.path.join(static_folder, "index.html")
+#         try:
+#             print(f"Requested path: {path}")  # Debug log
 # 
-#         print(f"Requested path: {path}")  # Add debug log
+#             # Serve files if path exists
+#             if path != "" and os.path.exists(os.path.join(static_folder_path, path)):
+#                 return send_from_directory(static_folder_path, path)
 # 
-#         # Check if requested path exists
-#         if path != "" and os.path.exists(os.path.join(static_folder, path)):
-#             return send_from_directory(static_folder, path)
-# 
-#         # Serve React index.html for non-API routes
-#         return send_from_directory(static_folder, "index.html")
+#             # Fallback to React index.html
+#             return send_from_directory(static_folder_path, "index.html")
+#         except Exception as e:
+#             print(f"Error serving React file: {e}")
+#             return send_from_directory(static_folder_path, "index.html")
 # 
 #     # Handle 404 errors by serving React index.html
 #     @app.errorhandler(404)
@@ -90,7 +105,7 @@
 # 
 # def register_blueprints(app):
 #     """
-#     Import and register all blueprints (routes) in the application.
+#     Import and register all blueprints (routes).
 #     """
 #     from app.auth import auth_bp
 #     from app.routes.patient_routes import patient_bp
@@ -103,7 +118,6 @@
 #     from app.routes.health_record_routes import health_record_bp
 #     from app.routes.user_recommendation_routes import user_recommendation_bp
 # 
-#     # Register blueprints with their prefixes
 #     app.register_blueprint(auth_bp, url_prefix="/auth")
 #     app.register_blueprint(patient_bp, url_prefix="/patients")
 #     app.register_blueprint(appointment_bp, url_prefix="/appointments")
@@ -117,13 +131,13 @@
 # 
 # def register_cli_commands(app):
 #     """
-#     Register custom CLI commands for seeding the database.
+#     Register CLI commands for database seeding.
 #     """
 #     seed_cli = AppGroup("seed")
 # 
 #     @seed_cli.command("run")
 #     def seed():
-#         """Run all seed scripts."""
+#         """Run database seeds."""
 #         from app.seeds import seed_users, seed_patients, seed_appointments
 #         try:
 #             seed_users()
@@ -145,9 +159,7 @@
 # 
 #     app.cli.add_command(seed_cli)
 
-
-
-# Further Test
+# Test 2
 
 from flask import Flask, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
@@ -235,20 +247,20 @@ def create_app():
             print(f"Requested path: {path}")  # Debug log
 
             # Serve files if path exists
-            if path != "" and os.path.exists(os.path.join(static_folder_path, path)):
+            if path != "" and os.path.exists(os.path.join(static_folder_path or "", path)):
                 return send_from_directory(static_folder_path, path)
 
             # Fallback to React index.html
-            return send_from_directory(static_folder_path, "index.html")
+            return send_from_directory(static_folder_path or "", "index.html")
         except Exception as e:
             print(f"Error serving React file: {e}")
-            return send_from_directory(static_folder_path, "index.html")
+            return {"error": "Frontend not available"}, 404
 
     # Handle 404 errors by serving React index.html
     @app.errorhandler(404)
     def not_found(e):
         print("404 Error - Serving React index.html")
-        return send_from_directory(static_folder_path, "index.html")
+        return send_from_directory(static_folder_path or "", "index.html")
 
     return app
 
