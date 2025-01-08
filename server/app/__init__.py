@@ -174,7 +174,7 @@ def create_app():
     Create and configure the Flask app.
     """
     # Static folder for React build
-    static_folder_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "dist"))
+    static_folder_path = os.path.join(os.path.dirname(__file__), "dist")
     app = Flask(__name__, static_folder=static_folder_path, static_url_path="/")
 
     # Load configuration
@@ -196,10 +196,20 @@ def create_app():
             "origins": [
                 "http://localhost:5173",
                 "http://localhost:5555",
-                "https://caresynq.onrender.com"
+                "https://caresynq.onrender.com",
+                "https://caresync-rful.onrender.com"
             ]
         }
     }, supports_credentials=True)
+
+    # Add CORS headers
+    @app.after_request
+    def add_cors_headers(response):
+        response.headers["Access-Control-Allow-Origin"] = "*"
+        response.headers["Access-Control-Allow-Credentials"] = "true"
+        response.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS"
+        response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
+        return response
 
     # Initialize Extensions
     db.init_app(app)
@@ -219,14 +229,18 @@ def create_app():
         """
         Serve React static files for all non-API routes.
         """
-        print(f"Requested path: {path}")  # Debug log
+        try:
+            print(f"Requested path: {path}")  # Debug log
 
-        # Serve files if path exists
-        if path != "" and os.path.exists(os.path.join(static_folder_path, path)):
-            return send_from_directory(static_folder_path, path)
+            # Serve files if path exists
+            if path != "" and os.path.exists(os.path.join(static_folder_path, path)):
+                return send_from_directory(static_folder_path, path)
 
-        # Fallback to React index.html
-        return send_from_directory(static_folder_path, "index.html")
+            # Fallback to React index.html
+            return send_from_directory(static_folder_path, "index.html")
+        except Exception as e:
+            print(f"Error serving React file: {e}")
+            return send_from_directory(static_folder_path, "index.html")
 
     # Handle 404 errors by serving React index.html
     @app.errorhandler(404)
