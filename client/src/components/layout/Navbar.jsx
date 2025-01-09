@@ -16,6 +16,7 @@ import {
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle"; // Provider logo
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchSearchResults, setQuery, clearSearch } from "../../store/slices/searchSlice";
@@ -30,9 +31,9 @@ const Navbar = () => {
   const [anchorElPatients, setAnchorElPatients] = useState(null);
   const [anchorElUsers, setAnchorElUsers] = useState(null);
   const [anchorElAppointments, setAnchorElAppointments] = useState(null);
-  const [anchorElProfile, setAnchorElProfile] = useState(null);
+  const [anchorElProfile, setAnchorElProfile] = useState(null); // For Profile & Logout Menu
   const [showDropdown, setShowDropdown] = useState(false);
-  const [userName, setUserName] = useState("Guest");
+  const [userName, setUserName] = useState("");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // Fetch user session and role
@@ -237,23 +238,21 @@ const Navbar = () => {
         </Box>
 
         <Box>
-          <Button
+          <IconButton
             onClick={handleMenuOpen(setAnchorElProfile)}
-            sx={{
-              color: "white",
-              fontSize: "1.5rem",
-              fontWeight: "bold",
-              textTransform: "none",
-            }}
+            sx={{ color: "white" }}
           >
-            {userName}
-          </Button>
-
-          <Menu anchorEl={anchorElProfile} open={Boolean(anchorElProfile)} onClose={handleMenuClose(setAnchorElProfile)}>
+            <AccountCircleIcon fontSize="large" />
+          </IconButton>
+          <Menu
+            anchorEl={anchorElProfile}
+            open={Boolean(anchorElProfile)}
+            onClose={handleMenuClose(setAnchorElProfile)}
+          >
             <MenuItem onClick={() => navigate("/account")}>Account Settings</MenuItem>
             <MenuItem
               onClick={() => {
-                handleMenuClose(setAnchorElProfile);
+                handleMenuClose(setAnchorElProfile)();
                 logout(navigate);
               }}
             >
@@ -267,5 +266,6 @@ const Navbar = () => {
 };
 
 export default Navbar;
+
 
 
