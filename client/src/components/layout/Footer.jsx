@@ -1,12 +1,12 @@
 import React from "react";
-import { Link } from "react-router-dom"; 
+import { Link } from "react-router-dom";
 import { Box, Typography } from "@mui/material";
 
 const Footer = () => (
   <Box
     component="footer"
     sx={{
-      backgroundColor: "#1976D2", 
+      backgroundColor: "#1976D2",
       textAlign: "center",
       padding: "0.5rem 0",
       position: "fixed",
@@ -25,7 +25,8 @@ const Footer = () => (
         display: "flex",
         justifyContent: "center",
         gap: "1rem",
-        marginTop: "0.25rem", 
+        marginTop: "0.25rem",
+        flexWrap: "wrap", // Ensures links wrap on smaller screens
       }}
     >
       {/* Navigation Links */}
@@ -33,7 +34,7 @@ const Footer = () => (
         to="/about"
         style={{
           textDecoration: "none",
-          color: "#FFFFFF", 
+          color: "#FFFFFF",
           fontSize: "0.75rem",
         }}
       >
@@ -67,7 +68,7 @@ const Footer = () => (
         rel="noopener noreferrer"
         style={{
           textDecoration: "none",
-          color: "#FFFFFF", 
+          color: "#FFFFFF",
           fontSize: "0.75rem",
         }}
       >
@@ -78,6 +79,7 @@ const Footer = () => (
 );
 
 export default Footer;
+
 
 
 
