@@ -20,7 +20,7 @@ import PatientRegisterPage from "./components/authentication/auth_pages/PatientR
 import UserRegisterPage from "./components/authentication/auth_pages/UserRegisterPage";
 import PasswordResetPage from "./components/authentication/auth_pages/UserPasswordResetPage";
 import PatientPasswordReset from "./components/authentication/auth_pages/PatientLoginPage";
-import Footer from "./components/layout/Footer";
+// import Footer from "./components/layout/Footer";
 import LandingPage from "./components/layout/LandingPage";
 import PatientLoginPage from "./components/authentication/auth_pages/PatientLoginPage";
 import UserLoginPage from "./components/authentication/auth_pages/UserLoginPage";
@@ -97,7 +97,7 @@ const App = () => {
                         <Route path="/users" element={<Users />} />
                         <Route path="/users/:id" element={<UserDetails />} />
                     </Routes>
-                    <Footer />
+                    {/* <Footer /> */}
                 </Router>
             </Box>
         </ThemeProvider>
