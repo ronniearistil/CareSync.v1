@@ -1,6 +1,4 @@
-# # Further Test
-# 
-# from flask import Flask, send_from_directory
+# from flask import Flask, send_from_directory, redirect, request
 # from flask_sqlalchemy import SQLAlchemy
 # from flask_migrate import Migrate
 # from flask_jwt_extended import JWTManager
@@ -23,10 +21,10 @@
 #     """
 #     Create and configure the Flask app.
 #     """
-#     # Static folder for React build
+#     # Determine static folder for serving React build
 #     static_folder_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../client/dist"))
 #     if not os.path.exists(static_folder_path):
-#         static_folder_path = None  # Skip static folder setup for backend-only deployment
+#         static_folder_path = None  # Backend-only deployment
 # 
 #     app = Flask(__name__, static_folder=static_folder_path, static_url_path="/")
 # 
@@ -44,25 +42,12 @@
 #     app.config["JWT_COOKIE_CSRF_PROTECT"] = False
 # 
 #     # Enable CORS
-#     CORS(app, resources={
-#         r"/*": {
-#             "origins": [
-#                 "http://localhost:5173",
-#                 "http://localhost:5555",
-#                 "https://caresynq.onrender.com",
-#                 "https://caresync-rful.onrender.com"
-#             ]
-#         }
-#     }, supports_credentials=True)
-# 
-#     # Add CORS headers
-#     @app.after_request
-#     def add_cors_headers(response):
-#         response.headers["Access-Control-Allow-Origin"] = "*"
-#         response.headers["Access-Control-Allow-Credentials"] = "true"
-#         response.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS"
-#         response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
-#         return response
+#     CORS(app, resources={r"/*": {"origins": [
+#             "http://localhost:5173",  # Local frontend
+#             "http://localhost:5555",  # Local backend (for local tests)
+#             "https://caresync-rful.onrender.com",  # Production frontend
+#             "https://caresynq-7ykc.onrender.com",  # Production backend
+#     ], "supports_credentials": True}})
 # 
 #     # Initialize Extensions
 #     db.init_app(app)
@@ -75,31 +60,41 @@
 #     register_blueprints(app)
 #     register_cli_commands(app)
 # 
-#     # Serve React Frontend
-#     @app.route("/", defaults={"path": ""})
-#     @app.route("/<path:path>")
-#     def serve_react(path):
-#         """
-#         Serve React static files for all non-API routes.
-#         """
-#         try:
-#             print(f"Requested path: {path}")  # Debug log
-# 
-#             # Serve files if path exists
-#             if path != "" and os.path.exists(os.path.join(static_folder_path, path)):
+#     # Serve React Frontend (if available)
+#     if static_folder_path:
+#         @app.route("/", defaults={"path": ""})
+#         @app.route("/<path:path>")
+#         def serve_react(path):
+#             """
+#             Serve React static files for all non-API routes.
+#             """
+#             if path and os.path.exists(os.path.join(static_folder_path, path)):
 #                 return send_from_directory(static_folder_path, path)
-# 
-#             # Fallback to React index.html
-#             return send_from_directory(static_folder_path, "index.html")
-#         except Exception as e:
-#             print(f"Error serving React file: {e}")
 #             return send_from_directory(static_folder_path, "index.html")
 # 
-#     # Handle 404 errors by serving React index.html
-#     @app.errorhandler(404)
-#     def not_found(e):
-#         print("404 Error - Serving React index.html")
-#         return send_from_directory(static_folder_path, "index.html")
+#         @app.errorhandler(404)
+#         def not_found(e):
+#             """
+#             Fallback to React index.html for any 404.
+#             """
+#             return send_from_directory(static_folder_path, "index.html")
+# 
+#     else:
+#         @app.route("/", defaults={"path": ""})
+#         @app.route("/<path:path>")
+#         def redirect_to_frontend(path):
+#             """
+#             Redirect all non-API requests to hosted React frontend.
+#             """
+#             frontend_url = "https://caresync-rful.onrender.com"
+#             return redirect(f"{frontend_url}/{path}")
+# 
+#         @app.errorhandler(404)
+#         def not_found_redirect(e):
+#             """
+#             Redirect to hosted React frontend for any 404.
+#             """
+#             return redirect("https://caresync-rful.onrender.com")
 # 
 #     return app
 # 
@@ -159,7 +154,6 @@
 # 
 #     app.cli.add_command(seed_cli)
 
-# Test 2
 
 from flask import Flask, send_from_directory, redirect, request
 from flask_sqlalchemy import SQLAlchemy
@@ -205,12 +199,26 @@ def create_app():
     app.config["JWT_COOKIE_CSRF_PROTECT"] = False
 
     # Enable CORS
-    CORS(app, resources={r"/*": {"origins": [
-            "http://localhost:5173",  # Local frontend
-            "http://localhost:5555",  # Local backend (for local tests)
-            "https://caresync-rful.onrender.com",  # Production frontend
-            "https://caresynq-7ykc.onrender.com",  # Production backend
-    ], "supports_credentials": True}})
+    CORS(app, resources={
+        r"/*": {
+            "origins": [
+                "http://localhost:5173",  # Local frontend
+                "http://localhost:5555",  # Local backend (for local tests)
+                "https://caresync-rful.onrender.com",  # Production frontend
+                "https://caresynq-7ykc.onrender.com",  # Production backend
+            ],
+            "supports_credentials": True,  # Allow cookies/auth
+        }
+    })
+
+    @app.after_request
+    def debug_cors_headers(response):
+        """
+        Debugging CORS headers for troubleshooting.
+        """
+        print(f"Access-Control-Allow-Origin: {response.headers.get('Access-Control-Allow-Origin')}")
+        print(f"Access-Control-Allow-Credentials: {response.headers.get('Access-Control-Allow-Credentials')}")
+        return response
 
     # Initialize Extensions
     db.init_app(app)
@@ -231,7 +239,7 @@ def create_app():
             """
             Serve React static files for all non-API routes.
             """
-            if path and os.path.exists(os.path.join(static_folder_path, path)):
+            if os.path.exists(os.path.join(static_folder_path, path)):
                 return send_from_directory(static_folder_path, path)
             return send_from_directory(static_folder_path, "index.html")
 
@@ -241,7 +249,6 @@ def create_app():
             Fallback to React index.html for any 404.
             """
             return send_from_directory(static_folder_path, "index.html")
-
     else:
         @app.route("/", defaults={"path": ""})
         @app.route("/<path:path>")
@@ -260,6 +267,7 @@ def create_app():
             return redirect("https://caresync-rful.onrender.com")
 
     return app
+
 
 def register_blueprints(app):
     """
@@ -286,6 +294,7 @@ def register_blueprints(app):
     app.register_blueprint(user_bp, url_prefix="/users")
     app.register_blueprint(health_record_bp, url_prefix="/health_records")
     app.register_blueprint(user_recommendation_bp, url_prefix="/user_recommendations")
+
 
 def register_cli_commands(app):
     """
