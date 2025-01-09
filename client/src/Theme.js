@@ -24,20 +24,39 @@ const healthcareTheme = createTheme({
       fontSize: "3rem",
       fontWeight: 700,
       color: "#2E2E2E",
+      '@media (max-width:600px)': {
+        fontSize: "2rem",
+      },
     },
     h2: {
       fontSize: "2rem",
       fontWeight: 600,
       color: "#2E2E2E",
+      '@media (max-width:600px)': {
+        fontSize: "1.5rem",
+      },
     },
     body1: {
       fontSize: "1.25rem",
       color: "#2E2E2E",
+      '@media (max-width:600px)': {
+        fontSize: "1rem",
+      },
+    },
+  },
+  breakpoints: {
+    values: {
+      xs: 0,
+      sm: 600,
+      md: 960,
+      lg: 1280,
+      xl: 1920,
     },
   },
 });
 
 export default healthcareTheme;
+
 
 
 

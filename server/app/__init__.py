@@ -184,10 +184,10 @@ def create_app():
     """
     Create and configure the Flask app.
     """
-    # Static folder for React build
+    # Determine static folder for serving React build
     static_folder_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "../client/dist"))
     if not os.path.exists(static_folder_path):
-        static_folder_path = None  # Skip static folder setup for backend-only deployment
+        static_folder_path = None  # Backend-only deployment
 
     app = Flask(__name__, static_folder=static_folder_path, static_url_path="/")
 
@@ -204,25 +204,13 @@ def create_app():
     app.config["JWT_TOKEN_LOCATION"] = ["cookies"]
     app.config["JWT_COOKIE_CSRF_PROTECT"] = False
 
-# Enable CORS with specific origins
-    CORS(app, supports_credentials=True)
-
-    @app.after_request
-    def add_cors_headers(response):
-        # Allow only trusted origins
-        allowed_origins = [
-            "http://localhost:5173",
-            "https://caresync-rful.onrender.com",  # Frontend
-            "https://caresynq-7ykc.onrender.com"  # Backend
-        ]
-        origin = request.headers.get("Origin")
-        if origin in allowed_origins:
-            response.headers["Access-Control-Allow-Origin"] = origin
-            response.headers["Access-Control-Allow-Credentials"] = "true"
-            response.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS"
-            response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
-        return response
-
+    # Enable CORS
+    CORS(app, resources={r"/*": {"origins": [
+            "http://localhost:5173",  # Local frontend
+            "http://localhost:5555",  # Local backend (for local tests)
+            "https://caresync-rful.onrender.com",  # Production frontend
+            "https://caresynq-7ykc.onrender.com",  # Production backend
+    ], "supports_credentials": True}})
 
     # Initialize Extensions
     db.init_app(app)
@@ -235,34 +223,43 @@ def create_app():
     register_blueprints(app)
     register_cli_commands(app)
 
-    # Serve React Frontend
-def create_app():
-    """
-    Create and configure the Flask app.
-    """
-    app = Flask(__name__)
+    # Serve React Frontend (if available)
+    if static_folder_path:
+        @app.route("/", defaults={"path": ""})
+        @app.route("/<path:path>")
+        def serve_react(path):
+            """
+            Serve React static files for all non-API routes.
+            """
+            if path and os.path.exists(os.path.join(static_folder_path, path)):
+                return send_from_directory(static_folder_path, path)
+            return send_from_directory(static_folder_path, "index.html")
 
-    # Enable CORS
-    CORS(app)
+        @app.errorhandler(404)
+        def not_found(e):
+            """
+            Fallback to React index.html for any 404.
+            """
+            return send_from_directory(static_folder_path, "index.html")
 
-    # Redirect requests to React frontend
-    @app.route("/", defaults={"path": ""})
-    @app.route("/<path:path>")
-    def serve_frontend(path):
-        """
-        Redirect all non-API requests to React frontend URL.
-        """
-        frontend_url = "https://caresync-rful.onrender.com"
-        return redirect(f"{frontend_url}/{path}")
+    else:
+        @app.route("/", defaults={"path": ""})
+        @app.route("/<path:path>")
+        def redirect_to_frontend(path):
+            """
+            Redirect all non-API requests to hosted React frontend.
+            """
+            frontend_url = "https://caresync-rful.onrender.com"
+            return redirect(f"{frontend_url}/{path}")
 
-    # Handle 404 errors by redirecting to React frontend
-    @app.errorhandler(404)
-    def not_found(e):
-        frontend_url = "https://caresync-rful.onrender.com"
-        return redirect(frontend_url)
+        @app.errorhandler(404)
+        def not_found_redirect(e):
+            """
+            Redirect to hosted React frontend for any 404.
+            """
+            return redirect("https://caresync-rful.onrender.com")
 
     return app
-
 
 def register_blueprints(app):
     """
